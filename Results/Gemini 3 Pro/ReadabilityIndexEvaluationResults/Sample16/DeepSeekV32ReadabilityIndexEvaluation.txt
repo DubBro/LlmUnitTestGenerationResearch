@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765318903-gk6g0LjPxbzVZNXZt2BM
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the 'ClassUnderTestTests' pattern: AsciiHelpersTests.",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern.",
+		"Tests follow AAA pattern with clear comment separators.",
+		"Uses [Theory] with [InlineData] appropriately to reduce duplication.",
+		"No unnecessary comments except AAA separators.",
+		"Meaningful and clear variable names.",
+		"Good separation of test scenarios for edge cases, ASCII-only, and non-ASCII replacement.",
+		"Minor issue: InlineData strings contain escaped characters which may slightly affect readability.",
+		"Single [Fact] used appropriately for unique scenario."
+	]
+}

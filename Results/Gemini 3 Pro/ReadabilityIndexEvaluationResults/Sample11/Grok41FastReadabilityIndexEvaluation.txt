@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765318491-iufXVvOCeZqceUmL6B59
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern effectively",
+		"Strict adherence to AAA pattern with // Arrange, // Act, // Assert comments and clear separation",
+		"Appropriate use of [Theory] with [InlineData] for parameterized testing, reducing duplication",
+		"[Fact] used correctly for single-scenario tests",
+		"Clear, meaningful variable and parameter names reflecting purpose",
+		"Consistent C# naming conventions and formatting",
+		"No unnecessary nested classes or code duplication",
+		"Minor deduction for extra explanatory comments beyond AAA markers",
+		"Logical structure makes tests easy to read and maintain"
+	]
+}

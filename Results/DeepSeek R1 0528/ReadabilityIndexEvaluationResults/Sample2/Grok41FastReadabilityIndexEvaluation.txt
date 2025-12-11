@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315457-aRaQpAIqsKZyyKkWOf82
+
+Content:
+{
+	"readabilityIndex": 87,
+	"reasons": [
+		"Class and method names follow recommended patterns (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult).",
+		"Consistent AAA structure with // Arrange, // Act, // Assert comments and empty line separations in most tests.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to handle multiple scenarios without duplication.",
+	"Constructor provides clean, shared setup for mocks, improving maintainability.",
+		"Clear, meaningful variable names reflecting purpose.",
+		"Some tests combine Act & Assert (e.g., exception tests), slightly deviating from strict AAA.",
+		"Verbose, repetitive assertions in GetAsync_ExistingId_ReturnsMappedEmployeeModel reduce conciseness.",
+		"Long parameter lists in ListFilteredAsync calls impact readability.",
+		"No unnecessary comments or nested classes.",
+		"Adheres to C# naming conventions and async Task signatures."
+	]
+}

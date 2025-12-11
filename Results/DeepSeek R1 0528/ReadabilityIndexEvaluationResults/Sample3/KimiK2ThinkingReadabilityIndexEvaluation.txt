@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315557-UBKbMziEWdNesfEgoqqz
+
+Content:
+ {
+	"readabilityIndex": 93,
+	"reasons": [
+		"Test class and method names follow clear, consistent patterns (ClassUnderTestTests and Method_Scenario_ExpectedResult)",
+		"All tests properly implement the AAA pattern with explicit // Arrange, // Act, // Assert comments and block separation",
+		"Correct use of [Fact] and [Theory] attributes for single and parameterized test scenarios",
+		"Asynchronous tests correctly return Task instead of void",
+		"No unnecessary comments or nested classes; private fields follow C# naming conventions",
+		"Some object initializers span very long lines, reducing horizontal scanability",
+		"Complex lambda expressions in Arg.Is() predicates require careful reading, slightly impacting immediate comprehension",
+		"Minor inconsistency: one test lacks blank line separation after the Arrange block",
+		"Repetitive transaction verification patterns across tests slightly affect maintainability",
+		"Overall excellent structure with clear naming makes test purposes immediately understandable"
+	]
+}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765326596-riwFJGi4TLyHixXHBrGn
+
+Content:
+{
+  "readabilityIndex": 86,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests convention and clearly indicates the subject under test (LoremIpsumGeneratorTests).",
+    "Test method names are long but descriptive and consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern, making intent clear.",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for parameterized cases is appropriate and reduces duplication.",
+    "AAA structure is generally followed and visually separated with comments and blank lines, which improves scanability.",
+    "Parameter names and local variable names are meaningful and consistent with .NET naming conventions.",
+    "Assertion blocks are straightforward and mostly focused, making it easy to understand what is being verified.",
+    "Some variables are declared but never used (e.g., expectedParagraphCount, openTags, closeTags), creating noise and slightly reducing clarity.",
+    "Exception tests use a combined 'Act & Assert' style comment, which is common but slightly blurs strict AAA separation.",
+    "The HTML paragraph count test name suggests counting paragraphs, but the implementation does not actually use the computed counts, which can confuse maintainers.",
+    "Minor arrange duplication across tests could be refactored for better maintainability but does not seriously impact readability."
+  ]
+}

@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765318096-XlqyBaMgD9dkJSFkLGEm
+
+Content:
+```json
+{
+	"readabilityIndex": 94,
+	"reasons": [
+		"Test class name follows `ClassUnderTestTests` pattern.",
+		"Test method names precisely follow `MethodUnderTest_Scenario_ExpectedResult` pattern.",
+		"Appropriate use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for variations, reducing duplication.",
+		"All async tests correctly use `async Task` signatures.",
+		"Strict adherence to AAA pattern with `// Arrange`, `// Act`, `// Assert` comments and clear separation.",
+		"Clear, meaningful naming for variables, fields, and mocks.",
+		"Constructor-based setup of mocks and SUT promotes maintainability across tests.",
+		"Assert.Collection used effectively for verifying ordered collections with specific expectations.",
+		"Mock interaction verification enhances clarity of test intent.",
+		"Minor extra comments in Arrange and InlineData slightly deviate from 'no comments other than AAA' but improve understanding without clutter."
+	]
+}
+```

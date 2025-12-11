@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample10Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample10;
+using NSubstitute;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class AuctionServiceTests
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IAuctionService _auctionService;
+
+        public AuctionServiceTests()
+        {
+            _unitOfWork = Substitute.For&lt;IUnitOfWork&gt;();
+            _mapper = Substitute.For&lt;IMapper&gt;();
+            _auctionService = new AuctionService(_unitOfWork, _mapper);
+        }
+
+        [Fact]
+        public void Bet_PassingInvalidId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = -1;
+            var customerName = &quot;John Doe&quot;;
+            var bid = 100;
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingNullCustomerName_ThrowsInvalidNameException()
+        {
+            // Arrange
+            var id = 1;
+            string customerName = null;
+            var bid = 100;
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidNameException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingNonExistentAuction_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = 1;
+            var customerName = &quot;John Doe&quot;;
+            var bid = 100;
+
+            _unitOfWork.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingUnstartedAuction_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+            var customerName = &quot;John Doe&quot;;
+            var bid = 100;
+
+            var auction = new Auction { ID = id, Started = false, Ended = false, Bid = 50 };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingFinishedAuction_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+            var customerName = &quot;John Doe&quot;;
+            var bid = 100;
+
+            var auction = new Auction { ID = id, Started = true, Ended = true, Bid = 50 };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingLowerOrEqualBid_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+            var customerName = &quot;John Doe&quot;;
+            var bid = 100;
+
+            var auction = new Auction { ID = id, Started = true, Ended = false, Bid = 150 };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_ValidInputs_UpdatesAuctionAndCommits()
+        {
+            // Arrange
+            var id = 1;
+            var customerName = &quot;John Doe&quot;;
+            var bid = 200;
+
+            var auction = new Auction { ID = id, Started = true, Ended = false, Bid = 100 };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act
+            _auctionService.Bet(id, customerName, bid);
+
+            // Assert
+            Assert.Equal(bid, auction.Bid);
+            Assert.Equal(customerName, auction.Leader);
+            _unitOfWork.Auctions.Received(1).Update(auction);
+            _unitOfWork.Received(1).Commit();
+        }
+
+        [Fact]
+        public void CloseAuction_PassingInvalidId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = -1;
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.CloseAuction(id));
+        }
+
+        [Fact]
+        public void CloseAuction_PassingNonExistentAuction_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = 1;
+
+            _unitOfWork.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.CloseAuction(id));
+        }
+
+        [Fact]
+        public void CloseAuction_PassingUnstartedAuction_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Started = false, Ended = false };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.CloseAuction(id));
+        }
+
+        [Fact]
+        public void CloseAuction_PassingAlreadyFinishedAuction_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Started = true, Ended = true };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.CloseAuction(id));
+        }
+
+        [Fact]
+        public void CloseAuction_ValidInputs_SetsEndedTrueAndCommits()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Started = true, Ended = false };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act
+            _auctionService.CloseAuction(id);
+
+            // Assert
+            Assert.True(auction.Ended);
+            _unitOfWork.Auctions.Received(1).Update(auction);
+            _unitOfWork.Received(1).Commit();
+        }
+
+        [Fact]
+        public void GetAuction_PassingInvalidId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = -1;
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.GetAuction(id));
+        }
+
+        [Fact]
+        public void GetAuction_PassingNonExistentAuction_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = 1;
+
+            _unitOfWork.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.GetAuction(id));
+        }
+
+        [Fact]
+        public void GetAuction_ValidInputs_ReturnsMappedAuctionDTO()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Bid = 100, Leader = &quot;John Doe&quot;, Started = true, Ended = false };
+            var auctionDto = new AuctionDTO { ID = id, Bid = 100, Leader = &quot;John Doe&quot;, Started = true, Ended = false };
+
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+            _mapper.Map&lt;Auction, AuctionDTO&gt;(auction).Returns(auctionDto);
+
+            // Act
+            var result = _auctionService.GetAuction(id);
+
+            // Assert
+            Assert.Equal(auctionDto, result);
+        }
+
+        [Fact]
+        public void GetAuctions_ReturnsMappedAuctions()
+        {
+            // Arrange
+            var auctions = new List&lt;Auction&gt;
+            {
+                new Auction { ID = 1, Bid = 100, Leader = &quot;John Doe&quot;, Started = true, Ended = false },
+                new Auction { ID = 2, Bid = 200, Leader = &quot;Jane Smith&quot;, Started = true, Ended = false }
+            };
+
+            var auctionDtos = new List&lt;AuctionDTO&gt;
+            {
+                new AuctionDTO { ID = 1, Bid = 100, Leader = &quot;John Doe&quot;, Started = true, Ended = false },
+                new AuctionDTO { ID = 2, Bid = 200, Leader = &quot;Jane Smith&quot;, Started = true, Ended = false }
+            };
+
+            _unitOfWork.Auctions.GetAll().Returns(auctions);
+            _mapper.Map&lt;IEnumerable&lt;Auction&gt;, IEnumerable&lt;AuctionDTO&gt;&gt;(auctions).Returns(auctionDtos);
+
+            // Act
+            var result = _auctionService.GetAuctions();
+
+            // Assert
+            Assert.Equal(auctionDtos, result.ToList());
+        }
+
+        [Fact]
+        public void OpenAuction_PassingInvalidId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = -1;
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.OpenAuction(id));
+        }
+
+        [Fact]
+        public void OpenAuction_PassingNonExistentAuction_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var id = 1;
+
+            _unitOfWork.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.OpenAuction(id));
+        }
+
+        [Fact]
+        public void OpenAuction_PassingAlreadyFinishedAuction_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Started = false, Ended = true };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.OpenAuction(id));
+        }
+
+        [Fact]
+        public void OpenAuction_PassingAlreadyStartedAuction_ThrowsInvalidAuctionException()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Started = true, Ended = false };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.OpenAuction(id));
+        }
+
+        [Fact]
+        public void OpenAuction_ValidInputs_SetsStartedTrueAndCommits()
+        {
+            // Arrange
+            var id = 1;
+
+            var auction = new Auction { ID = id, Started = false, Ended = false };
+            _unitOfWork.Auctions.Get(id).Returns(auction);
+
+            // Act
+            _auctionService.OpenAuction(id);
+
+            // Assert
+            Assert.True(auction.Started);
+            _unitOfWork.Auctions.Received(1).Update(auction);
+            _unitOfWork.Received(1).Commit();
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,9,13,37,1],[14,9,14,10,1],[15,13,15,57,1],[16,13,16,49,1],[17,13,17,72,1],[18,9,18,10,1],[22,9,22,10,1],[24,13,24,25,1],[25,13,25,43,1],[26,13,26,27,1],[29,13,29,69,1],[29,69,29,111,1],[29,111,29,113,1],[30,9,30,10,1],[34,9,34,10,1],[36,13,36,24,1],[37,13,37,40,1],[38,13,38,27,1],[41,13,41,71,1],[41,71,41,113,1],[41,113,41,115,1],[42,9,42,10,1],[46,9,46,10,1],[48,13,48,24,1],[49,13,49,43,1],[50,13,50,27,1],[52,13,52,65,1],[55,13,55,69,1],[55,69,55,111,1],[55,111,55,113,1],[56,9,56,10,1],[60,9,60,10,1],[62,13,62,24,1],[63,13,63,43,1],[64,13,64,27,1],[66,13,66,93,1],[67,13,67,59,1],[70,13,70,74,1],[70,74,70,116,1],[70,116,70,118,1],[71,9,71,10,1],[75,9,75,10,1],[77,13,77,24,1],[78,13,78,43,1],[79,13,79,27,1],[81,13,81,91,1],[82,13,82,59,1],[85,13,85,74,1],[85,74,85,116,1],[85,116,85,118,1],[86,9,86,10,1],[90,9,90,10,1],[92,13,92,24,1],[93,13,93,43,1],[94,13,94,27,1],[96,13,96,93,1],[97,13,97,59,1],[100,13,100,74,1],[100,74,100,116,1],[100,116,100,118,1],[101,9,101,10,1],[105,9,105,10,1],[107,13,107,24,1],[108,13,108,43,1],[109,13,109,27,1],[111,13,111,93,1],[112,13,112,59,1],[115,13,115,56,1],[118,13,118,44,1],[119,13,119,56,1],[120,13,120,62,1],[121,13,121,46,1],[122,9,122,10,1],[126,9,126,10,1],[128,13,128,25,1],[131,13,131,69,1],[131,69,131,101,1],[131,101,131,103,1],[132,9,132,10,1],[136,9,136,10,1],[138,13,138,24,1],[140,13,140,65,1],[143,13,143,69,1],[143,69,143,101,1],[143,101,143,103,1],[144,9,144,10,1],[148,9,148,10,1],[150,13,150,24,1],[152,13,152,83,1],[153,13,153,59,1],[156,13,156,74,1],[156,74,156,106,1],[156,106,156,108,1],[157,9,157,10,1],[161,9,161,10,1],[163,13,163,24,1],[165,13,165,81,1],[166,13,166,59,1],[169,13,169,74,1],[169,74,169,106,1],[169,106,169,108,1],[170,9,170,10,1],[174,9,174,10,1],[176,13,176,24,1],[178,13,178,82,1],[179,13,179,59,1],[182,13,182,46,1],[185,13,185,40,1],[186,13,186,62,1],[187,13,187,46,1],[188,9,188,10,1],[192,9,192,10,1],[194,13,194,25,1],[197,13,197,69,1],[197,69,197,99,1],[197,99,197,101,1],[198,9,198,10,1],[202,9,202,10,1],[204,13,204,24,1],[206,13,206,65,1],[209,13,209,69,1],[209,69,209,99,1],[209,99,209,101,1],[210,9,210,10,1],[214,9,214,10,1],[216,13,216,24,1],[218,13,218,114,1],[219,13,219,120,1],[221,13,221,59,1],[222,13,222,75,1],[225,13,225,57,1],[228,13,228,46,1],[229,9,229,10,1],[233,9,233,10,1],[235,13,239,15,1],[241,13,245,15,1],[247,13,247,61,1],[248,13,248,103,1],[251,13,251,56,1],[254,13,254,56,1],[255,9,255,10,1],[259,9,259,10,1],[261,13,261,25,1],[264,13,264,69,1],[264,69,264,100,1],[264,100,264,102,1],[265,9,265,10,1],[269,9,269,10,1],[271,13,271,24,1],[273,13,273,65,1],[276,13,276,69,1],[276,69,276,100,1],[276,100,276,102,1],[277,9,277,10,1],[281,9,281,10,1],[283,13,283,24,1],[285,13,285,82,1],[286,13,286,59,1],[289,13,289,74,1],[289,74,289,105,1],[289,105,289,107,1],[290,9,290,10,1],[294,9,294,10,1],[296,13,296,24,1],[298,13,298,82,1],[299,13,299,59,1],[302,13,302,74,1],[302,74,302,105,1],[302,105,302,107,1],[303,9,303,10,1],[307,9,307,10,1],[309,13,309,24,1],[311,13,311,83,1],[312,13,312,59,1],[315,13,315,45,1],[318,13,318,42,1],[319,13,319,62,1],[320,13,320,46,1],[321,9,321,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765327860-iRqvOwAZILma4kvl7l43
+
+Content:
+{"readabilityIndex":95,"reasons":["Test class name follows `ClassUnderTestTests` pattern perfectly.","Test method names adhere strictly to `MethodUnderTest_Scenario_ExpectedResult` pattern.","Consistent AAA pattern with `// Arrange`, `// Act`, `// Assert` comments and clear separation in every test.","Clear, meaningful variable names (e.g., `lhs`, `rhs`, `vector`, `result`) reflecting purpose.","No extraneous comments, only AAA separators.","Adheres to C# naming conventions and standard formatting.","Appropriate use of `[Fact]` for single scenarios, no duplication."]}

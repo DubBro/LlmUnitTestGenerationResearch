@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765324084-Aefa6BKKvYmDZg7djzyd
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern.",
+		"Test method names adhere to the MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Appropriate use of [Theory] with [InlineData] for parameterized tests, avoiding duplication.",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"No extraneous comments or code; clean and focused.",
+		"Clear, meaningful variable names reflecting purpose.",
+		"Adheres to C# naming conventions and xUnit best practices.",
+		"Minor inconsistency in API usage (extension vs. static method for Decode in invalid test)."
+	]
+}

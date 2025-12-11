@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765317014-hiZxIaBygDUdePEVqNBB
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern effectively",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication across multiple test cases",
+		"Clear and meaningful parameter names (input, replacement, expected) that communicate intent",
+		"Tests follow AAA pattern with Act and Assert blocks clearly marked with comments",
+		"Missing Arrange block comments, though arrangement is minimal in these tests",
+		"No unnecessary nested classes or extraneous comments cluttering the code",
+		"Standard C# naming conventions are consistently applied throughout",
+		"Good test coverage of edge cases (null, empty, whitespace, various non-ASCII characters) demonstrating thoughtful test design",
+		"Minor improvement possible: empty line separation between AAA blocks would enhance visual structure"
+	]
+}
+```

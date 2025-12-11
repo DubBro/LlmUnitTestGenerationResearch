@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample1Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample1;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+
+namespace Gemini3ProUnitTests
+{
+    public class DepartmentServiceTests
+    {
+        private readonly IDepartmentRepository _departmentRepositorySubstitute;
+        private readonly DepartmentService _departmentService;
+
+        public DepartmentServiceTests()
+        {
+            _departmentRepositorySubstitute = Substitute.For&lt;IDepartmentRepository&gt;();
+            _departmentService = new DepartmentService(_departmentRepositorySubstitute);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenEntityFound_ReturnsMappedModel()
+        {
+            // Arrange
+            var id = 1;
+            var entity = new DepartmentEntity
+            {
+                Id = id,
+                Name = &quot;Engineering&quot;,
+                Description = &quot;Software Development&quot;
+            };
+
+            _departmentRepositorySubstitute.GetAsync(id).Returns(entity);
+
+            // Act
+            var result = await _departmentService.GetAsync(id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.Id, result.Id);
+            Assert.Equal(entity.Name, result.Name);
+            Assert.Equal(entity.Description, result.Description);
+            await _departmentRepositorySubstitute.Received(1).GetAsync(id);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenEntityHasNullDescription_ReturnsModelWithNullDescription()
+        {
+            // Arrange
+            var id = 2;
+            var entity = new DepartmentEntity
+            {
+                Id = id,
+                Name = &quot;HR&quot;,
+                Description = null
+            };
+
+            _departmentRepositorySubstitute.GetAsync(id).Returns(entity);
+
+            // Act
+            var result = await _departmentService.GetAsync(id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.Id, result.Id);
+            Assert.Equal(entity.Name, result.Name);
+            Assert.Null(result.Description);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenRepositoryThrowsException_ThrowsSameException()
+        {
+            // Arrange
+            var id = 3;
+            var expectedException = new InvalidOperationException(&quot;Database error&quot;);
+
+            _departmentRepositorySubstitute.GetAsync(id).Throws(expectedException);
+
+            // Act &amp; Assert
+            var actualException = await Assert.ThrowsAsync&lt;InvalidOperationException&gt;(() =&gt; _departmentService.GetAsync(id));
+            Assert.Same(expectedException, actualException);
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenEntitiesExist_ReturnsListOfMappedModels()
+        {
+            // Arrange
+            var entities = new List&lt;DepartmentEntity&gt;
+            {
+                new() { Id = 10, Name = &quot;Finance&quot;, Description = &quot;Accounts&quot; },
+                new() { Id = 20, Name = &quot;Marketing&quot;, Description = null }
+            };
+
+            _departmentRepositorySubstitute.ListAsync().Returns(entities);
+
+            // Act
+            var result = await _departmentService.ListAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+
+            var firstModel = result.ElementAt(0);
+            Assert.Equal(10, firstModel.Id);
+            Assert.Equal(&quot;Finance&quot;, firstModel.Name);
+            Assert.Equal(&quot;Accounts&quot;, firstModel.Description);
+
+            var secondModel = result.ElementAt(1);
+            Assert.Equal(20, secondModel.Id);
+            Assert.Equal(&quot;Marketing&quot;, secondModel.Name);
+            Assert.Null(secondModel.Description);
+
+            await _departmentRepositorySubstitute.Received(1).ListAsync();
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenRepositoryReturnsEmptyList_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var entities = new List&lt;DepartmentEntity&gt;();
+            _departmentRepositorySubstitute.ListAsync().Returns(entities);
+
+            // Act
+            var result = await _departmentService.ListAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenRepositoryThrowsException_ThrowsSameException()
+        {
+            // Arrange
+            var expectedException = new TaskCanceledException();
+            _departmentRepositorySubstitute.ListAsync().Throws(expectedException);
+
+            // Act &amp; Assert
+            var actualException = await Assert.ThrowsAsync&lt;TaskCanceledException&gt;(() =&gt; _departmentService.ListAsync());
+            Assert.Same(expectedException, actualException);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,40,1],[13,9,13,10,1],[14,13,14,87,1],[15,13,15,89,1],[16,9,16,10,1],[20,9,20,10,1],[22,13,22,24,1],[23,13,28,15,1],[30,13,30,74,1],[33,13,33,64,1],[36,13,36,36,1],[37,13,37,48,1],[38,13,38,52,1],[39,13,39,66,1],[40,13,40,76,1],[41,9,41,10,1],[45,9,45,10,1],[47,13,47,24,1],[48,13,53,15,1],[55,13,55,74,1],[58,13,58,64,1],[61,13,61,36,1],[62,13,62,48,1],[63,13,63,52,1],[64,13,64,45,1],[65,9,65,10,1],[69,9,69,10,1],[71,13,71,24,1],[72,13,72,85,1],[74,13,74,84,1],[77,13,77,93,1],[77,93,77,124,1],[77,124,77,126,1],[78,13,78,61,1],[79,9,79,10,1],[83,9,83,10,1],[85,13,89,15,1],[91,13,91,75,1],[94,13,94,63,1],[97,13,97,36,1],[98,13,98,43,1],[100,13,100,50,1],[101,13,101,45,1],[102,13,102,54,1],[103,13,103,62,1],[105,13,105,51,1],[106,13,106,46,1],[107,13,107,57,1],[108,13,108,50,1],[110,13,110,75,1],[111,9,111,10,1],[115,9,115,10,1],[117,13,117,57,1],[118,13,118,75,1],[121,13,121,63,1],[124,13,124,36,1],[125,13,125,34,1],[126,9,126,10,1],[130,9,130,10,1],[132,13,132,65,1],[133,13,133,83,1],[136,13,136,121,1],[137,13,137,61,1],[138,9,138,10,1]]);
+    </script>
+  </body>
+</html>

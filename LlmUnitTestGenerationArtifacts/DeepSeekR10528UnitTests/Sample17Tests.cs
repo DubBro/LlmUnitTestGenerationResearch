@@ -1,0 +1,233 @@
+using Dataset.Sample17;
+
+namespace DeepSeekR10528UnitTests;
+
+public class VectorExtensionsTests
+{
+    [Fact]
+    public void Copy_NotEmptyVector_ReturnsEqualArray()
+    {
+        // Arrange
+        double[] vector = { 1.1, 2.2, 3.3 };
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.Equal(vector, result);
+        Assert.NotSame(vector, result);
+    }
+
+    [Fact]
+    public void Copy_EmptyVector_ReturnsEmptyArray()
+    {
+        // Arrange
+        double[] vector = Array.Empty<double>();
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void OuterProduct_TwoVectors_CorrectMatrixResult()
+    {
+        // Arrange
+        double[] lhs = { 1, 2 };
+        double[] rhs = { 3, 4 };
+        double[,] expected = { { 3, 4 }, { 6, 8 } };
+
+        // Act
+        var result = lhs.OuterProduct(rhs);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void OuterProduct_OneEmptyVector_ReturnsEmptyMatrix()
+    {
+        // Arrange
+        double[] lhs = { 1, 2 };
+        double[] rhs = Array.Empty<double>();
+        var expected = new double[2,0];
+
+        // Act
+        var result = lhs.OuterProduct(rhs);
+
+        // Assert
+        Assert.Equal(expected.GetLength(0), result.GetLength(0));
+        Assert.Equal(expected.GetLength(1), result.GetLength(1));
+    }
+
+    [Theory]
+    [InlineData(new double[] { 1, 2 }, new double[] { 3, 4 }, 11)]
+    [InlineData(new double[] { -1, 0, 1 }, new double[] { 2, 3, 4 }, 2)]
+    public void Dot_EqualLengthVectors_CorrectResult(double[] lhs, double[] rhs, double expected)
+    {
+        // Arrange & Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Dot_DifferentLengthVectors_ThrowsArgumentException()
+    {
+        // Arrange
+        double[] lhs = { 1, 2 };
+        double[] rhs = { 1 };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => lhs.Dot(rhs));
+    }
+
+    [Fact]
+    public void Dot_EmptyVectors_ReturnsZero()
+    {
+        // Arrange
+        double[] lhs = Array.Empty<double>();
+        double[] rhs = Array.Empty<double>();
+
+        // Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(0, result);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 3, 4 }, 5)]
+    [InlineData(new double[] { 1, 1, 1, 1 }, 2)]
+    [InlineData(new double[] { 0, 0 }, 0)]
+    public void Magnitude_VariousVectors_CorrectResult(double[] vector, double expected)
+    {
+        // Arrange & Act
+        var result = vector.Magnitude();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 1, 2, 3 }, 2, new double[] { 2, 4, 6 })]
+    [InlineData(new double[] { 0, 1, 0 }, 5, new double[] { 0, 5, 0 })]
+    [InlineData(new double[] { }, 10, new double[] { })]
+    public void Scale_VariousVectors_CorrectResult(double[] vector, double factor, double[] expected)
+    {
+        // Arrange & Act
+        var result = vector.Scale(factor);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToColumnVector_NonEmptyVector_CorrectMatrix()
+    {
+        // Arrange
+        double[] vector = { 1, 2, 3 };
+        double[,] expected = { { 1 }, { 2 }, { 3 } };
+
+        // Act
+        var result = vector.ToColumnVector();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToColumnVector_EmptyVector_CorrectMatrix()
+    {
+        // Arrange
+        double[] vector = Array.Empty<double>();
+        double[,] expected = new double[0, 1];
+
+        // Act
+        var result = vector.ToColumnVector();
+
+        // Assert
+        Assert.Equal(expected.GetLength(0), result.GetLength(0));
+        Assert.Equal(1, result.GetLength(1));
+    }
+
+    [Fact]
+    public void ToRowVector_ColumnVector_CorrectArray()
+    {
+        // Arrange
+        double[,] vector = { { 1 }, { 2 }, { 3 } };
+        double[] expected = { 1, 2, 3 };
+
+        // Act
+        var result = vector.ToRowVector();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToRowVector_NonColumnVector_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        double[,] invalidVector = new double[2, 2];
+
+        // Act & Assert
+        Assert.Throws<InvalidOperationException>(() => invalidVector.ToRowVector());
+    }
+
+    [Fact]
+    public void ToRowVector_EmptyColumnVector_ReturnsEmptyArray()
+    {
+        // Arrange
+        double[,] emptyVector = new double[0, 1];
+        double[] expected = Array.Empty<double>();
+
+        // Act
+        var result = emptyVector.ToRowVector();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_NonEmptyVector_CorrectMatrix()
+    {
+        // Arrange
+        double[] vector = { 1, 2, 3 };
+        double[,] expected = {
+            { 1, 0, 0 },
+            { 0, 2, 0 },
+            { 0, 0, 3 }
+        };
+
+        // Act
+        var result = vector.ToDiagonalMatrix();
+
+        // Assert
+        for (int i = 0; i < vector.Length; i++)
+        {
+            for (int j = 0; j < vector.Length; j++)
+            {
+                Assert.Equal(expected[i, j], result[i, j]);
+            }
+        }
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_EmptyVector_ReturnsEmptyMatrix()
+    {
+        // Arrange
+        double[] vector = Array.Empty<double>();
+        var expected = new double[0, 0];
+
+        // Act
+        var result = vector.ToDiagonalMatrix();
+
+        // Assert
+        Assert.Equal(expected.GetLength(0), result.GetLength(0));
+        Assert.Equal(expected.GetLength(1), result.GetLength(1));
+    }
+}

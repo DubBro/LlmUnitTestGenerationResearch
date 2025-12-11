@@ -1,0 +1,115 @@
+using Dataset.Sample15;
+
+namespace Gemini3ProUnitTests;
+
+public class Base64HelpersTests
+{
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    public void Encode_InputNullOrWhiteSpace_ReturnsEmptyString(string? plainText)
+    {
+        // Arrange
+        // No specific state setup required for static utility method.
+
+        // Act
+        var result = Base64Helpers.Encode(plainText!);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Theory]
+    [InlineData("Hello World", "SGVsbG8gV29ybGQ=")]
+    [InlineData("unit test", "dW5pdCB0ZXN0")]
+    [InlineData("1234567890", "MTIzNDU2Nzg5MA==")]
+    [InlineData("!@#$%^&*()_+", "IUAjJCVeJiooKV8r")]
+    public void Encode_ValidString_ReturnsCorrectBase64String(string plainText, string expectedBase64)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act
+        var result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(expectedBase64, result);
+    }
+
+    [Fact]
+    public void Encode_StringWithUtf8Characters_ReturnsCorrectBase64String()
+    {
+        // Arrange
+        string plainText = "C# é muito bom";
+        string expectedBase64 = "QyMgw6kgbXVpdG8gYm9t";
+
+        // Act
+        var result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(expectedBase64, result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    public void Decode_InputNullOrWhiteSpace_ReturnsEmptyString(string? base64Data)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act
+        var result = Base64Helpers.Decode(base64Data!);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Theory]
+    [InlineData("SGVsbG8gV29ybGQ=", "Hello World")]
+    [InlineData("dW5pdCB0ZXN0", "unit test")]
+    [InlineData("MTIzNDU2Nzg5MA==", "1234567890")]
+    [InlineData("IUAjJCVeJiooKV8r", "!@#$%^&*()_+")]
+    public void Decode_ValidBase64String_ReturnsCorrectDecodedString(string base64Data, string expectedPlainText)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act
+        var result = Base64Helpers.Decode(base64Data);
+
+        // Assert
+        Assert.Equal(expectedPlainText, result);
+    }
+
+    [Fact]
+    public void Decode_Base64StringWithUtf8Characters_ReturnsCorrectDecodedString()
+    {
+        // Arrange
+        string base64Data = "QyMgw6kgbXVpdG8gYm9t";
+        string expectedPlainText = "C# é muito bom";
+
+        // Act
+        var result = Base64Helpers.Decode(base64Data);
+
+        // Assert
+        Assert.Equal(expectedPlainText, result);
+    }
+
+    [Theory]
+    [InlineData("InvalidBase64...")]
+    [InlineData("!!!!")]
+    [InlineData("SGVsbG8")] // Missing padding if strict, or invalid length for Base64 (length must be multiple of 4)
+    public void Decode_InvalidBase64String_ThrowsFormatException(string invalidBase64Data)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act & Assert
+        Assert.Throws<FormatException>(() => Base64Helpers.Decode(invalidBase64Data));
+    }
+}

@@ -1,0 +1,140 @@
+GenerationId:
+gen-1765203773-AQ24jqRVhAAtDSftDN3N
+
+Content:
+```csharp
+using System;
+using Xunit;
+
+namespace Dataset.Sample12.UnitTests
+{
+    public class LUPDecompositionTests
+    {
+        [Fact]
+        public void Decompose_ValidMatrix_OutputsLMatrixWithCorrectStructure()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 2, 1, 1 },
+                { 4, 3, 3 },
+                { 8, 7, 9 }
+            };
+
+            // Act
+            LUPDecomposition.Decompose(matrix, out double[,] L, out _, out _);
+
+            // Assert
+            Assert.Equal(3, L.GetLength(0));
+            Assert.Equal(3, L.GetLength(1));
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.Equal(1.0, L[i, i]);
+            }
+        }
+
+        [Fact]
+        public void Decompose_ValidMatrix_OutputsUMatrixWithCorrectStructure()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 2, 1, 1 },
+                { 4, 3, 3 },
+                { 8, 7, 9 }
+            };
+
+            // Act
+            LUPDecomposition.Decompose(matrix, out _, out double[,] U, out _);
+
+            // Assert
+            Assert.Equal(3, U.GetLength(0));
+            Assert.Equal(3, U.GetLength(1));
+        }
+
+        [Fact]
+        public void Decompose_ValidMatrix_OutputsPermutationArrayWithCorrectLength()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 2, 1, 1 },
+                { 4, 3, 3 },
+                { 8, 7, 9 }
+            };
+
+            // Act
+            LUPDecomposition.Decompose(matrix, out _, out _, out int[] P);
+
+            // Assert
+            Assert.Equal(3, P.Length);
+        }
+
+        [Fact]
+        public void Decompose_DegenerateMatrix_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 0, 1, 1 },
+                { 0, 3, 3 },
+                { 0, 7, 9 }
+            };
+
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() =>
+                LUPDecomposition.Decompose(matrix, out _, out _, out _));
+        }
+
+        [Fact]
+        public void GetMatrix_ValidMatrix_ReturnsFormattedString()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 1.5, 2.7 },
+                { 3.1, 4.9 }
+            };
+
+            // Act
+            string result = LUPDecomposition.GetMatrix(matrix);
+
+            // Assert
+            Assert.Contains("1.5", result);
+            Assert.Contains("2.7", result);
+            Assert.Contains("3.1", result);
+            Assert.Contains("4.9", result);
+            Assert.Contains("\n", result);
+        }
+
+        [Fact]
+        public void GetPermutationMatrix_ValidPermutationArray_ReturnsFormattedString()
+        {
+            // Arrange
+            int[] P = { 2, 0, 1 };
+
+            // Act
+            string result = LUPDecomposition.GetPermutationMatrix(P);
+
+            // Assert
+            Assert.Contains("0\t0\t1\t", result);
+            Assert.Contains("1\t0\t0\t", result);
+            Assert.Contains("0\t1\t0\t", result);
+            Assert.Contains("\n", result);
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+5189,207
+
+OpenRouterElapsedTimeMilliseconds:
+5006
+
+PromptTokens:
+1579
+
+CompletionTokens:
+748
+
+TotalTokens:
+2327
+
+TotalCost:
+0,0003823

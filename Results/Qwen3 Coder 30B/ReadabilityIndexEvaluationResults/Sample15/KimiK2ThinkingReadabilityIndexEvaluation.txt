@@ -1,0 +1,13 @@
+GenerationId:
+gen-1765327566-HRvnh2tupAUwnM6Jt9GH
+
+Content:
+ {
+	"readabilityIndex": 65,
+	"reasons": [
+		"Redundant test coverage: The `[Theory]` test `Encode_InputNullOrWhitespace_ReturnsEmptyString` duplicates three separate `[Fact]` tests for `Encode`, violating DRY principles and creating maintenance confusion.",
+		"Inconsistent test strategy: Similar edge cases for `Encode` and `Decode` use different patterns (mixed `[Fact]`/`[Theory]` vs. only `[Fact]`), lacking a uniform approach.",
+		"Minor naming inconsistencies: Theory test names are slightly less descriptive than fact-based equivalents.",
+		"Generic namespace: `Qwen3Coder30BUnitTests` is not semantically meaningful."
+	]
+}

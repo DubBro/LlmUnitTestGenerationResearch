@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765321271-5NlD6Mj6AnUBG7SpZ5EQ
+
+Content:
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Test class and method names follow recommended conventions (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult).",
+		"Clear AAA structure with // Arrange, // Act, // Assert comments, though many combine Act & Assert.",
+		"Proper use of [Fact] and [Theory] with [InlineData] to avoid duplication.",
+		"Shared mock setup in constructor promotes DRY and readability.",
+		"Nested classes group tests by method (e.g., BetMethod), aiding organization but unconventional inheritance from outer class.",
+		"No unnecessary comments beyond AAA markers.",
+		"Adheres to C# naming conventions for variables and mocks.",
+		"Some test names are overly verbose, reducing scannability.",
+		"Minor redundancies like 'int id = auction.ID;' where values are constant.",
+		"Lacks strict separation of Act and Assert in exception-throwing tests."
+	]
+}

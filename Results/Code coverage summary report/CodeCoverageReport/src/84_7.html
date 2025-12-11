@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample2Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample2;
+using NSubstitute;
+
+namespace Gpt5MiniUnitTests
+{
+    public class EmployeeServiceTests
+    {
+        // Arrange helpers
+        private static EmployeeEntity CreateEntity(int id = 1)
+        {
+            return new EmployeeEntity
+            {
+                Id = id,
+                FirstName = &quot;John&quot;,
+                LastName = &quot;Doe&quot;,
+                MiddleName = &quot;M&quot;,
+                BirthDate = new DateTime(1980, 1, 1),
+                Country = &quot;USA&quot;,
+                City = &quot;NewYork&quot;,
+                Address = &quot;123 Street&quot;,
+                Phone = &quot;+12345678901&quot;,
+                HireDate = DateTime.Now.AddDays(-1),
+                Salary = 1000m,
+                DepartmentId = 1,
+                Department = &quot;Dept&quot;,
+                PositionId = 1,
+                Position = &quot;Pos&quot;
+            };
+        }
+
+        private static EmployeeModel CreateValidModel(int id = 0)
+        {
+            return new EmployeeModel
+            {
+                Id = id,
+                FirstName = &quot;John&quot;,
+                LastName = &quot;Doe&quot;,
+                MiddleName = &quot;M&quot;,
+                BirthDate = new DateTime(1980, 1, 1),
+                Country = &quot;USA&quot;,
+                City = &quot;NewYork&quot;,
+                Address = &quot;123 Street&quot;,
+                Phone = &quot;+12345678901&quot;,
+                HireDate = DateTime.Now.AddDays(-1),
+                Salary = 1000m,
+                DepartmentId = 1,
+                Department = &quot;Dept&quot;,
+                PositionId = 1,
+                Position = &quot;Pos&quot;
+            };
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenEntityExists_ReturnsMappedModel()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var entity = CreateEntity(5);
+            repo.GetAsync(5).Returns(Task.FromResult(entity));
+            var service = new EmployeeService(repo);
+
+            // Act
+            var result = await service.GetAsync(5);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.Id, result.Id);
+            Assert.Equal(entity.FirstName, result.FirstName);
+            Assert.Equal(entity.LastName, result.LastName);
+            Assert.Equal(entity.MiddleName, result.MiddleName);
+            Assert.Equal(entity.BirthDate, result.BirthDate);
+            Assert.Equal(entity.Country, result.Country);
+            Assert.Equal(entity.City, result.City);
+            Assert.Equal(entity.Address, result.Address);
+            Assert.Equal(entity.Phone, result.Phone);
+            Assert.Equal(entity.HireDate, result.HireDate);
+            Assert.Equal(entity.Salary, result.Salary);
+            Assert.Equal(entity.DepartmentId, result.DepartmentId);
+            Assert.Equal(entity.Department, result.Department);
+            Assert.Equal(entity.PositionId, result.PositionId);
+            Assert.Equal(entity.Position, result.Position);
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenCalled_ReturnsMappedModels()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var entities = new List&lt;EmployeeEntity&gt;
+            {
+                CreateEntity(1),
+                CreateEntity(2)
+            };
+            repo.ListAsync().Returns(Task.FromResult((ICollection&lt;EmployeeEntity&gt;)entities));
+            var service = new EmployeeService(repo);
+
+            // Act
+            var result = await service.ListAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, m =&gt; m.Id == 1);
+            Assert.Contains(result, m =&gt; m.Id == 2);
+        }
+
+        [Fact]
+        public async Task ListFilteredAsync_NoFilters_CallsListAsync()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var entities = new List&lt;EmployeeEntity&gt; { CreateEntity(1) };
+            repo.ListAsync().Returns(Task.FromResult((ICollection&lt;EmployeeEntity&gt;)entities));
+            var service = new EmployeeService(repo);
+
+            // Act
+            var result = await service.ListFilteredAsync(
+                name: null,
+                country: null,
+                city: null,
+                minSalary: 0,
+                maxSalary: 0,
+                departmentId: 0,
+                positionId: 0);
+
+            // Assert
+            Assert.Single(result);
+            await repo.Received(1).ListAsync();
+            await repo.DidNotReceive().ListFilteredAsync(
+                Arg.Any&lt;string&gt;(),
+                Arg.Any&lt;string&gt;(),
+                Arg.Any&lt;string&gt;(),
+                Arg.Any&lt;decimal&gt;(),
+                Arg.Any&lt;decimal&gt;(),
+                Arg.Any&lt;int&gt;(),
+                Arg.Any&lt;int&gt;());
+        }
+
+        [Fact]
+        public async Task ListFilteredAsync_WithFilters_CallsRepositoryFiltered()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var entities = new List&lt;EmployeeEntity&gt; { CreateEntity(2) };
+            repo.ListFilteredAsync(&quot;n&quot;, &quot;c&quot;, &quot;t&quot;, 1m, 2m, 3, 4)
+                .Returns(Task.FromResult((ICollection&lt;EmployeeEntity&gt;)entities));
+            var service = new EmployeeService(repo);
+
+            // Act
+            var result = await service.ListFilteredAsync(&quot;n&quot;, &quot;c&quot;, &quot;t&quot;, 1m, 2m, 3, 4);
+
+            // Assert
+            Assert.Single(result);
+            await repo.Received(1).ListFilteredAsync(&quot;n&quot;, &quot;c&quot;, &quot;t&quot;, 1m, 2m, 3, 4);
+            await repo.DidNotReceive().ListAsync();
+        }
+
+        [Fact]
+        public async Task AddAsync_ValidModel_TrimsAndNormalizesAndCallsRepository()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            repo.AddAsync(Arg.Any&lt;EmployeeEntity&gt;()).Returns(42);
+            var service = new EmployeeService(repo);
+
+            var model = CreateValidModel();
+            model.FirstName = &quot; John &quot;;
+            model.LastName = &quot; Doe &quot;;
+            model.MiddleName = &quot; M &quot;;
+            model.Country = &quot; &quot;; // should become null
+            model.City = &quot;   &quot;;  // should become null
+            model.Phone = &quot;12345678901&quot;; // should get &#39;+&#39; prefix
+            model.Address = &quot; 123 Street &quot;; // trimmed
+
+            // Act
+            var result = await service.AddAsync(model);
+
+            // Assert
+            Assert.Equal(42, result);
+            await repo.Received(1).AddAsync(Arg.Is&lt;EmployeeEntity&gt;(e =&gt;
+                e.FirstName == &quot;John&quot; &amp;&amp;
+                e.LastName == &quot;Doe&quot; &amp;&amp;
+                e.MiddleName == &quot;M&quot; &amp;&amp;
+                e.Country == null &amp;&amp;
+                e.City == null &amp;&amp;
+                e.Address == &quot;123 Street&quot; &amp;&amp;
+                e.Phone == &quot;+12345678901&quot; &amp;&amp;
+                e.Salary == model.Salary &amp;&amp;
+                e.DepartmentId == model.DepartmentId &amp;&amp;
+                e.PositionId == model.PositionId));
+        }
+
+        [Fact]
+        public async Task AddAsync_NullModel_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var service = new EmployeeService(repo);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentNullException&gt;(async () =&gt; await service.AddAsync(null!));
+            await repo.DidNotReceive().AddAsync(Arg.Any&lt;EmployeeEntity&gt;());
+        }
+
+        [Fact]
+        public async Task AddAsync_WhiteSpaceFirstName_ThrowsArgumentExceptionWithParamNameFirstName()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var service = new EmployeeService(repo);
+            var model = CreateValidModel();
+            model.FirstName = &quot;   &quot;;
+
+            // Act
+            var ex = await Assert.ThrowsAsync&lt;ArgumentException&gt;(async () =&gt; await service.AddAsync(model));
+
+            // Assert
+            Assert.Equal(&quot;FirstName&quot;, ex.ParamName);
+            await repo.DidNotReceive().AddAsync(Arg.Any&lt;EmployeeEntity&gt;());
+        }
+
+        [Fact]
+        public async Task AddAsync_AddressTooLong_ThrowsArgumentExceptionWithParamNameCity()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var service = new EmployeeService(repo);
+            var model = CreateValidModel();
+            model.Address = new string(&#39;a&#39;, 51);
+
+            // Act
+            var ex = await Assert.ThrowsAsync&lt;ArgumentException&gt;(async () =&gt; await service.AddAsync(model));
+
+            // Assert: production code incorrectly uses nameof(employeeModel.City) for this error
+            Assert.Equal(&quot;City&quot;, ex.ParamName);
+            await repo.DidNotReceive().AddAsync(Arg.Any&lt;EmployeeEntity&gt;());
+        }
+
+        [Fact]
+        public async Task UpdateAsync_InvalidId_ThrowsArgumentExceptionWithParamNameId()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var service = new EmployeeService(repo);
+            var model = CreateValidModel(id: 0);
+
+            // Act
+            var ex = await Assert.ThrowsAsync&lt;ArgumentException&gt;(async () =&gt; await service.UpdateAsync(model));
+
+            // Assert
+            Assert.Equal(&quot;Id&quot;, ex.ParamName);
+            await repo.DidNotReceive().UpdateAsync(Arg.Any&lt;EmployeeEntity&gt;());
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ValidModel_CallsRepositoryUpdateAndReturnsResult()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            repo.UpdateAsync(Arg.Any&lt;EmployeeEntity&gt;()).Returns(7);
+            var service = new EmployeeService(repo);
+            var model = CreateValidModel(id: 5);
+
+            // Act
+            var result = await service.UpdateAsync(model);
+
+            // Assert
+            Assert.Equal(7, result);
+            await repo.Received(1).UpdateAsync(Arg.Is&lt;EmployeeEntity&gt;(e =&gt; e.Id == 5 &amp;&amp; e.FirstName == model.FirstName));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_NullModel_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            var service = new EmployeeService(repo);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentNullException&gt;(async () =&gt; await service.UpdateAsync(null!));
+            await repo.DidNotReceive().UpdateAsync(Arg.Any&lt;EmployeeEntity&gt;());
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ForwardsToRepositoryAndReturnsResult()
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IEmployeeRepository&gt;();
+            repo.DeleteAsync(10).Returns(1);
+            var service = new EmployeeService(repo);
+
+            // Act
+            var result = await service.DeleteAsync(10);
+
+            // Assert
+            Assert.Equal(1, result);
+            await repo.Received(1).DeleteAsync(10);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,9,10,10,1],[11,13,28,15,1],[29,9,29,10,1],[32,9,32,10,1],[33,13,50,15,1],[51,9,51,10,1],[55,9,55,10,1],[57,13,57,62,1],[58,13,58,42,1],[59,13,59,63,1],[60,13,60,53,1],[63,13,63,52,1],[66,13,66,36,1],[67,13,67,48,1],[68,13,68,62,1],[69,13,69,60,1],[70,13,70,64,1],[71,13,71,62,1],[72,13,72,58,1],[73,13,73,52,1],[74,13,74,58,1],[75,13,75,54,1],[76,13,76,60,1],[77,13,77,56,1],[78,13,78,68,1],[79,13,79,64,1],[80,13,80,64,1],[81,13,81,60,1],[82,9,82,10,1],[86,9,86,10,1],[88,13,88,62,1],[89,13,93,15,1],[94,13,94,94,1],[95,13,95,53,1],[98,13,98,52,1],[101,13,101,36,1],[102,13,102,43,1],[103,13,103,42,1],[103,42,103,51,1],[103,51,103,53,1],[104,13,104,42,1],[104,42,104,51,1],[104,51,104,53,1],[105,9,105,10,1],[109,9,109,10,1],[111,13,111,62,1],[112,13,112,73,1],[113,13,113,94,1],[114,13,114,53,1],[117,13,124,32,1],[127,13,127,35,1],[128,13,128,48,1],[129,13,136,33,1],[137,9,137,10,1],[141,9,141,10,1],[143,13,143,62,1],[144,13,144,73,1],[145,13,146,82,1],[147,13,147,53,1],[150,13,150,87,1],[153,13,153,35,1],[154,13,154,83,1],[155,13,155,52,1],[156,9,156,10,1],[160,9,160,10,1],[162,13,162,62,1],[163,13,163,66,1],[164,13,164,53,1],[166,13,166,44,1],[167,13,167,40,1],[168,13,168,38,1],[169,13,169,38,1],[170,13,170,33,1],[171,13,171,32,1],[172,13,172,41,1],[173,13,173,44,1],[176,13,176,56,1],[179,13,179,38,1],[180,13,190,52,1],[191,9,191,10,1],[195,9,195,10,1],[197,13,197,62,1],[198,13,198,53,1],[201,13,201,73,1],[201,73,201,102,1],[201,102,201,104,1],[202,13,202,76,1],[203,9,203,10,1],[207,9,207,10,1],[209,13,209,62,1],[210,13,210,53,1],[211,13,211,44,1],[212,13,212,37,1],[215,13,215,78,1],[215,78,215,107,1],[215,107,215,109,1],[218,13,218,53,1],[219,13,219,76,0],[220,9,220,10,0],[224,9,224,10,1],[226,13,226,62,1],[227,13,227,53,1],[228,13,228,44,1],[229,13,229,49,1],[232,13,232,78,1],[232,78,232,107,1],[232,107,232,109,1],[235,13,235,48,1],[236,13,236,76,0],[237,9,237,10,0],[241,9,241,10,1],[243,13,243,62,1],[244,13,244,53,1],[245,13,245,49,1],[248,13,248,78,1],[248,78,248,110,1],[248,110,248,112,1],[251,13,251,46,1],[252,13,252,79,0],[253,9,253,10,0],[257,9,257,10,1],[259,13,259,62,1],[260,13,260,68,1],[261,13,261,53,1],[262,13,262,49,1],[265,13,265,59,1],[268,13,268,37,1],[269,13,269,122,1],[270,9,270,10,1],[274,9,274,10,1],[276,13,276,62,1],[277,13,277,53,1],[280,13,280,73,1],[280,73,280,105,1],[280,105,280,107,1],[281,13,281,79,1],[282,9,282,10,1],[286,9,286,10,1],[288,13,288,62,1],[289,13,289,45,1],[290,13,290,53,1],[293,13,293,56,1],[296,13,296,37,1],[297,13,297,52,1],[298,9,298,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765318891-eV3isJIRncvB9FS3dhSA
+
+Content:
+ {"readabilityIndex":88,"reasons":["Test class and method names clearly follow standard patterns (ClassUnderTestTests and Method_Scenario_Result)","Excellent use of [Theory] with [InlineData] for testing multiple input variations, reducing duplication","AAA pattern is consistently applied with clear comments and empty line separation","Minor inconsistency in Arrange comments verbosity across tests (some more detailed than others)","Null-forgiving operator (!) used in null-input tests reduces clarity by suppressing compiler warnings","Exception test uses combined 'Act & Assert' comment, which deviates slightly from pure AAA pattern but is standard practice"]}

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765322817-lRvWtN2jqpHXAsVvq1vf
+
+Content:
+{"readabilityIndex":92,"reasons":["Test class name follows `ClassUnderTestTests` pattern.","Test method names consistently follow `MethodUnderTest_Scenario_ExpectedResult` pattern.","Most tests adhere to AAA pattern with clear // Arrange, // Act, // Assert comments and separations.","Async tests correctly use `async Task` signatures.","Clear, meaningful naming for variables, mocks, and entities.","No unnecessary comments or nested classes.","Standard C# naming conventions and formatting.","Appropriate use of [Fact] for single scenarios.","Minor deviation: some tests combine // Act & Assert for exception scenarios.","Verbose property-by-property assertions in collection test reduce conciseness slightly.","Complex Arrange setup in null-list test slightly impacts readability."]}

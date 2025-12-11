@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765327867-rPjYnemfFmjD26ltZyM0
+
+Content:
+ {"readabilityIndex":98,"reasons":["Consistent and clear naming following the ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult patterns","Proper implementation of AAA pattern with comments and empty line separation","Clear and meaningful variable names that reflect their purpose","Appropriate use of [Fact] attribute for single test scenarios","Clean and consistent code formatting throughout all tests","No unnecessary comments, nested classes, or code duplication","Exception tests combine Act and Assert blocks idiomatically for xUnit without sacrificing readability"]}

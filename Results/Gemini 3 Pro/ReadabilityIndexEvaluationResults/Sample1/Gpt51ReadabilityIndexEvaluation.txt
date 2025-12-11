@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317559-jbMtS9LDCE9I5BGe6vIK
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test (DepartmentServiceTests).",
+    "Test method names consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern and are very descriptive.",
+    "AAA pattern is clearly used and visually separated by comments and blank lines, making test flow easy to follow.",
+    "Asynchronous tests correctly use async Task signatures, improving clarity and avoiding async void pitfalls.",
+    "Variable and field names (_departmentRepositorySubstitute, entity, result, expectedException) are meaningful and self-explanatory.",
+    "Use of NSubstitute is straightforward and readable with clear setup and verification (Returns, Throws, Received).",
+    "Assertions are explicit and focused, often checking multiple relevant properties, which makes the intent of each test clear.",
+    "No unnecessary nested classes or unrelated comments; the test file is structurally simple and easy to navigate.",
+    "Code adheres to standard C# naming and formatting conventions, which improves readability and consistency.",
+    "Some minor duplication between similar tests (e.g., GetAsync scenarios) could be reduced with helper methods or theories, but this does not significantly harm readability."
+  ]
+}

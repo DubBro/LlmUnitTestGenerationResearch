@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765326665-GkMe0VpqGHfZH9IelnZn
+
+Content:
+{
+	"readabilityIndex": 82,
+	"reasons": [
+		"Clear and consistent test naming following MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Proper test class naming (AuctionServiceTests) matches convention",
+		"Good separation of AAA blocks with appropriate comments and spacing",
+		"Clean and organized test structure with logical grouping of related tests",
+		"Variables and parameters have meaningful names that describe their purpose",
+		"Proper use of xUnit attributes ([Fact]) for single scenarios",
+		"Minimal dependencies with clear mocking using NSubstitute",
+		"Consistent formatting and indentation throughout the code",
+		"Tests follow single responsibility principle - each tests one specific scenario",
+		"Some minor duplication in test setup could be reduced with Theory attributes or helper methods"
+	]
+}

@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765328043-CxGvO1uT4s31svYoBcQJ
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern (StringExtensionsTests), making its purpose immediately clear.",
+    "Individual test names consistently use the MethodUnderTest_Scenario_ExpectedResult convention, which clearly expresses intent.",
+    "All tests follow a clean AAA structure with // Arrange, // Act, // Assert comments and blank-line separation, improving scanability.",
+    "Formatting, indentation, and brace style are consistent throughout, making the code visually easy to follow.",
+    "No unnecessary nested classes or extraneous comments; each test is self-contained and focused on a single scenario.",
+    "Use of [Theory] with [InlineData] for ToCsvCompatible special character cases reduces duplication and clarifies a shared scenario.",
+    "Local variable names (s, c) are short but still understandable in context; however, slightly more descriptive names (e.g., input) could improve clarity further.",
+    "There is some repetitive structure across similar tests (IsInteger, IsNumber, Reverse, GetFileExtension) that could be consolidated into additional [Theory]-based tests to reduce duplication and improve maintainability."
+  ]
+}

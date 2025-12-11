@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317665-5dmXspFrOnbfuybDHSmB
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests convention.",
+		"Most test method names follow MethodUnderTest_Scenario_ExpectedResult pattern clearly.",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and separation.",
+		"Proper use of async Task for asynchronous tests.",
+		"Effective use of [Theory] and [InlineData] to avoid duplication in validation tests.",
+		"Constructor initializes mocks and SUT, improving setup consistency.",
+		"Helper method CreateValidModel() reduces code duplication and enhances maintainability.",
+		"[Fact] attributes used correctly for single scenarios.",
+		"Minor flaw: unclear 'RunOfPaperValidInputs' in one method name.",
+		"Some exception tests merge Act & Assert, slightly deviating from strict AAA."
+	]
+}

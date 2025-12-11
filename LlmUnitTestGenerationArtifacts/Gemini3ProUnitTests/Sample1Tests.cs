@@ -1,0 +1,140 @@
+using Dataset.Sample1;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+
+namespace Gemini3ProUnitTests
+{
+    public class DepartmentServiceTests
+    {
+        private readonly IDepartmentRepository _departmentRepositorySubstitute;
+        private readonly DepartmentService _departmentService;
+
+        public DepartmentServiceTests()
+        {
+            _departmentRepositorySubstitute = Substitute.For<IDepartmentRepository>();
+            _departmentService = new DepartmentService(_departmentRepositorySubstitute);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenEntityFound_ReturnsMappedModel()
+        {
+            // Arrange
+            var id = 1;
+            var entity = new DepartmentEntity
+            {
+                Id = id,
+                Name = "Engineering",
+                Description = "Software Development"
+            };
+
+            _departmentRepositorySubstitute.GetAsync(id).Returns(entity);
+
+            // Act
+            var result = await _departmentService.GetAsync(id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.Id, result.Id);
+            Assert.Equal(entity.Name, result.Name);
+            Assert.Equal(entity.Description, result.Description);
+            await _departmentRepositorySubstitute.Received(1).GetAsync(id);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenEntityHasNullDescription_ReturnsModelWithNullDescription()
+        {
+            // Arrange
+            var id = 2;
+            var entity = new DepartmentEntity
+            {
+                Id = id,
+                Name = "HR",
+                Description = null
+            };
+
+            _departmentRepositorySubstitute.GetAsync(id).Returns(entity);
+
+            // Act
+            var result = await _departmentService.GetAsync(id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.Id, result.Id);
+            Assert.Equal(entity.Name, result.Name);
+            Assert.Null(result.Description);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenRepositoryThrowsException_ThrowsSameException()
+        {
+            // Arrange
+            var id = 3;
+            var expectedException = new InvalidOperationException("Database error");
+
+            _departmentRepositorySubstitute.GetAsync(id).Throws(expectedException);
+
+            // Act & Assert
+            var actualException = await Assert.ThrowsAsync<InvalidOperationException>(() => _departmentService.GetAsync(id));
+            Assert.Same(expectedException, actualException);
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenEntitiesExist_ReturnsListOfMappedModels()
+        {
+            // Arrange
+            var entities = new List<DepartmentEntity>
+            {
+                new() { Id = 10, Name = "Finance", Description = "Accounts" },
+                new() { Id = 20, Name = "Marketing", Description = null }
+            };
+
+            _departmentRepositorySubstitute.ListAsync().Returns(entities);
+
+            // Act
+            var result = await _departmentService.ListAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+
+            var firstModel = result.ElementAt(0);
+            Assert.Equal(10, firstModel.Id);
+            Assert.Equal("Finance", firstModel.Name);
+            Assert.Equal("Accounts", firstModel.Description);
+
+            var secondModel = result.ElementAt(1);
+            Assert.Equal(20, secondModel.Id);
+            Assert.Equal("Marketing", secondModel.Name);
+            Assert.Null(secondModel.Description);
+
+            await _departmentRepositorySubstitute.Received(1).ListAsync();
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenRepositoryReturnsEmptyList_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var entities = new List<DepartmentEntity>();
+            _departmentRepositorySubstitute.ListAsync().Returns(entities);
+
+            // Act
+            var result = await _departmentService.ListAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenRepositoryThrowsException_ThrowsSameException()
+        {
+            // Arrange
+            var expectedException = new TaskCanceledException();
+            _departmentRepositorySubstitute.ListAsync().Throws(expectedException);
+
+            // Act & Assert
+            var actualException = await Assert.ThrowsAsync<TaskCanceledException>(() => _departmentService.ListAsync());
+            Assert.Same(expectedException, actualException);
+        }
+    }
+}

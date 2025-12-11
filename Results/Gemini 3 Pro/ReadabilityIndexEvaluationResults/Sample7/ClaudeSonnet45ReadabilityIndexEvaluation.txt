@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765318089-sxbiXpawOEQ7thSPCb7f
+
+Content:
+```json
+{
+	"readabilityIndex": 87,
+	"reasons": [
+		"Test class name follows the correct 'ClassUnderTestTests' pattern",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"All tests properly follow the AAA pattern with clear comments separating each section",
+		"Appropriate use of [Theory] with [InlineData] to avoid duplication when testing multiple invalid inputs",
+		"Async tests correctly use 'async Task' signature instead of 'async void'",
+		"Clear and meaningful variable names throughout (validImei, invalidImei, entities, result)",
+		"Proper setup of test dependencies using constructor injection with mocks",
+		"Inline comments in InlineData attributes provide helpful context without cluttering test bodies",
+		"Consistent formatting and spacing between logical blocks enhances readability",
+		"Very minor improvement possible: some assertion blocks could be slightly more concise, but overall excellent quality"
+	]
+}
+```

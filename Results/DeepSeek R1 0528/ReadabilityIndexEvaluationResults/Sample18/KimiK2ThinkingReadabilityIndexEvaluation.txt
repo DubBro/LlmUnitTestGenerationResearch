@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317176-YWq2XgSYTb8JpmwisBEV
+
+Content:
+ {"readabilityIndex":88,"reasons":["Excellent naming conventions for test class and all test methods following the specified patterns","Proper use of [Theory] with comprehensive [InlineData] and [Fact] for appropriate scenarios","Clear AAA structure with proper comments and empty line separation","Meaningful and descriptive variable names throughout","Minor deviation: Additional explanatory comments beyond AAA blocks violate the strict 'no comments' rule","Some test data values (negative keys, large numbers) are complex and require mental calculation despite comments"]}

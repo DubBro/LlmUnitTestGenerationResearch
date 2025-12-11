@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample20Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample20;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class FisherYatesShufflerTests
+    {
+        [Fact]
+        public void Shuffle_ArrayIsNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            int[]? array = null;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; shuffler.Shuffle(array));
+        }
+
+        [Fact]
+        public void Shuffle_ArrayIsEmpty_DoesNotThrow()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var array = new int[0];
+
+            // Act
+            shuffler.Shuffle(array);
+
+            // Assert
+            // No exception thrown, and array remains empty
+            Assert.Empty(array);
+        }
+
+        [Fact]
+        public void Shuffle_ArrayHasOneElement_ArrayUnchanged()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var array = new[] { 42 };
+
+            // Act
+            shuffler.Shuffle(array);
+
+            // Assert
+            Assert.Equal(42, array[0]);
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 2, 3, 4, 5 }, 1)]
+        [InlineData(new[] { 1, 2, 3, 4, 5 }, 100)]
+        [InlineData(new[] { 1, 2, 3, 4, 5 }, 999)]
+        public void Shuffle_ArrayWithMultipleElements_ShufflesWithSeed(int[] original, int seed)
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var array = new int[original.Length];
+            Array.Copy(original, array, original.Length);
+
+            // Act
+            shuffler.Shuffle(array, seed);
+
+            // Assert
+            // Elements are still present but order has changed (probabilistically)
+            Assert.Equal(original.Length, array.Length);
+            Assert.True(array.Contains(original[0]));
+            Assert.True(array.Contains(original[1]));
+            Assert.True(array.Contains(original[2]));
+            Assert.True(array.Contains(original[3]));
+            Assert.True(array.Contains(original[4]));
+        }
+
+        [Theory]
+        [InlineData(new[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot; }, 0)]
+        [InlineData(new[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot; }, 42)]
+        [InlineData(new[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot; }, 999999)]
+        public void Shuffle_StringArrayWithSeed_SharesSameElements(string[] original, int seed)
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;string&gt;();
+            var array = new string[original.Length];
+            Array.Copy(original, array, original.Length);
+
+            // Act
+            shuffler.Shuffle(array, seed);
+
+            // Assert
+            Assert.Contains(&quot;a&quot;, array);
+            Assert.Contains(&quot;b&quot;, array);
+            Assert.Contains(&quot;c&quot;, array);
+            Assert.Equal(3, array.Length);
+        }
+
+        [Fact]
+        public void Shuffle_ArrayWithSeed_NullSeedUsesDefaultRandom()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var array = new[] { 1, 2, 3, 4, 5 };
+
+            // Act
+            shuffler.Shuffle(array, null);
+
+            // Assert
+            // Should shuffle without throwing; behavior depends on Random() behavior
+            // We check the structure only
+            Assert.Equal(5, array.Length);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[11,13,11,59,1],[12,13,12,33,1],[15,13,15,56,1],[15,56,15,79,1],[15,79,15,81,1],[16,9,16,10,0],[20,9,20,10,1],[22,13,22,59,1],[23,13,23,36,1],[26,13,26,37,1],[30,13,30,33,1],[31,9,31,10,1],[35,9,35,10,1],[37,13,37,59,1],[38,13,38,38,1],[41,13,41,37,1],[44,13,44,40,1],[45,9,45,10,1],[52,9,52,10,1],[54,13,54,59,1],[55,13,55,50,1],[56,13,56,58,1],[59,13,59,43,1],[63,13,63,57,1],[64,13,64,54,1],[65,13,65,54,1],[66,13,66,54,1],[67,13,67,54,1],[68,13,68,54,1],[69,9,69,10,1],[76,9,76,10,1],[78,13,78,62,1],[79,13,79,53,1],[80,13,80,58,1],[83,13,83,43,1],[86,13,86,41,1],[87,13,87,41,1],[88,13,88,41,1],[89,13,89,43,1],[90,9,90,10,1],[94,9,94,10,1],[96,13,96,59,1],[97,13,97,49,1],[100,13,100,43,1],[105,13,105,43,1],[106,9,106,10,1]]);
+    </script>
+  </body>
+</html>

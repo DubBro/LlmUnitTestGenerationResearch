@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample11Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample11;
+
+namespace Gpt5MiniUnitTests
+{
+    public class MatrixChainMultiplicationTests
+    {
+        [Fact]
+        public void MatrixChainOrder_SimpleTwoMatrices_ReturnsCorrectCostAndS()
+        {
+            // Arrange
+            int[] p = { 10, 20, 30 };
+            int n = 3;
+
+            // Act
+            int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Assert
+            Assert.Equal(6000, cost);
+            Assert.NotNull(s);
+            Assert.Equal(1, s[1, 2]);
+            string parentheses = MatrixChainMultiplication.GetOptimalParentheses(s, 1, 2);
+            Assert.Equal(&quot;(A1A2)&quot;, parentheses);
+        }
+
+        [Fact]
+        public void MatrixChainOrder_ClassicExample_ReturnsKnownMinimumAndParentheses()
+        {
+            // Arrange
+            int[] p = { 30, 35, 15, 5, 10, 20, 25 };
+            int n = 7;
+
+            // Act
+            int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Assert
+            Assert.Equal(15125, cost);
+            Assert.NotNull(s);
+            string parentheses = MatrixChainMultiplication.GetOptimalParentheses(s, 1, n - 1);
+            Assert.Equal(&quot;((A1(A2A3))((A4A5)A6))&quot;, parentheses);
+            // ensure input array not modified
+            Assert.Equal(new int[] { 30, 35, 15, 5, 10, 20, 25 }, p);
+        }
+
+        [Fact]
+        public void MatrixChainOrder_InvalidN_ThrowsIndexOutOfRangeException()
+        {
+            // Arrange
+            int[] p = { 10, 20 };
+            int n = 1;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;IndexOutOfRangeException&gt;(() =&gt; MatrixChainMultiplication.MatrixChainOrder(p, n, out _));
+        }
+
+        [Fact]
+        public void GetOptimalParentheses_SingleElement_ReturnsSingleName()
+        {
+            // Arrange
+            int[,] s = new int[2, 2]; // indices 0..1, but we will call i==j==1
+            int i = 1;
+            int j = 1;
+
+            // Act
+            string result = MatrixChainMultiplication.GetOptimalParentheses(s, i, j);
+
+            // Assert
+            Assert.Equal(&quot;A1&quot;, result);
+        }
+
+        [Fact]
+        public void GetOptimalParentheses_NullS_ThrowsNullReferenceException()
+        {
+            // Arrange
+            int[,] s = null;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;NullReferenceException&gt;(() =&gt; MatrixChainMultiplication.GetOptimalParentheses(s, 1, 1));
+        }
+
+        [Fact]
+        public void GetOptimalParentheses_CustomS_ConstructsExpectedParentheses()
+        {
+            // Arrange
+            // Build s for a chain of 3 matrices where optimal split is between 1 and 2:
+            // Desired parentheses: (A1(A2A3))
+            int[,] s = new int[4, 4];
+            s[1, 3] = 1;
+            s[1, 1] = 0;
+            s[2, 3] = 2;
+
+            // Act
+            string result = MatrixChainMultiplication.GetOptimalParentheses(s, 1, 3);
+
+            // Assert
+            Assert.Equal(&quot;(A1(A2A3))&quot;, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[11,13,11,38,1],[12,13,12,23,1],[15,13,15,87,1],[18,13,18,38,1],[19,13,19,31,1],[20,13,20,38,1],[21,13,21,91,1],[22,13,22,49,1],[23,9,23,10,1],[27,9,27,10,1],[29,13,29,53,1],[30,13,30,23,1],[33,13,33,87,1],[36,13,36,39,1],[37,13,37,31,1],[38,13,38,95,1],[39,13,39,65,1],[41,13,41,70,1],[42,9,42,10,1],[46,9,46,10,1],[48,13,48,34,1],[49,13,49,23,1],[52,13,52,59,1],[52,59,52,114,1],[52,114,52,116,1],[53,9,53,10,1],[57,9,57,10,1],[59,13,59,38,1],[60,13,60,23,1],[61,13,61,23,1],[64,13,64,86,1],[67,13,67,40,1],[68,9,68,10,1],[72,9,72,10,1],[74,13,74,29,1],[77,13,77,57,1],[77,57,77,113,1],[77,113,77,115,1],[78,9,78,10,0],[82,9,82,10,1],[86,13,86,38,1],[87,13,87,25,1],[88,13,88,25,1],[89,13,89,25,1],[92,13,92,86,1],[95,13,95,48,1],[96,9,96,10,1]]);
+    </script>
+  </body>
+</html>

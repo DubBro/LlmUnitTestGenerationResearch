@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765322266-YGwppOb7qNQqpaz9e9wH
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test method names clearly follow the MethodUnderTest_Scenario_ExpectedResult pattern, making intent immediately obvious.",
+    "Test class name AsciiHelpersTests clearly indicates the unit under test and follows the ClassUnderTestTests convention.",
+    "Each test consistently follows the AAA (Arrange–Act–Assert) pattern with separating comments, improving scanability.",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for varying replacement characters reduces duplication and clarifies scenario coverage.",
+    "Variable names like input, replacement, result, and expected are simple, consistent, and descriptive enough for the context.",
+    "Formatting, spacing, and brace style are consistent throughout, aiding quick visual parsing.",
+    "No extraneous comments beyond AAA separators; the code is self-explanatory through naming.",
+    "Nested public classes per method under test slightly increase structural complexity and nesting depth, making navigation marginally less straightforward.",
+    "Some minor repetition between null/empty/whitespace cases could be consolidated with theories, which would further improve maintainability without sacrificing clarity."
+  ]
+}

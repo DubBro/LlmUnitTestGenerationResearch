@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765326771-ob3no4JAibBmAokhKHOq
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is clearly implemented with proper comments and blank line separation in most tests",
+		"Naming conventions are clear and meaningful throughout the code",
+		"Good use of NSubstitute for mocking dependencies with readable setup",
+		"Minor inconsistency: some tests combine Act & Assert sections which slightly deviates from strict AAA separation",
+		"Unused 'exception' variables are declared but never used, adding minor noise to the code",
+		"Could benefit from [Theory] with [InlineData] to reduce duplication across similar validation tests (e.g., multiple InvalidIdException tests)",
+		"Constructor setup of mocks is clean and promotes maintainability",
+		"No unnecessary comments beyond AAA markers, keeping the code clean"
+	]
+}
+```

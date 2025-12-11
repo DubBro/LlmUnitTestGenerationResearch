@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765322219-ojW4PihYHuyWimO55v8X
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern (AsciiHelpersTests).",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern, clearly communicating intent.",
+		"Tests follow the AAA pattern with clear Arrange, Act, Assert comments and logical separation.",
+		"Uses [Fact] for single scenarios and [Theory] with [InlineData] for parameterized testing to avoid duplication.",
+		"Nested classes for different method groups (ReplaceNonAsciiCharsWith, RemoveNonAsciiChars) provide logical organization.",
+		"Variable names are clear and meaningful (input, replacement, result, expected).",
+		"Consistent formatting and adherence to C# naming conventions throughout.",
+		"Tests cover edge cases (null, empty, whitespace) and typical scenarios thoroughly."
+	]
+}

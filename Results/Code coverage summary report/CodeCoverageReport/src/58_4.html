@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample19Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample19;
+
+namespace Gemini3ProUnitTests;
+
+public class StringExtensionsTests
+{
+    #region IsDigit
+
+    [Theory]
+    [InlineData(&#39;0&#39;)]
+    [InlineData(&#39;1&#39;)]
+    [InlineData(&#39;5&#39;)]
+    [InlineData(&#39;9&#39;)]
+    public void IsDigit_PassingDigitChar_ReturnsTrue(char c)
+    {
+        // Arrange
+        // (Input provided via parameter)
+
+        // Act
+        var result = c.IsDigit();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Theory]
+    [InlineData(&#39;a&#39;)]
+    [InlineData(&#39;Z&#39;)]
+    [InlineData(&#39;/&#39;)] // ASCII 47 (before &#39;0&#39;)
+    [InlineData(&#39;:&#39;)] // ASCII 58 (after &#39;9&#39;)
+    [InlineData(&#39; &#39;)]
+    [InlineData(&#39;$&#39;)]
+    public void IsDigit_PassingNonDigitChar_ReturnsFalse(char c)
+    {
+        // Arrange
+        // (Input provided via parameter)
+
+        // Act
+        var result = c.IsDigit();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    #endregion
+
+    #region IsInteger
+
+    [Theory]
+    [InlineData(&quot;0&quot;)]
+    [InlineData(&quot;123&quot;)]
+    [InlineData(&quot;-456&quot;)]
+    [InlineData(&quot;2147483647&quot;)] // int.MaxValue
+    [InlineData(&quot;-2147483648&quot;)] // int.MinValue
+    [InlineData(&quot;  123  &quot;)] // int.TryParse allows whitespace
+    public void IsInteger_PassingValidIntegerString_ReturnsTrue(string s)
+    {
+        // Arrange
+        // (Input provided via parameter)
+
+        // Act
+        var result = s.IsInteger();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot;   &quot;)]
+    [InlineData(&quot;abc&quot;)]
+    [InlineData(&quot;12.34&quot;)]
+    [InlineData(&quot;2147483648&quot;)] // int.MaxValue + 1
+    public void IsInteger_PassingInvalidIntegerString_ReturnsFalse(string s)
+    {
+        // Arrange
+        // (Input provided via parameter)
+
+        // Act
+        var result = s.IsInteger();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    #endregion
+
+    #region IsNumber
+
+    [Theory]
+    [InlineData(&quot;0&quot;)]
+    [InlineData(&quot;123&quot;)]
+    [InlineData(&quot;-456&quot;)]
+    [InlineData(&quot;  789  &quot;)] // double.TryParse allows whitespace
+    public void IsNumber_PassingValidNumberString_ReturnsTrue(string s)
+    {
+        // Arrange
+        // (Input provided via parameter)
+
+        // Act
+        var result = s.IsNumber();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot;   &quot;)]
+    [InlineData(&quot;abc&quot;)]
+    [InlineData(&quot;12.34.56&quot;)]
+    public void IsNumber_PassingInvalidNumberString_ReturnsFalse(string s)
+    {
+        // Arrange
+        // (Input provided via parameter)
+
+        // Act
+        var result = s.IsNumber();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    #endregion
+
+    #region Reverse
+
+    [Theory]
+    [InlineData(&quot;abc&quot;, &quot;cba&quot;)]
+    [InlineData(&quot;Hello&quot;, &quot;olleH&quot;)]
+    [InlineData(&quot;a&quot;, &quot;a&quot;)]
+    [InlineData(&quot;123456&quot;, &quot;654321&quot;)]
+    public void Reverse_PassingValidString_ReturnsReversedString(string input, string expected)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.Reverse();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot;   &quot;)]
+    public void Reverse_PassingNullOrWhitespace_ReturnsOriginalString(string input)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.Reverse();
+
+        // Assert
+        Assert.Same(input, result);
+    }
+
+    #endregion
+
+    #region ToCsvCompatible
+
+    [Theory]
+    [InlineData(&quot;NormalString&quot;, &quot;NormalString&quot;)]
+    [InlineData(&quot;123&quot;, &quot;123&quot;)]
+    [InlineData(&quot;NoSpecialChars&quot;, &quot;NoSpecialChars&quot;)]
+    public void ToCsvCompatible_PassingSimpleString_ReturnsOriginalString(string input, string expected)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;Value with comma, inside&quot;, &quot;\&quot;Value with comma, inside\&quot;&quot;)]
+    [InlineData(&quot;Value with semicolon; inside&quot;, &quot;\&quot;Value with semicolon; inside\&quot;&quot;)]
+    [InlineData(&quot;Line\nBreak&quot;, &quot;\&quot;Line\nBreak\&quot;&quot;)]
+    [InlineData(&quot; LeadingSpace&quot;, &quot;\&quot; LeadingSpace\&quot;&quot;)]
+    [InlineData(&quot;TrailingSpace &quot;, &quot;\&quot;TrailingSpace \&quot;&quot;)]
+    [InlineData(&quot;Quote\&quot;Inside&quot;, &quot;\&quot;Quote\&quot;\&quot;Inside\&quot;&quot;)] // Replaces &quot; with &quot;&quot; and wraps in &quot;&quot;
+    [InlineData(&quot;A,B;C\&quot;D&quot;, &quot;\&quot;A,B;C\&quot;\&quot;D\&quot;&quot;)] // Mixed special characters
+    public void ToCsvCompatible_PassingStringRequiringEscaping_ReturnsEscapedString(string input, string expected)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    public void ToCsvCompatible_PassingNullOrEmpty_ReturnsOriginalString(string input)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal(input, result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_PassingSingleSpace_ReturnsWrappedString()
+    {
+        // Arrange
+        // &quot; &quot; -&gt; Has leading/trailing space -&gt; Wraps -&gt; &quot; &quot;
+        string input = &quot; &quot;;
+        string expected = &quot;\&quot; \&quot;&quot;;
+
+        // Act
+        var result = input.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    #endregion
+
+    #region GetFileExtension
+
+    [Theory]
+    [InlineData(&quot;file.txt&quot;, &quot;txt&quot;)]
+    [InlineData(&quot;archive.tar.gz&quot;, &quot;gz&quot;)]
+    [InlineData(&quot;.config&quot;, &quot;config&quot;)]
+    [InlineData(&quot;image.JPEG&quot;, &quot;JPEG&quot;)]
+    [InlineData(&quot;path/to/file.xml&quot;, &quot;xml&quot;)]
+    public void GetFileExtension_PassingValidStringWithExtension_ReturnsExtension(string input, string expected)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.GetFileExtension();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;file.   txt   &quot;, &quot;txt&quot;)] // result is trimmed
+    [InlineData(&quot;file.&quot;, &quot;&quot;)] // dot is last char, substring is empty
+    public void GetFileExtension_PassingStringWithWhitespaceAroundExtension_ReturnsTrimmedExtension(string input, string expected)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.GetFileExtension();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void GetFileExtension_PassingStringWithoutExtension_ReturnsEmptyString()
+    {
+        // Arrange
+        string input = &quot;makefile&quot;;
+
+        // Act
+        var result = input.GetFileExtension();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot;   &quot;)]
+    public void GetFileExtension_PassingNullOrWhitespace_ReturnsOriginalString(string input)
+    {
+        // Arrange
+        // (Input provided via parameters)
+
+        // Act
+        var result = input.GetFileExtension();
+
+        // Assert
+        Assert.Equal(input, result);
+    }
+
+    #endregion
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[15,5,15,6,1],[20,9,20,34,1],[23,9,23,29,1],[24,5,24,6,1],[34,5,34,6,1],[39,9,39,34,1],[42,9,42,30,1],[43,5,43,6,1],[57,5,57,6,1],[62,9,62,36,1],[65,9,65,29,1],[66,5,66,6,1],[76,5,76,6,1],[81,9,81,36,1],[84,9,84,30,1],[85,5,85,6,1],[97,5,97,6,1],[102,9,102,35,1],[105,9,105,29,1],[106,5,106,6,1],[115,5,115,6,1],[120,9,120,35,1],[123,9,123,30,1],[124,5,124,6,1],[136,5,136,6,1],[141,9,141,38,1],[144,9,144,40,1],[145,5,145,6,1],[152,5,152,6,1],[157,9,157,38,1],[160,9,160,36,1],[161,5,161,6,1],[172,5,172,6,1],[177,9,177,46,1],[180,9,180,40,1],[181,5,181,6,1],[192,5,192,6,1],[197,9,197,46,1],[200,9,200,40,1],[201,5,201,6,1],[207,5,207,6,1],[212,9,212,46,1],[215,9,215,37,1],[216,5,216,6,1],[220,5,220,6,1],[223,9,223,28,1],[224,9,224,35,1],[227,9,227,46,1],[230,9,230,40,1],[231,5,231,6,1],[244,5,244,6,1],[249,9,249,47,1],[252,9,252,40,1],[253,5,253,6,1],[259,5,259,6,1],[264,9,264,47,1],[267,9,267,40,1],[268,5,268,6,1],[272,5,272,6,1],[274,9,274,35,1],[277,9,277,47,1],[280,9,280,44,1],[281,5,281,6,1],[288,5,288,6,1],[293,9,293,47,1],[296,9,296,37,1],[297,5,297,6,1]]);
+    </script>
+  </body>
+</html>

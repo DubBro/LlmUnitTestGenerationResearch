@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319881-HuoXUxWJEV9rTBCqZko4
+
+Content:
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class and method names are clear and follow recommended patterns (ClassUnderTestTests, MethodUnderTest_Scenario_ExpectedResult).",
+		"AAA pattern is consistently followed with clear Arrange, Act, Assert comments and separation.",
+		"Tests use proper async Task signatures instead of async void.",
+		"Good use of mocks/substitutes with NSubstitute, though some test data duplication exists between tests.",
+		"Test scenarios are logically organized with clear setup in constructor and per-test arrangements.",
+		"Assertions verify both results and mock interactions appropriately.",
+		"One test has vague scenario description ('WithDefaultId_UsesDefaultId') - could be more explicit about the optional parameter scenario.",
+		"Fourth test creates local mocks instead of using class-level fields, slightly inconsistent but acceptable.",
+		"No use of Theory/InlineData for parameterized tests where appropriate (e.g., testing different IDs).",
+		"Overall structure is clean with good separation of concerns and minimal unnecessary code."
+	]
+}

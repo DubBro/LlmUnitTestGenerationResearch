@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample17Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample17;
+
+namespace Gemini3ProUnitTests;
+
+public class VectorExtensionsTests
+{
+    [Fact]
+    public void Copy_WhenCalledWithPopulatedVector_ReturnsNewArrayWithSameValues()
+    {
+        // Arrange
+        double[] vector = { 1.5, 2.5, 3.5 };
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.NotSame(vector, result);
+        Assert.Equal(vector, result);
+    }
+
+    [Fact]
+    public void Copy_WhenCalledWithEmptyVector_ReturnsEmptyArray()
+    {
+        // Arrange
+        double[] vector = Array.Empty&lt;double&gt;();
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.NotSame(vector, result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void OuterProduct_WhenCalledWithValidVectors_ReturnsCorrectResult()
+    {
+        // Arrange
+        double[] lhs = { 1.0, 2.0, 3.0 };
+        double[] rhs = { 4.0, 5.0 };
+
+        // Act
+        var result = lhs.OuterProduct(rhs);
+
+        // Assert
+        Assert.Equal(3, result.GetLength(0));
+        Assert.Equal(2, result.GetLength(1));
+        Assert.Equal(4.0, result[0, 0]);
+        Assert.Equal(5.0, result[0, 1]);
+        Assert.Equal(8.0, result[1, 0]);
+        Assert.Equal(10.0, result[1, 1]);
+        Assert.Equal(12.0, result[2, 0]);
+        Assert.Equal(15.0, result[2, 1]);
+    }
+
+    [Fact]
+    public void Dot_WhenCalledWithVectorsOfSameDimension_ReturnsDotProduct()
+    {
+        // Arrange
+        double[] lhs = { 1.0, 3.0, -5.0 };
+        double[] rhs = { 4.0, -2.0, -1.0 };
+
+        // Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(3.0, result);
+    }
+
+    [Fact]
+    public void Dot_WhenCalledWithVectorsOfDifferentDimension_ThrowsArgumentException()
+    {
+        // Arrange
+        double[] lhs = { 1.0, 2.0 };
+        double[] rhs = { 1.0, 2.0, 3.0 };
+
+        // Act
+        Action act = () =&gt; lhs.Dot(rhs);
+
+        // Assert
+        var exception = Assert.Throws&lt;ArgumentException&gt;(act);
+        Assert.Equal(&quot;Arguments must have same dimension.&quot;, exception.Message);
+    }
+
+    [Fact]
+    public void Dot_WhenCalledWithEmptyVectors_ReturnsZero()
+    {
+        // Arrange
+        double[] lhs = Array.Empty&lt;double&gt;();
+        double[] rhs = Array.Empty&lt;double&gt;();
+
+        // Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(0.0, result);
+    }
+
+    [Theory]
+    [InlineData(new[] { 3.0, 4.0 }, 5.0)]
+    [InlineData(new[] { 1.0 }, 1.0)]
+    [InlineData(new[] { -5.0 }, 5.0)]
+    [InlineData(new double[] { }, 0.0)]
+    public void Magnitude_WhenCalled_ReturnsEuclideanMagnitude(double[] vector, double expected)
+    {
+        // Arrange
+        // Input provided via Theory
+
+        // Act
+        var result = vector.Magnitude();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Scale_WhenCalledWithFactor_ReturnsScaledVector()
+    {
+        // Arrange
+        double[] vector = { 1.0, -2.0, 0.0 };
+        double factor = 2.5;
+        double[] expected = { 2.5, -5.0, 0.0 };
+
+        // Act
+        var result = vector.Scale(factor);
+
+        // Assert
+        Assert.NotSame(vector, result);
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToColumnVector_WhenCalledWithVector_ReturnsColumnMatrix()
+    {
+        // Arrange
+        double[] vector = { 10.0, 20.0 };
+
+        // Act
+        var result = vector.ToColumnVector();
+
+        // Assert
+        Assert.Equal(2, result.GetLength(0));
+        Assert.Equal(1, result.GetLength(1));
+        Assert.Equal(10.0, result[0, 0]);
+        Assert.Equal(20.0, result[1, 0]);
+    }
+
+    [Fact]
+    public void ToRowVector_WhenSourceIsSingleColumn_ReturnsVector()
+    {
+        // Arrange
+        double[,] source = new double[3, 1] { { 1.0 }, { 2.0 }, { 3.0 } };
+
+        // Act
+        var result = source.ToRowVector();
+
+        // Assert
+        Assert.Equal(new[] { 1.0, 2.0, 3.0 }, result);
+    }
+
+    [Fact]
+    public void ToRowVector_WhenSourceIsNotSingleColumn_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        double[,] source = new double[2, 2] { { 1.0, 2.0 }, { 3.0, 4.0 } };
+
+        // Act
+        Action act = () =&gt; source.ToRowVector();
+
+        // Assert
+        var exception = Assert.Throws&lt;InvalidOperationException&gt;(act);
+        Assert.Equal(&quot;The column vector must have only 1 element in width.&quot;, exception.Message);
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_WhenCalledWithVector_ReturnsSquareMatrixWithValuesOnDiagonal()
+    {
+        // Arrange
+        double[] vector = { 1.0, 2.0 };
+
+        // Act
+        var result = vector.ToDiagonalMatrix();
+
+        // Assert
+        Assert.Equal(2, result.GetLength(0));
+        Assert.Equal(2, result.GetLength(1));
+        Assert.Equal(1.0, result[0, 0]);
+        Assert.Equal(0.0, result[0, 1]);
+        Assert.Equal(0.0, result[1, 0]);
+        Assert.Equal(2.0, result[1, 1]);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,45,1],[14,9,14,36,1],[17,9,17,40,1],[18,9,18,38,1],[19,5,19,6,1],[23,5,23,6,1],[25,9,25,49,1],[28,9,28,36,1],[31,9,31,40,1],[32,9,32,30,1],[33,5,33,6,1],[37,5,37,6,1],[39,9,39,42,1],[40,9,40,37,1],[43,9,43,44,1],[46,9,46,46,1],[47,9,47,46,1],[48,9,48,41,1],[49,9,49,41,1],[50,9,50,41,1],[51,9,51,42,1],[52,9,52,42,1],[53,9,53,42,1],[54,5,54,6,1],[58,5,58,6,1],[60,9,60,43,1],[61,9,61,44,1],[64,9,64,35,1],[67,9,67,35,1],[68,5,68,6,1],[72,5,72,6,1],[74,9,74,37,1],[75,9,75,42,1],[78,9,78,28,1],[78,28,78,40,1],[78,40,78,41,1],[81,9,81,63,1],[82,9,82,80,1],[83,5,83,6,1],[87,5,87,6,1],[89,9,89,46,1],[90,9,90,46,1],[93,9,93,35,1],[96,9,96,35,1],[97,5,97,6,1],[105,5,105,6,1],[110,9,110,41,1],[113,9,113,40,1],[114,5,114,6,1],[118,5,118,6,1],[120,9,120,46,1],[121,9,121,29,1],[122,9,122,48,1],[125,9,125,43,1],[128,9,128,40,1],[129,9,129,40,1],[130,5,130,6,1],[134,5,134,6,1],[136,9,136,42,1],[139,9,139,46,1],[142,9,142,46,1],[143,9,143,46,1],[144,9,144,42,1],[145,9,145,42,1],[146,5,146,6,1],[150,5,150,6,1],[152,9,152,75,1],[155,9,155,43,1],[158,9,158,55,1],[159,5,159,6,1],[163,5,163,6,1],[165,9,165,76,1],[168,9,168,28,1],[168,28,168,48,1],[168,48,168,49,1],[171,9,171,71,1],[172,9,172,97,1],[173,5,173,6,1],[177,5,177,6,1],[179,9,179,40,1],[182,9,182,48,1],[185,9,185,46,1],[186,9,186,46,1],[187,9,187,41,1],[188,9,188,41,1],[189,9,189,41,1],[190,9,190,41,1],[191,5,191,6,1]]);
+    </script>
+  </body>
+</html>

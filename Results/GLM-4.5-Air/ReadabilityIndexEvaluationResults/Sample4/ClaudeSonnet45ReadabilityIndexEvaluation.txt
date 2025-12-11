@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765319912-CmiaH0raP3HXkX2WLDLl
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended pattern 'ClassUnderTestTests'",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"All tests properly follow the AAA pattern with clear comment separators and blank line separation",
+		"Async tests correctly use 'async Task' signature instead of 'async void'",
+		"Variable names are clear and meaningful throughout all tests",
+		"Dependencies are properly mocked and initialized in the constructor, promoting DRY principle",
+		"The last test 'GetAsync_WhenCalledThroughInterface_ReturnsMappedModel' creates duplicate mocks locally instead of reusing class-level fields, reducing maintainability and adding confusion about its purpose",
+		"No use of [Theory] with [InlineData] where it could eliminate duplication between similar test scenarios (e.g., tests with different IDs could be parameterized)",
+		"Assertions verify both return values and mock interactions consistently across all tests",
+		"Code adheres to standard C# and .NET naming conventions"
+	]
+}
+```

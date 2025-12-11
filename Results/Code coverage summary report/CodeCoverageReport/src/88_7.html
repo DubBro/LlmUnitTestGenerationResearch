@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample6Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample6;
+using NSubstitute;
+
+namespace Gpt5MiniUnitTests
+{
+    public class LotServiceTests
+    {
+        private (LotService service, IUnitOfWork db, IMapper mapper, ILotRepository lots, IAuctionRepository auctions) CreateSut()
+        {
+            var db = Substitute.For&lt;IUnitOfWork&gt;();
+            var lots = Substitute.For&lt;ILotRepository&gt;();
+            var auctions = Substitute.For&lt;IAuctionRepository&gt;();
+            db.Lots.Returns(lots);
+            db.Auctions.Returns(auctions);
+
+            var mapper = Substitute.For&lt;IMapper&gt;();
+
+            mapper
+                .Map&lt;LotDTO, Lot&gt;(Arg.Any&lt;LotDTO&gt;())
+                .Returns(ci =&gt;
+                {
+                    var dto = ci.Arg&lt;LotDTO&gt;();
+                    if (dto == null) return null;
+                    return new Lot
+                    {
+                        ID = dto.ID,
+                        Name = dto.Name,
+                        Owner = dto.Owner,
+                        Sold = dto.Sold,
+                        Category = dto.Category,
+                        Details = dto.Details,
+                        Auction = dto.Auction == null ? null : new Auction { ID = dto.Auction.ID, Bid = dto.Auction.Bid, Leader = dto.Auction.Leader, Started = dto.Auction.Started, Ended = dto.Auction.Ended }
+                    };
+                });
+
+            mapper
+                .Map&lt;Lot, LotDTO&gt;(Arg.Any&lt;Lot&gt;())
+                .Returns(ci =&gt;
+                {
+                    var e = ci.Arg&lt;Lot&gt;();
+                    if (e == null) return null;
+                    return new LotDTO
+                    {
+                        ID = e.ID,
+                        Name = e.Name,
+                        Owner = e.Owner,
+                        Sold = e.Sold,
+                        Category = e.Category,
+                        Details = e.Details,
+                        Auction = e.Auction == null ? null : new AuctionDTO { ID = e.Auction.ID, Bid = e.Auction.Bid, Leader = e.Auction.Leader, Started = e.Auction.Started, Ended = e.Auction.Ended }
+                    };
+                });
+
+            mapper
+                .Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(Arg.Any&lt;IEnumerable&lt;Lot&gt;&gt;())
+                .Returns(ci =&gt;
+                {
+                    var list = ci.Arg&lt;IEnumerable&lt;Lot&gt;&gt;();
+                    return list?.Select(l =&gt; new LotDTO
+                    {
+                        ID = l.ID,
+                        Name = l.Name,
+                        Owner = l.Owner,
+                        Sold = l.Sold,
+                        Category = l.Category,
+                        Details = l.Details,
+                        Auction = l.Auction == null ? null : new AuctionDTO { ID = l.Auction.ID, Bid = l.Auction.Bid, Leader = l.Auction.Leader, Started = l.Auction.Started, Ended = l.Auction.Ended }
+                    }).ToList();
+                });
+
+            var service = new LotService(db, mapper);
+            return (service, db, mapper, lots, auctions);
+        }
+
+        [Fact]
+        public void AddLot_NullLot_ThrowsInvalidLotException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() =&gt; service.AddLot(null);
+
+            // Assert
+            Assert.Throws&lt;InvalidLotException&gt;(Act);
+        }
+
+        [Fact]
+        public void AddLot_LotAlreadySold_ThrowsInvalidLotException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+            var dto = new LotDTO { ID = 1, Name = &quot;n&quot;, Owner = &quot;o&quot;, Category = &quot;c&quot;, Sold = true };
+
+            // Act
+            void Act() =&gt; service.AddLot(dto);
+
+            // Assert
+            Assert.Throws&lt;InvalidLotException&gt;(Act);
+        }
+
+        [Theory]
+        [InlineData(null, &quot;owner&quot;, &quot;cat&quot;)]
+        [InlineData(&quot;name&quot;, null, &quot;cat&quot;)]
+        [InlineData(&quot;name&quot;, &quot;owner&quot;, null)]
+        public void AddLot_MissingRequiredFields_ThrowsInvalidLotException(string name, string owner, string category)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+            var dto = new LotDTO { ID = 1, Name = name, Owner = owner, Category = category, Sold = false };
+
+            // Act
+            void Act() =&gt; service.AddLot(dto);
+
+            // Assert
+            Assert.Throws&lt;InvalidLotException&gt;(Act);
+        }
+
+        [Fact]
+        public void AddLot_Valid_AddsAndCommitsAndSetsAuction()
+        {
+            // Arrange
+            var (service, db, mapper, lots, _) = CreateSut();
+            var dto = new LotDTO { ID = 2, Name = &quot;Lot&quot;, Owner = &quot;Owner&quot;, Category = &quot;Cat&quot;, Sold = false, Details = &quot;D&quot; };
+
+            // Act
+            service.AddLot(dto);
+
+            // Assert
+            Assert.NotNull(dto.Auction);
+            mapper.Received(1).Map&lt;LotDTO, Lot&gt;(dto);
+            lots.Received(1).Add(Arg.Is&lt;Lot&gt;(l =&gt; l.Name == dto.Name &amp;&amp; l.Owner == dto.Owner &amp;&amp; l.Category == dto.Category &amp;&amp; l.Details == dto.Details));
+            db.Received(1).Commit();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void DeleteLot_InvalidId_ThrowsInvalidIdException(int id)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() =&gt; service.DeleteLot(id);
+
+            // Assert
+            Assert.Throws&lt;InvalidIdException&gt;(Act);
+        }
+
+        [Fact]
+        public void DeleteLot_Valid_DeletesAuctionsAndLotsAndCommits()
+        {
+            // Arrange
+            var (service, db, _, _, auctions) = CreateSut();
+            var id = 5;
+
+            // Act
+            service.DeleteLot(id);
+
+            // Assert
+            auctions.Received(1).Delete(id);
+            db.Lots.Received(1).Delete(id);
+            db.Received(1).Commit();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-10)]
+        public void GetLot_InvalidId_ThrowsInvalidIdException(int id)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() =&gt; service.GetLot(id);
+
+            // Assert
+            Assert.Throws&lt;InvalidIdException&gt;(Act);
+        }
+
+        [Fact]
+        public void GetLot_NotFound_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var id = 10;
+            lots.Get(id).Returns((Lot)null);
+            mapper.Map&lt;Lot, LotDTO&gt;(Arg.Any&lt;Lot&gt;()).Returns((LotDTO)null);
+
+            // Act
+            void Act() =&gt; service.GetLot(id);
+
+            // Assert
+            Assert.Throws&lt;InvalidIdException&gt;(Act);
+        }
+
+        [Fact]
+        public void GetLot_Existing_ReturnsMappedDto()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domain = new Lot { ID = 3, Name = &quot;n&quot;, Owner = &quot;o&quot;, Category = &quot;c&quot;, Sold = false, Details = &quot;d&quot; };
+            var mapped = new LotDTO { ID = 3, Name = &quot;n&quot;, Owner = &quot;o&quot;, Category = &quot;c&quot;, Sold = false, Details = &quot;d&quot; };
+            lots.Get(domain.ID).Returns(domain);
+            mapper.Map&lt;Lot, LotDTO&gt;(domain).Returns(mapped);
+
+            // Act
+            var result = service.GetLot(domain.ID);
+
+            // Assert
+            Assert.Same(mapped, result);
+        }
+
+        [Fact]
+        public void GetLots_ReturnsMappedCollection()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List&lt;Lot&gt;
+            {
+                new Lot { ID = 1, Name = &quot;a&quot; },
+                new Lot { ID = 2, Name = &quot;b&quot; }
+            };
+            var mappedList = new List&lt;LotDTO&gt;
+            {
+                new LotDTO { ID = 1, Name = &quot;a&quot; },
+                new LotDTO { ID = 2, Name = &quot;b&quot; }
+            };
+            lots.GetAll().Returns(domainList);
+            mapper.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetLots();
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetLotsByCategory_NullCategory_ThrowsInvalidCategoryException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() =&gt; service.GetLotsByCategory(null);
+
+            // Assert
+            Assert.Throws&lt;InvalidCategoryException&gt;(Act);
+        }
+
+        [Fact]
+        public void GetLotsByCategory_Valid_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List&lt;Lot&gt; { new Lot { ID = 4, Category = &quot;cat&quot; } };
+            var mappedList = new List&lt;LotDTO&gt; { new LotDTO { ID = 4, Category = &quot;cat&quot; } };
+            lots.GetLotsByCategory(&quot;cat&quot;).Returns(domainList);
+            mapper.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetLotsByCategory(&quot;cat&quot;);
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetLotsByName_NullName_ThrowsInvalidNameException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() =&gt; service.GetLotsByName(null);
+
+            // Assert
+            Assert.Throws&lt;InvalidNameException&gt;(Act);
+        }
+
+        [Fact]
+        public void GetLotsByName_Valid_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List&lt;Lot&gt; { new Lot { ID = 6, Name = &quot;nm&quot; } };
+            var mappedList = new List&lt;LotDTO&gt; { new LotDTO { ID = 6, Name = &quot;nm&quot; } };
+            lots.GetLotsByName(&quot;nm&quot;).Returns(domainList);
+            mapper.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetLotsByName(&quot;nm&quot;);
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetNotSoldLots_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List&lt;Lot&gt; { new Lot { ID = 7, Sold = false } };
+            var mappedList = new List&lt;LotDTO&gt; { new LotDTO { ID = 7, Sold = false } };
+            lots.GetNotSoldLots().Returns(domainList);
+            mapper.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetNotSoldLots();
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetSoldLots_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List&lt;Lot&gt; { new Lot { ID = 8, Sold = true } };
+            var mappedList = new List&lt;LotDTO&gt; { new LotDTO { ID = 8, Sold = true } };
+            lots.GetSoldLots().Returns(domainList);
+            mapper.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetSoldLots();
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void UpdateLot_Null_ThrowsInvalidLotException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() =&gt; service.UpdateLot(null);
+
+            // Assert
+            Assert.Throws&lt;InvalidLotException&gt;(Act);
+        }
+
+        [Theory]
+        [InlineData(null, &quot;o&quot;, &quot;c&quot;)]
+        [InlineData(&quot;n&quot;, null, &quot;c&quot;)]
+        [InlineData(&quot;n&quot;, &quot;o&quot;, null)]
+        public void UpdateLot_MissingRequiredFields_ThrowsInvalidLotException(string name, string owner, string category)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+            var dto = new LotDTO { ID = 1, Name = name, Owner = owner, Category = category };
+
+            // Act
+            void Act() =&gt; service.UpdateLot(dto);
+
+            // Assert
+            Assert.Throws&lt;InvalidLotException&gt;(Act);
+        }
+
+        [Fact]
+        public void UpdateLot_LotNotFound_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var (service, _, _, lots, _) = CreateSut();
+            var dto = new LotDTO { ID = 11, Name = &quot;n&quot;, Owner = &quot;o&quot;, Category = &quot;c&quot;, Sold = true, Details = &quot;d&quot; };
+            lots.Get(dto.ID).Returns((Lot)null);
+
+            // Act
+            void Act() =&gt; service.UpdateLot(dto);
+
+            // Assert
+            Assert.Throws&lt;InvalidIdException&gt;(Act);
+        }
+
+        [Fact]
+        public void UpdateLot_Valid_UpdatesEntityAndCommits()
+        {
+            // Arrange
+            var (service, db, _, lots, _) = CreateSut();
+            var existing = new Lot { ID = 12, Name = &quot;old&quot;, Owner = &quot;oldOwner&quot;, Category = &quot;oldCat&quot;, Sold = false, Details = &quot;oldD&quot; };
+            var dto = new LotDTO { ID = 12, Name = &quot;new&quot;, Owner = &quot;newOwner&quot;, Category = &quot;newCat&quot;, Sold = true, Details = &quot;newD&quot; };
+            lots.Get(existing.ID).Returns(existing);
+
+            // Act
+            service.UpdateLot(dto);
+
+            // Assert
+            Assert.Equal(&quot;new&quot;, existing.Name);
+            Assert.Equal(&quot;newOwner&quot;, existing.Owner);
+            Assert.Equal(&quot;newCat&quot;, existing.Category);
+            Assert.Equal(&quot;newD&quot;, existing.Details);
+            Assert.True(existing.Sold);
+            lots.Received(1).Update(existing);
+            db.Received(1).Commit();
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,9,10,10,1],[11,13,11,52,1],[12,13,12,57,1],[13,13,13,65,1],[14,13,14,35,1],[15,13,15,43,1],[17,13,17,52,1],[19,13,22,17,1],[22,17,22,18,1],[22,18,23,21,1],[23,21,23,48,1],[23,48,24,21,1],[24,21,24,37,1],[24,37,24,38,1],[24,38,24,50,0],[24,50,25,21,1],[25,21,34,23,1],[34,23,35,17,1],[35,17,35,18,1],[35,18,35,20,1],[37,13,40,17,1],[40,17,40,18,1],[40,18,41,21,1],[41,21,41,43,1],[41,43,42,21,1],[42,21,42,35,1],[42,35,42,36,1],[42,36,42,48,0],[42,48,43,21,1],[43,21,52,23,1],[52,23,53,17,1],[53,17,53,18,1],[53,18,53,20,1],[55,13,58,17,1],[58,17,58,18,1],[58,18,59,21,1],[59,21,59,59,1],[59,59,60,21,1],[60,21,60,46,1],[60,46,69,22,1],[69,22,69,33,1],[69,33,70,17,1],[70,17,70,18,1],[70,18,70,20,1],[72,13,72,54,1],[73,13,73,58,1],[74,9,74,10,1],[78,9,78,10,1],[80,13,80,53,1],[83,27,83,47,1],[86,13,86,53,1],[87,9,87,10,1],[91,9,91,10,1],[93,13,93,53,1],[94,13,94,99,1],[97,27,97,46,1],[100,13,100,53,1],[101,9,101,10,1],[108,9,108,10,1],[110,13,110,53,1],[111,13,111,108,1],[114,27,114,46,1],[117,13,117,53,1],[118,9,118,10,1],[122,9,122,10,1],[124,13,124,62,1],[125,13,125,123,1],[128,13,128,33,1],[131,13,131,41,1],[132,13,132,54,1],[133,13,133,154,1],[134,13,134,37,1],[135,9,135,10,1],[141,9,141,10,1],[143,13,143,53,1],[146,27,146,48,1],[149,13,149,52,1],[150,9,150,10,1],[154,9,154,10,1],[156,13,156,61,1],[157,13,157,24,1],[160,13,160,35,1],[163,13,163,45,1],[164,13,164,44,1],[165,13,165,37,1],[166,9,166,10,1],[172,9,172,10,1],[174,13,174,53,1],[177,27,177,45,1],[180,13,180,52,1],[181,9,181,10,1],[185,9,185,10,1],[187,13,187,61,1],[188,13,188,25,1],[189,13,189,45,1],[190,13,190,75,1],[193,27,193,45,1],[196,13,196,52,1],[197,9,197,10,1],[201,9,201,10,1],[203,13,203,61,1],[204,13,204,115,1],[205,13,205,118,1],[206,13,206,49,1],[207,13,207,61,1],[210,13,210,52,1],[213,13,213,41,1],[214,9,214,10,1],[218,9,218,10,1],[220,13,220,61,1],[221,13,225,15,1],[226,13,230,15,1],[231,13,231,47,1],[232,13,232,95,1],[235,13,235,44,1],[238,13,238,46,1],[239,9,239,10,1],[243,9,243,10,1],[245,13,245,53,1],[248,27,248,58,1],[251,13,251,58,1],[252,9,252,10,1],[256,9,256,10,1],[258,13,258,61,1],[259,13,259,85,1],[260,13,260,91,1],[261,13,261,63,1],[262,13,262,95,1],[265,13,265,59,1],[268,13,268,46,1],[269,9,269,10,1],[273,9,273,10,1],[275,13,275,53,1],[278,27,278,54,1],[281,13,281,54,1],[282,9,282,10,1],[286,9,286,10,1],[288,13,288,61,1],[289,13,289,80,1],[290,13,290,86,1],[291,13,291,58,1],[292,13,292,95,1],[295,13,295,54,1],[298,13,298,46,1],[299,9,299,10,1],[303,9,303,10,1],[305,13,305,61,1],[306,13,306,81,1],[307,13,307,87,1],[308,13,308,55,1],[309,13,309,95,1],[312,13,312,51,1],[315,13,315,46,1],[316,9,316,10,1],[320,9,320,10,1],[322,13,322,61,1],[323,13,323,80,1],[324,13,324,86,1],[325,13,325,52,1],[326,13,326,95,1],[329,13,329,48,1],[332,13,332,46,1],[333,9,333,10,1],[337,9,337,10,1],[339,13,339,53,1],[342,27,342,50,1],[345,13,345,53,1],[346,9,346,10,1],[353,9,353,10,1],[355,13,355,53,1],[356,13,356,94,1],[359,27,359,49,1],[362,13,362,53,1],[363,9,363,10,1],[367,9,367,10,1],[369,13,369,56,1],[370,13,370,115,1],[371,13,371,49,1],[374,27,374,49,1],[377,13,377,52,1],[378,9,378,10,1],[382,9,382,10,1],[384,13,384,57,1],[385,13,385,135,1],[386,13,386,132,1],[387,13,387,53,1],[390,13,390,36,1],[393,13,393,48,1],[394,13,394,54,1],[395,13,395,55,1],[396,13,396,52,1],[397,13,397,40,1],[398,13,398,47,1],[399,13,399,37,1],[400,9,400,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765324976-oXzBXGQszziUuxe0w6lk
+
+Content:
+ {
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Proper AAA pattern with comments and empty line separation",
+		"Correct async signatures returning Task instead of void",
+		"Clear and meaningful variable names following .NET conventions",
+		"Appropriate use of [Fact] attribute for single scenarios",
+		"Tests are self-contained, focused, and easy to understand",
+		"Minimal duplication with each test independently readable",
+		"Explicit assertions verify all relevant properties",
+		"Clean structure without unnecessary nested classes or comments"
+	]
+}

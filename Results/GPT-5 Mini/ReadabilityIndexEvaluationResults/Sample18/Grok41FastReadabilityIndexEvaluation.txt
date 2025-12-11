@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324275-du5l0C8zizdeVjStIuwp
+
+Content:
+{"readabilityIndex":95,"reasons":["Test class name follows `ClassUnderTestTests` pattern.","Test method names are descriptive and mostly follow `MethodUnderTest_Scenario_ExpectedResult` pattern.","Consistent use of [Theory] with [InlineData] for parameterized tests, avoiding duplication.","Strict adherence to AAA pattern with // Arrange, // Act, // Assert comments in all tests.","Clear, meaningful variable names (e.g., input, key, expected, actual).","No unnecessary comments or nested classes.","Standard C# naming conventions followed.","Minor deviation in one test combining Act & Assert for exception handling (common practice).","Decode test name implies roundtrip but starts with Decode (slightly less precise)."]}

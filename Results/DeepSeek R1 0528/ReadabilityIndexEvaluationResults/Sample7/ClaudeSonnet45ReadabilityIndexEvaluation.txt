@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765316221-m1YrJIIDrgkI5ipSarQX
+
+Content:
+```json
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern, making it immediately clear what is being tested",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently, providing clear documentation of test intent",
+		"AAA pattern is properly implemented with clear comment separators (// Arrange, // Act, // Assert) and logical grouping",
+		"Effective use of [Theory] with [InlineData] to test multiple invalid input variations without code duplication",
+		"Constructor properly initializes shared test dependencies, following DRY principle and improving maintainability",
+		"Asynchronous tests correctly use 'async Task' signatures instead of 'async void'",
+		"Field and variable naming is clear and meaningful (_walkRepositorySubstitute, validImei, entities, result)",
+		"Test code is well-formatted with consistent indentation and appropriate use of whitespace for readability",
+		"No unnecessary comments beyond AAA separators; code is self-documenting through descriptive naming",
+		"Tests are logically organized and easy to understand, with each test having a single, clear responsibility"
+	]
+}
+```

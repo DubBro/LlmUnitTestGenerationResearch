@@ -1,0 +1,342 @@
+using AutoMapper;
+using Dataset.Sample6;
+using NSubstitute;
+
+namespace Gemini3ProUnitTests;
+
+public class LotServiceTests
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILotRepository _lotRepository;
+    private readonly IAuctionRepository _auctionRepository;
+    private readonly IMapper _mapper;
+    private readonly LotService _sut;
+
+    public LotServiceTests()
+    {
+        _unitOfWork = Substitute.For<IUnitOfWork>();
+        _lotRepository = Substitute.For<ILotRepository>();
+        _auctionRepository = Substitute.For<IAuctionRepository>();
+        _mapper = Substitute.For<IMapper>();
+
+        // Setup UnitOfWork properties
+        _unitOfWork.Lots.Returns(_lotRepository);
+        _unitOfWork.Auctions.Returns(_auctionRepository);
+
+        _sut = new LotService(_unitOfWork, _mapper);
+    }
+
+    [Fact]
+    public void AddLot_ValidLot_AddsLotAndCommits()
+    {
+        // Arrange
+        var lotDto = new LotDTO
+        {
+            Name = "Test Lot",
+            Owner = "Owner",
+            Category = "Category",
+            Sold = false
+        };
+        var lotEntity = new Lot();
+
+        _mapper.Map<LotDTO, Lot>(lotDto).Returns(lotEntity);
+
+        // Act
+        _sut.AddLot(lotDto);
+
+        // Assert
+        Assert.NotNull(lotDto.Auction); // Verifies logic: lot.Auction = new AuctionDTO();
+        _lotRepository.Received(1).Add(lotEntity);
+        _unitOfWork.Received(1).Commit();
+    }
+
+    [Fact]
+    public void AddLot_NullLot_ThrowsInvalidLotException()
+    {
+        // Arrange
+        LotDTO? lotDto = null;
+
+        // Act & Assert
+        Assert.Throws<InvalidLotException>(() => _sut.AddLot(lotDto!));
+    }
+
+    [Theory]
+    [InlineData(true, "Name", "Owner", "Category")] // Sold is true
+    [InlineData(false, null, "Owner", "Category")]  // Name is null
+    [InlineData(false, "Name", null, "Category")]   // Owner is null
+    [InlineData(false, "Name", "Owner", null)]      // Category is null
+    public void AddLot_InvalidProperties_ThrowsInvalidLotException(bool sold, string? name, string? owner, string? category)
+    {
+        // Arrange
+        var lotDto = new LotDTO
+        {
+            Sold = sold,
+            Name = name!,
+            Owner = owner!,
+            Category = category!
+        };
+
+        // Act & Assert
+        Assert.Throws<InvalidLotException>(() => _sut.AddLot(lotDto));
+    }
+
+    [Fact]
+    public void DeleteLot_ValidId_DeletesAuctionAndLotAndCommits()
+    {
+        // Arrange
+        int id = 10;
+
+        // Act
+        _sut.DeleteLot(id);
+
+        // Assert
+        _auctionRepository.Received(1).Delete(id);
+        _lotRepository.Received(1).Delete(id);
+        _unitOfWork.Received(1).Commit();
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void DeleteLot_InvalidId_ThrowsInvalidIdException(int id)
+    {
+        // Act & Assert
+        Assert.Throws<InvalidIdException>(() => _sut.DeleteLot(id));
+
+        // Assert ensuring no side effects
+        _unitOfWork.DidNotReceive().Commit();
+        _auctionRepository.DidNotReceive().Delete(Arg.Any<int>());
+    }
+
+    [Fact]
+    public void GetLot_ValidIdAndExists_ReturnsLotDTO()
+    {
+        // Arrange
+        int id = 1;
+        var lotEntity = new Lot { ID = id };
+        var lotDto = new LotDTO { ID = id };
+
+        _lotRepository.Get(id).Returns(lotEntity);
+        _mapper.Map<Lot, LotDTO>(lotEntity).Returns(lotDto);
+
+        // Act
+        var result = _sut.GetLot(id);
+
+        // Assert
+        Assert.Same(lotDto, result);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-5)]
+    public void GetLot_InvalidId_ThrowsInvalidIdException(int id)
+    {
+        // Act & Assert
+        Assert.Throws<InvalidIdException>(() => _sut.GetLot(id));
+    }
+
+    [Fact]
+    public void GetLot_ValidIdButNotFound_ThrowsInvalidIdException()
+    {
+        // Arrange
+        int id = 99;
+        _lotRepository.Get(id).Returns((Lot?)null);
+        // Note: Even if repo returns null, mapper handles null source by default returning null,
+        // but explicit mapping setup helps ensure test isolation.
+        _mapper.Map<Lot, LotDTO>(null).Returns((LotDTO?)null);
+
+        // Act & Assert
+        Assert.Throws<InvalidIdException>(() => _sut.GetLot(id));
+    }
+
+    [Fact]
+    public void GetLots_WhenCalled_ReturnsMappedList()
+    {
+        // Arrange
+        var entities = new List<Lot> { new Lot() };
+        var dtos = new List<LotDTO> { new LotDTO() };
+
+        _lotRepository.GetAll().Returns(entities);
+        _mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(entities).Returns(dtos);
+
+        // Act
+        var result = _sut.GetLots();
+
+        // Assert
+        Assert.Same(dtos, result);
+    }
+
+    [Fact]
+    public void GetLotsByCategory_ValidCategory_ReturnsMappedList()
+    {
+        // Arrange
+        string category = "Electronics";
+        var entities = new List<Lot>();
+        var dtos = new List<LotDTO>();
+
+        _lotRepository.GetLotsByCategory(category).Returns(entities);
+        _mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(entities).Returns(dtos);
+
+        // Act
+        var result = _sut.GetLotsByCategory(category);
+
+        // Assert
+        Assert.Same(dtos, result);
+    }
+
+    [Fact]
+    public void GetLotsByCategory_NullCategory_ThrowsInvalidCategoryException()
+    {
+        // Act & Assert
+        Assert.Throws<InvalidCategoryException>(() => _sut.GetLotsByCategory(null!));
+    }
+
+    [Fact]
+    public void GetLotsByName_ValidName_ReturnsMappedList()
+    {
+        // Arrange
+        string name = "ItemName";
+        var entities = new List<Lot>();
+        var dtos = new List<LotDTO>();
+
+        _lotRepository.GetLotsByName(name).Returns(entities);
+        _mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(entities).Returns(dtos);
+
+        // Act
+        var result = _sut.GetLotsByName(name);
+
+        // Assert
+        Assert.Same(dtos, result);
+    }
+
+    [Fact]
+    public void GetLotsByName_NullName_ThrowsInvalidNameException()
+    {
+        // Act & Assert
+        Assert.Throws<InvalidNameException>(() => _sut.GetLotsByName(null!));
+    }
+
+    [Fact]
+    public void GetNotSoldLots_WhenCalled_ReturnsMappedList()
+    {
+        // Arrange
+        var entities = new List<Lot>();
+        var dtos = new List<LotDTO>();
+
+        _lotRepository.GetNotSoldLots().Returns(entities);
+        _mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(entities).Returns(dtos);
+
+        // Act
+        var result = _sut.GetNotSoldLots();
+
+        // Assert
+        Assert.Same(dtos, result);
+    }
+
+    [Fact]
+    public void GetSoldLots_WhenCalled_ReturnsMappedList()
+    {
+        // Arrange
+        var entities = new List<Lot>();
+        var dtos = new List<LotDTO>();
+
+        _lotRepository.GetSoldLots().Returns(entities);
+        _mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(entities).Returns(dtos);
+
+        // Act
+        var result = _sut.GetSoldLots();
+
+        // Assert
+        Assert.Same(dtos, result);
+    }
+
+    [Fact]
+    public void UpdateLot_ValidLot_UpdatesEntityAndCommits()
+    {
+        // Arrange
+        int id = 5;
+        var lotDto = new LotDTO
+        {
+            ID = id,
+            Name = "New Name",
+            Owner = "New Owner",
+            Category = "New Category",
+            Sold = true,
+            Details = "New Details"
+        };
+
+        var existingEntity = new Lot
+        {
+            ID = id,
+            Name = "Old Name",
+            Owner = "Old Owner",
+            Category = "Old Category",
+            Sold = false,
+            Details = "Old Details"
+        };
+
+        _lotRepository.Get(id).Returns(existingEntity);
+
+        // Act
+        _sut.UpdateLot(lotDto);
+
+        // Assert
+        // Verify entity properties were updated
+        Assert.Equal(lotDto.Name, existingEntity.Name);
+        Assert.Equal(lotDto.Owner, existingEntity.Owner);
+        Assert.Equal(lotDto.Category, existingEntity.Category);
+        Assert.Equal(lotDto.Sold, existingEntity.Sold);
+        Assert.Equal(lotDto.Details, existingEntity.Details);
+
+        // Verify repository calls
+        _lotRepository.Received(1).Update(existingEntity);
+        _unitOfWork.Received(1).Commit();
+    }
+
+    [Fact]
+    public void UpdateLot_NullLotDto_ThrowsInvalidLotException()
+    {
+        // Act & Assert
+        Assert.Throws<InvalidLotException>(() => _sut.UpdateLot(null!));
+    }
+
+    [Theory]
+    [InlineData(null, "Owner", "Category")] // Name is null
+    [InlineData("Name", null, "Category")]  // Owner is null
+    [InlineData("Name", "Owner", null)]     // Category is null
+    public void UpdateLot_InvalidProperties_ThrowsInvalidLotException(string? name, string? owner, string? category)
+    {
+        // Arrange
+        var lotDto = new LotDTO
+        {
+            ID = 1,
+            Name = name!,
+            Owner = owner!,
+            Category = category!
+        };
+
+        // Act & Assert
+        Assert.Throws<InvalidLotException>(() => _sut.UpdateLot(lotDto));
+    }
+
+    [Fact]
+    public void UpdateLot_LotDoesNotExist_ThrowsInvalidIdException()
+    {
+        // Arrange
+        var lotDto = new LotDTO
+        {
+            ID = 99,
+            Name = "Valid Name",
+            Owner = "Valid Owner",
+            Category = "Valid Category"
+        };
+
+        _lotRepository.Get(lotDto.ID).Returns((Lot?)null);
+
+        // Act & Assert
+        Assert.Throws<InvalidIdException>(() => _sut.UpdateLot(lotDto));
+
+        // Assert no commit happened
+        _unitOfWork.DidNotReceive().Commit();
+    }
+}

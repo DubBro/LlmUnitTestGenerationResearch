@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765320384-pJDuoUnwQpy8zD2j9U5r
+
+Content:
+{
+	"readabilityIndex": 86,
+	"reasons": [
+		"Test class names follow the ClassUnderTestTests pattern (FolderServiceTests).",
+		"Test method names use a clear Given-When-Then naming convention (GivenNullPath_WhenCalled_ThenReturnsRootFolderWithSubFolders).",
+		"Tests follow AAA pattern with clear Arrange, Act, Assert sections marked with comments.",
+		"Good use of Theory with InlineData for parameterized tests to avoid code duplication.",
+		"Good setup in constructor with mocked dependencies.",
+		"Assertions are clear and readable with descriptive values.",
+		"Nested test classes are used to group tests by method (GetFolderAsync, GetRootFoldersAsync, AddFolderAsync), which slightly reduces readability compared to flat structure but provides logical grouping.",
+		"Test methods are asynchronous and properly return Task.",
+		"Variable names are meaningful and reflect their purpose.",
+		"Violation: Use of nested test classes, while not strictly prohibited, adds extra indirection and deviates from standard xUnit conventions. This is the primary readability concern."
+	]
+}

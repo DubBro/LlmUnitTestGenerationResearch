@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765316773-SmbI80NSbkxfqgkDx9AR
+
+Content:
+{
+	"readabilityIndex": 93,
+	"reasons": [
+		"Test class name `OntologyHelperTests` clearly reflects the unit under test and follows the recommended `ClassUnderTestTests` convention.",
+		"Test method names follow the `MethodUnderTest_Scenario_ExpectedResult` pattern and give a precise idea of intent (e.g., `ParseNode_LiteralNode_WithCaret_ReturnsExpectedStringAfterUnEscaping`).",
+		"Consistent use of `[Theory]` with `[InlineData]` to cover multiple input variations avoids duplication and keeps each scenario concise.",
+		"AAA pattern is followed with clear `// Arrange`, `// Act`, `// Assert` comments and blank-line separation, improving logical structure.",
+		"Variable naming (`node`, `input`, `expected`, `result`) is clear and self-explanatory, making each test easy to understand at a glance.",
+		"Formatting and indentation are consistent, and there are no distracting or unnecessary comments beyond AAA separators.",
+		"Minor deviation from strict AAA in the exception test (`// Act & Assert`) slightly reduces structural uniformity but does not significantly hurt readability."
+	]
+}

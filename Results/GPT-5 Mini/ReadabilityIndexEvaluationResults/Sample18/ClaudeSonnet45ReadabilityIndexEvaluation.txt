@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765324268-1LuTndMtAVmsAWoCbqO8
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended pattern 'ClassUnderTestTests'",
+		"Most test names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern with clear descriptions",
+		"Appropriate use of [Fact] and [Theory] attributes to avoid code duplication",
+		"AAA pattern is consistently followed with comment markers and empty line separators",
+		"Naming conventions for variables are clear and meaningful (input, key, expected, actual)",
+		"One test combines Act and Assert blocks ('Encode_Null_ThrowsNullReferenceException'), slightly deviating from strict AAA separation",
+		"Empty Arrange blocks in some tests could be removed or contain a clarifying comment about no setup being needed",
+		"Test name 'Decode_WhenApplied_AfterEncode_ReturnsOriginal' is slightly verbose but still understandable",
+		"Overall structure is clean, logical, and easy to maintain with minimal formatting issues"
+	]
+}
+```

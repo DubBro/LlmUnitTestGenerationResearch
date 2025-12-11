@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample13Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample13;
+using NSubstitute;
+
+namespace Gpt5MiniUnitTests
+{
+    public class OntologyHelperTests
+    {
+        [Fact]
+        public void ParseNode_NodeTypeUri_WithHash_ReturnsFragment()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(&quot;http://example.org#Fragment&quot;);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(&quot;Fragment&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeUri_NoHash_ReturnsFullString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(&quot;nohash&quot;);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(&quot;nohash&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeUri_NullToString_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns((string?)null);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeUri_HashAtEnd_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(&quot;http://example.org#&quot;);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeLiteral_WithCaret_ReturnsValueBeforeCaret()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns(&quot;value^^xsd:string&quot;);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(&quot;value&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeLiteral_CaretAtStart_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns(&quot;^rest&quot;);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeLiteral_NoCaret_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns(&quot;noCaretHere&quot;);
+
+            // Act &amp; Assert
+            Assert.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt; node.ParseNode());
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeLiteral_NullToString_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns((string?)null);
+
+            // Act &amp; Assert
+            Assert.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt; node.ParseNode());
+        }
+
+        [Theory]
+        [InlineData(NodeType.Blank)]
+        [InlineData(NodeType.GraphLiteral)]
+        [InlineData(NodeType.Variable)]
+        [InlineData(NodeType.Triple)]
+        public void ParseNode_OtherNodeTypes_ReturnsEmptyString(NodeType type)
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(type);
+            node.ToString().Returns(&quot;irrelevant&quot;);
+
+            // Act
+            var result = node.ParseNode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,9,10,10,1],[12,13,12,48,1],[13,13,13,49,1],[14,13,14,68,1],[17,13,17,43,1],[20,13,20,46,1],[21,9,21,10,1],[25,9,25,10,1],[27,13,27,48,1],[28,13,28,49,1],[29,13,29,47,1],[32,13,32,43,1],[35,13,35,44,1],[36,9,36,10,1],[40,9,40,10,1],[42,13,42,48,1],[43,13,43,49,1],[44,13,44,52,1],[47,13,47,43,1],[50,13,50,48,1],[51,9,51,10,1],[55,9,55,10,1],[57,13,57,48,1],[58,13,58,49,1],[59,13,59,60,1],[62,13,62,43,1],[65,13,65,48,1],[66,9,66,10,1],[70,9,70,10,1],[72,13,72,48,1],[73,13,73,53,1],[74,13,74,58,1],[77,13,77,43,1],[80,13,80,43,1],[81,9,81,10,1],[85,9,85,10,1],[87,13,87,48,1],[88,13,88,53,1],[89,13,89,46,1],[92,13,92,43,1],[95,13,95,48,1],[96,9,96,10,1],[100,9,100,10,1],[102,13,102,48,1],[103,13,103,53,1],[104,13,104,52,1],[107,13,107,62,1],[107,62,107,78,1],[107,78,107,80,1],[108,9,108,10,1],[112,9,112,10,1],[114,13,114,48,1],[115,13,115,53,1],[116,13,116,52,1],[119,13,119,62,1],[119,62,119,78,1],[119,78,119,80,1],[120,9,120,10,1],[128,9,128,10,1],[130,13,130,48,1],[131,13,131,41,1],[132,13,132,51,1],[135,13,135,43,1],[138,13,138,48,1],[139,9,139,10,1]]);
+    </script>
+  </body>
+</html>

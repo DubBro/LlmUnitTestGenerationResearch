@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765316078-JKJdHOjUowOElbxcbZw1
+
+Content:
+ {
+	"readabilityIndex": 78,
+	"reasons": [
+		"Multiple tests combine Act and Assert into a single block, violating AAA pattern.",
+		"Test 'GetRootFoldersAsync_WhenCalled_ReturnsRootFolders' uses vague scenario name 'WhenCalled'.",
+		"Extremely long inline string in 'AddFolderAsync_InvalidName_ThrowsArgumentException' harms readability.",
+		"Magic strings (e.g., 'InvalidProject', 'Documents') are used without named constants.",
+		"Test 'GetFolderAsync_PathIsNull_ReturnsRootFolderWithSubFolders' expects synthetic 'Root' folder not set up in Arrange.",
+		"Setup code for root folders is duplicated across several tests; helper methods could reduce duplication.",
+		"Theory 'AddFolderAsync_InvalidName_ThrowsArgumentException' groups disparate invalid cases under a single description.",
+		"Generic test namespace 'DeepSeekR10528UnitTests' does not convey purpose."
+	]
+}

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765318955-VIiAliCadU8D7usPX4wF
+
+Content:
+ {"readabilityIndex":78,"reasons":["Null-forgiving operator (!) used for null inputs reduces clarity about API contract","Explanatory comment in test body violates the no-comments guideline","Minor inconsistency in test naming pattern for expected behavior","Inconsistent invocation style between static and extension methods","Unnecessary 'Handled by InlineData' comments in Arrange sections"]}

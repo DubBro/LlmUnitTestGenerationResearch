@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample6Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample6;
+using NSubstitute;
+
+namespace DeepSeekR10528UnitTests;
+
+public class LotServiceTests
+{
+    private readonly ILotService _lotService;
+    private readonly IUnitOfWork _databaseSubstitute;
+    private readonly IMapper _mapperSubstitute;
+    private readonly ILotRepository _lotRepositorySubstitute;
+    private readonly IAuctionRepository _auctionRepositorySubstitute;
+
+    public LotServiceTests()
+    {
+        _databaseSubstitute = Substitute.For&lt;IUnitOfWork&gt;();
+        _mapperSubstitute = Substitute.For&lt;IMapper&gt;();
+        _lotRepositorySubstitute = Substitute.For&lt;ILotRepository&gt;();
+        _auctionRepositorySubstitute = Substitute.For&lt;IAuctionRepository&gt;();
+
+        _databaseSubstitute.Lots.Returns(_lotRepositorySubstitute);
+        _databaseSubstitute.Auctions.Returns(_auctionRepositorySubstitute);
+
+        _lotService = new LotService(_databaseSubstitute, _mapperSubstitute);
+    }
+
+    [Fact]
+    public void AddLot_LotIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        LotDTO lotDto = null;
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.AddLot(lotDto));
+    }
+
+    [Fact]
+    public void AddLot_LotSoldIsTrue_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Sold = true };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.AddLot(lotDto));
+    }
+
+    [Fact]
+    public void AddLot_LotNameIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Sold = false, Owner = &quot;owner&quot;, Category = &quot;category&quot; };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.AddLot(lotDto));
+    }
+
+    [Fact]
+    public void AddLot_LotOwnerIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Sold = false, Name = &quot;name&quot;, Category = &quot;category&quot; };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.AddLot(lotDto));
+    }
+
+    [Fact]
+    public void AddLot_LotCategoryIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Sold = false, Name = &quot;name&quot;, Owner = &quot;owner&quot; };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.AddLot(lotDto));
+    }
+
+    [Fact]
+    public void AddLot_ValidLot_AddsLotAndCommits()
+    {
+        // Arrange
+        var lotDto = new LotDTO
+        {
+            Name = &quot;name&quot;,
+            Owner = &quot;owner&quot;,
+            Sold = false,
+            Category = &quot;category&quot;
+        };
+        var mappedLot = new Lot();
+        _mapperSubstitute.Map&lt;LotDTO, Lot&gt;(lotDto).Returns(mappedLot);
+
+        // Act
+        _lotService.AddLot(lotDto);
+
+        // Assert
+        Assert.NotNull(lotDto.Auction);
+        _lotRepositorySubstitute.Received().Add(mappedLot);
+        _databaseSubstitute.Received().Commit();
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void DeleteLot_InvalidId_ThrowsInvalidIdException(int id)
+    {
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _lotService.DeleteLot(id));
+    }
+
+    [Fact]
+    public void DeleteLot_ValidId_DeletesLotAndCommits()
+    {
+        // Arrange
+        int id = 1;
+
+        // Act
+        _lotService.DeleteLot(id);
+
+        // Assert
+        _auctionRepositorySubstitute.Received().Delete(id);
+        _lotRepositorySubstitute.Received().Delete(id);
+        _databaseSubstitute.Received().Commit();
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void GetLot_InvalidId_ThrowsInvalidIdException(int id)
+    {
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _lotService.GetLot(id));
+    }
+
+    [Fact]
+    public void GetLot_ValidIdLotDoesNotExist_ThrowsInvalidIdException()
+    {
+        // Arrange
+        int id = 1;
+        _lotRepositorySubstitute.Get(id).Returns((Lot)null);
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _lotService.GetLot(id));
+    }
+
+    [Fact]
+    public void GetLot_ValidIdLotExists_ReturnsLotDTO()
+    {
+        // Arrange
+        int id = 1;
+        var lot = new Lot();
+        var expectedDto = new LotDTO();
+        _lotRepositorySubstitute.Get(id).Returns(lot);
+        _mapperSubstitute.Map&lt;Lot, LotDTO&gt;(lot).Returns(expectedDto);
+
+        // Act
+        var result = _lotService.GetLot(id);
+
+        // Assert
+        Assert.Same(expectedDto, result);
+    }
+
+    [Fact]
+    public void GetLots_WhenCalled_ReturnsListOfLotDTO()
+    {
+        // Arrange
+        var lots = new List&lt;Lot&gt;();
+        var expectedDtos = new List&lt;LotDTO&gt;();
+        _lotRepositorySubstitute.GetAll().Returns(lots);
+        _mapperSubstitute.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(lots).Returns(expectedDtos);
+
+        // Act
+        var result = _lotService.GetLots();
+
+        // Assert
+        Assert.Same(expectedDtos, result);
+    }
+
+    [Fact]
+    public void GetLotsByCategory_CategoryIsNull_ThrowsInvalidCategoryException()
+    {
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidCategoryException&gt;(() =&gt; _lotService.GetLotsByCategory(null));
+    }
+
+    [Fact]
+    public void GetLotsByCategory_ValidCategory_ReturnsFilteredLots()
+    {
+        // Arrange
+        string category = &quot;category&quot;;
+        var lots = new List&lt;Lot&gt;();
+        var expectedDtos = new List&lt;LotDTO&gt;();
+        _lotRepositorySubstitute.GetLotsByCategory(category).Returns(lots);
+        _mapperSubstitute.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(lots).Returns(expectedDtos);
+
+        // Act
+        var result = _lotService.GetLotsByCategory(category);
+
+        // Assert
+        Assert.Same(expectedDtos, result);
+    }
+
+    [Fact]
+    public void GetLotsByName_NameIsNull_ThrowsInvalidNameException()
+    {
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidNameException&gt;(() =&gt; _lotService.GetLotsByName(null));
+    }
+
+    [Fact]
+    public void GetLotsByName_ValidName_ReturnsFilteredLots()
+    {
+        // Arrange
+        string name = &quot;name&quot;;
+        var lots = new List&lt;Lot&gt;();
+        var expectedDtos = new List&lt;LotDTO&gt;();
+        _lotRepositorySubstitute.GetLotsByName(name).Returns(lots);
+        _mapperSubstitute.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(lots).Returns(expectedDtos);
+
+        // Act
+        var result = _lotService.GetLotsByName(name);
+
+        // Assert
+        Assert.Same(expectedDtos, result);
+    }
+
+    [Fact]
+    public void GetNotSoldLots_WhenCalled_ReturnsNotSoldLots()
+    {
+        // Arrange
+        var lots = new List&lt;Lot&gt;();
+        var expectedDtos = new List&lt;LotDTO&gt;();
+        _lotRepositorySubstitute.GetNotSoldLots().Returns(lots);
+        _mapperSubstitute.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(lots).Returns(expectedDtos);
+
+        // Act
+        var result = _lotService.GetNotSoldLots();
+
+        // Assert
+        Assert.Same(expectedDtos, result);
+    }
+
+    [Fact]
+    public void GetSoldLots_WhenCalled_ReturnsSoldLots()
+    {
+        // Arrange
+        var lots = new List&lt;Lot&gt;();
+        var expectedDtos = new List&lt;LotDTO&gt;();
+        _lotRepositorySubstitute.GetSoldLots().Returns(lots);
+        _mapperSubstitute.Map&lt;IEnumerable&lt;Lot&gt;, IEnumerable&lt;LotDTO&gt;&gt;(lots).Returns(expectedDtos);
+
+        // Act
+        var result = _lotService.GetSoldLots();
+
+        // Assert
+        Assert.Same(expectedDtos, result);
+    }
+
+    [Fact]
+    public void UpdateLot_LotDtoIsNull_ThrowsInvalidLotException()
+    {
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.UpdateLot(null));
+    }
+
+    [Fact]
+    public void UpdateLot_LotDtoNameIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Owner = &quot;owner&quot;, Category = &quot;category&quot; };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.UpdateLot(lotDto));
+    }
+
+    [Fact]
+    public void UpdateLot_LotDtoOwnerIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Name = &quot;name&quot;, Category = &quot;category&quot; };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.UpdateLot(lotDto));
+    }
+
+    [Fact]
+    public void UpdateLot_LotDtoCategoryIsNull_ThrowsInvalidLotException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { Name = &quot;name&quot;, Owner = &quot;owner&quot; };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidLotException&gt;(() =&gt; _lotService.UpdateLot(lotDto));
+    }
+
+    [Fact]
+    public void UpdateLot_LotDoesNotExistInDatabase_ThrowsInvalidIdException()
+    {
+        // Arrange
+        var lotDto = new LotDTO { ID = 1, Name = &quot;name&quot;, Owner = &quot;owner&quot;, Category = &quot;category&quot; };
+        _lotRepositorySubstitute.Get(lotDto.ID).Returns((Lot)null);
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _lotService.UpdateLot(lotDto));
+    }
+
+    [Fact]
+    public void UpdateLot_ValidLotDto_UpdatesLotAndCommits()
+    {
+        // Arrange
+        var lotDto = new LotDTO
+        {
+            ID = 1,
+            Name = &quot;newName&quot;,
+            Owner = &quot;newOwner&quot;,
+            Sold = true,
+            Category = &quot;newCategory&quot;,
+            Details = &quot;newDetails&quot;
+        };
+        var existingLot = new Lot();
+        _lotRepositorySubstitute.Get(lotDto.ID).Returns(existingLot);
+
+        // Act
+        _lotService.UpdateLot(lotDto);
+
+        // Assert
+        Assert.Equal(&quot;newName&quot;, existingLot.Name);
+        Assert.Equal(&quot;newOwner&quot;, existingLot.Owner);
+        Assert.True(existingLot.Sold);
+        Assert.Equal(&quot;newCategory&quot;, existingLot.Category);
+        Assert.Equal(&quot;newDetails&quot;, existingLot.Details);
+        _lotRepositorySubstitute.Received().Update(existingLot);
+        _databaseSubstitute.Received().Commit();
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[15,5,15,29,1],[16,5,16,6,1],[17,9,17,61,1],[18,9,18,55,1],[19,9,19,69,1],[20,9,20,77,1],[22,9,22,68,1],[23,9,23,76,1],[25,9,25,78,1],[26,5,26,6,1],[30,5,30,6,1],[32,9,32,30,1],[35,9,35,50,1],[35,50,35,76,1],[35,76,35,78,1],[36,5,36,6,1],[40,5,40,6,1],[42,9,42,49,1],[45,9,45,50,1],[45,50,45,76,1],[45,76,45,78,1],[46,5,46,6,1],[50,5,50,6,1],[52,9,52,90,1],[55,9,55,50,1],[55,50,55,76,1],[55,76,55,78,1],[56,5,56,6,1],[60,5,60,6,1],[62,9,62,88,1],[65,9,65,50,1],[65,50,65,76,1],[65,76,65,78,1],[66,5,66,6,1],[70,5,70,6,1],[72,9,72,82,1],[75,9,75,50,1],[75,50,75,76,1],[75,76,75,78,1],[76,5,76,6,1],[80,5,80,6,1],[82,9,88,11,1],[89,9,89,35,1],[90,9,90,71,1],[93,9,93,36,1],[96,9,96,40,1],[97,9,97,60,1],[98,9,98,49,1],[99,5,99,6,1],[105,5,105,6,1],[107,9,107,49,1],[107,49,107,74,1],[107,74,107,76,1],[108,5,108,6,1],[112,5,112,6,1],[114,9,114,20,1],[117,9,117,35,1],[120,9,120,60,1],[121,9,121,56,1],[122,9,122,49,1],[123,5,123,6,1],[129,5,129,6,1],[131,9,131,49,1],[131,49,131,71,1],[131,71,131,73,1],[132,5,132,6,1],[136,5,136,6,1],[138,9,138,20,1],[139,9,139,61,1],[142,9,142,49,1],[142,49,142,71,1],[142,71,142,73,1],[143,5,143,6,1],[147,5,147,6,1],[149,9,149,20,1],[150,9,150,29,1],[151,9,151,40,1],[152,9,152,55,1],[153,9,153,70,1],[156,9,156,45,1],[159,9,159,42,1],[160,5,160,6,1],[164,5,164,6,1],[166,9,166,36,1],[167,9,167,47,1],[168,9,168,57,1],[169,9,169,98,1],[172,9,172,44,1],[175,9,175,43,1],[176,5,176,6,1],[180,5,180,6,1],[182,9,182,92,1],[183,5,183,6,1],[187,5,187,6,1],[189,9,189,38,1],[190,9,190,36,1],[191,9,191,47,1],[192,9,192,76,1],[193,9,193,98,1],[196,9,196,62,1],[199,9,199,43,1],[200,5,200,6,1],[204,5,204,6,1],[206,9,206,84,1],[207,5,207,6,1],[211,5,211,6,1],[213,9,213,30,1],[214,9,214,36,1],[215,9,215,47,1],[216,9,216,68,1],[217,9,217,98,1],[220,9,220,54,1],[223,9,223,43,1],[224,5,224,6,1],[228,5,228,6,1],[230,9,230,36,1],[231,9,231,47,1],[232,9,232,65,1],[233,9,233,98,1],[236,9,236,51,1],[239,9,239,43,1],[240,5,240,6,1],[244,5,244,6,1],[246,9,246,36,1],[247,9,247,47,1],[248,9,248,62,1],[249,9,249,98,1],[252,9,252,48,1],[255,9,255,43,1],[256,5,256,6,1],[260,5,260,6,1],[262,9,262,79,1],[263,5,263,6,1],[267,5,267,6,1],[269,9,269,76,1],[272,9,272,50,1],[272,50,272,79,1],[272,79,272,81,1],[273,5,273,6,1],[277,5,277,6,1],[279,9,279,74,1],[282,9,282,50,1],[282,50,282,79,1],[282,79,282,81,1],[283,5,283,6,1],[287,5,287,6,1],[289,9,289,68,1],[292,9,292,50,1],[292,50,292,79,1],[292,79,292,81,1],[293,5,293,6,1],[297,5,297,6,1],[299,9,299,99,1],[300,9,300,68,1],[303,9,303,49,1],[303,49,303,78,1],[303,78,303,80,1],[304,5,304,6,1],[308,5,308,6,1],[310,9,318,11,1],[319,9,319,37,1],[320,9,320,70,1],[323,9,323,39,1],[326,9,326,51,1],[327,9,327,53,1],[328,9,328,39,1],[329,9,329,59,1],[330,9,330,57,1],[331,9,331,65,1],[332,9,332,49,1],[333,5,333,6,1]]);
+    </script>
+  </body>
+</html>

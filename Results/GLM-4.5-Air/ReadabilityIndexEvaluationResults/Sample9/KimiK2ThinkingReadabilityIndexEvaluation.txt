@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765321198-2DYG5BAWhwpvEZKORGZG
+
+Content:
+ {
+	"readabilityIndex": 85,
+	"reasons": [
+		"Extra comments beyond AAA blocks (`// Parameters provided by InlineData`) violate the no-additional-comments guideline",
+		"Namespace `Glm45AirUnitTests` lacks descriptiveness about the test subject",
+		"Minor code duplication in Arrange sections of similar tests",
+		"Complex assertion logic in word count test requires mental calculation to verify",
+		"String literals (`<p>`, `</p>`) are hard-coded in multiple assertions affecting maintainability",
+		"Test name `ReturnsString` is overly generic for Theory tests with varied inputs",
+		"Split operations with string arrays are verbose and could be simplified for clarity"
+	]
+}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327974-6cw7QIUXuVFjOdNgovMi
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the standard pattern 'ClassUnderTestTests'",
+		"Test method names are clear and follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern",
+		"Tests consistently use the AAA pattern with clear comments separating each section",
+		"[Theory] with [InlineData] is appropriately used for parameterized tests to avoid code duplication",
+		"Tests are well-structured with logical separation between different extension methods",
+		"Code follows standard C# naming conventions and formatting",
+		"No unnecessary nested classes or complex structures that would reduce readability",
+		"Test scenarios are simple and focused on single responsibilities",
+		"All asynchronous methods (if any) would correctly use 'async Task' signature",
+		"The code is easy to read and maintain with clear setup, execution, and verification sections"
+	]
+}

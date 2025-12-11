@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323097-Kdstof3IgNki8Bmy6cwv
+
+Content:
+ {"readabilityIndex":88,"reasons":["Test class name follows the ClassUnderTestTests pattern","All test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern","Proper use of async Task signatures for asynchronous tests","Clear AAA pattern implementation with comments and empty line separation","Variable names are meaningful and reflect their purpose","No unnecessary comments beyond AAA markers","Follows standard C# naming conventions","Tests are self-contained and readable individually","Minor code duplication in setup does not significantly impact readability","Test scenarios cover distinct cases clearly"]}

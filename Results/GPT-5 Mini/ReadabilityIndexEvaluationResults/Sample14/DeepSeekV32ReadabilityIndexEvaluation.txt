@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323966-cyNdMfJH0uGYEgdVmd8J
+
+Content:
+{"readabilityIndex": 80, "reasons": ["Test class name follows pattern 'ClassUnderTestTests'", "Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern", "AAA pattern is consistently followed with clear comments and empty lines", "Uses appropriate [Fact] and [Theory] attributes for different test scenarios", "Variable names are clear and meaningful", "Tests are well-structured and logical", "Uses assertions effectively with clear expected values", "Minor issue: nested loops in assertions could be extracted to helper method for better readability"]}

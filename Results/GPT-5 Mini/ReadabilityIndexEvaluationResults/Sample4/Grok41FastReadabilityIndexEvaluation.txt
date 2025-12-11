@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323090-EYxC2ILCAhLie8SvSRzA
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern.",
+		"Test method names precisely follow 'MethodUnderTest_Scenario_ExpectedResult' pattern.",
+		"Strict adherence to AAA pattern with clear // Arrange, // Act, // Assert comments and separation.",
+		"Meaningful, descriptive variable names (e.g., requestedId, entity, model).",
+		"Proper use of async Task for asynchronous tests.",
+		"Correct use of [Fact] for distinct single scenarios.",
+		"No unnecessary comments or nested classes.",
+		"Follows standard C# naming conventions and formatting.",
+		"Clear mocking setup with NSubstitute, easy to follow.",
+		"Minor nit: Arg.Is comparisons use reference equality (e => e == entity), but still readable."
+	]
+}

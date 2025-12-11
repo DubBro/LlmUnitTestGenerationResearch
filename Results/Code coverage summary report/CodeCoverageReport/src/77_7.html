@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample15Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Text;
+using Dataset.Sample15;
+
+namespace Gpt5MiniUnitTests
+{
+    public class Base64HelpersTests
+    {
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;   &quot;)]
+        [InlineData(&quot;\t\n&quot;)]
+        public void Encode_NullOrWhiteSpace_ReturnsEmpty(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.Encode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Encode_AsciiString_ReturnsExpectedBase64()
+        {
+            // Arrange
+            var input = &quot;hello&quot;;
+            var expected = &quot;aGVsbG8=&quot;;
+
+            // Act
+            var result = input.Encode();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Encode_UnicodeString_ReturnsUtf8Base64()
+        {
+            // Arrange
+            var input = &quot;Привет, мир &#127757;&quot;;
+            var expected = Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
+
+            // Act
+            var result = input.Encode();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;   &quot;)]
+        [InlineData(&quot;\r\n&quot;)]
+        public void Decode_NullOrWhiteSpace_ReturnsEmpty(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.Decode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Decode_ValidAsciiBase64_ReturnsOriginalString()
+        {
+            // Arrange
+            var original = &quot;hello&quot;;
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(original));
+
+            // Act
+            var result = base64.Decode();
+
+            // Assert
+            Assert.Equal(original, result);
+        }
+
+        [Fact]
+        public void Decode_ValidUnicodeBase64_ReturnsOriginalString()
+        {
+            // Arrange
+            var original = &quot;Привет, мир &#127757;&quot;;
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(original));
+
+            // Act
+            var result = base64.Decode();
+
+            // Assert
+            Assert.Equal(original, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;not-base64&quot;)]
+        [InlineData(&quot;!!!&quot;)]
+        [InlineData(&quot;abcd*&quot;)]
+        public void Decode_InvalidBase64_ThrowsFormatException(string invalidBase64)
+        {
+            // Arrange
+
+            // Act &amp; Assert
+            Assert.Throws&lt;FormatException&gt;(() =&gt; Base64Helpers.Decode(invalidBase64));
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[14,9,14,10,1],[18,13,18,41,1],[21,13,21,48,1],[22,9,22,10,1],[26,9,26,10,1],[28,13,28,33,1],[29,13,29,39,1],[32,13,32,41,1],[35,13,35,44,1],[36,9,36,10,1],[40,9,40,10,1],[42,13,42,42,1],[43,13,43,82,1],[46,13,46,41,1],[49,13,49,44,1],[50,9,50,10,1],[58,9,58,10,1],[62,13,62,41,1],[65,13,65,48,1],[66,9,66,10,1],[70,9,70,10,1],[72,13,72,36,1],[73,13,73,83,1],[76,13,76,42,1],[79,13,79,44,1],[80,9,80,10,1],[84,9,84,10,1],[86,13,86,45,1],[87,13,87,83,1],[90,13,90,42,1],[93,13,93,44,1],[94,9,94,10,1],[101,9,101,10,1],[105,13,105,50,1],[105,50,105,85,1],[105,85,105,87,1],[106,9,106,10,1]]);
+    </script>
+  </body>
+</html>

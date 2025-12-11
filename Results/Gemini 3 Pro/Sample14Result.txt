@@ -1,0 +1,175 @@
+GenerationId:
+gen-1765216001-arF6JA7d6WGhJaHozyt3
+
+Content:
+```csharp
+using System;
+using Xunit;
+// NSubstitute is available but not required as the class under test has no external dependencies/interfaces to mock.
+// using NSubstitute; 
+
+namespace Dataset.Sample14.UnitTests;
+
+public class RhombusGeneratorTests
+{
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-10)]
+    public void GetRhombus_WhenCountIsZero orNegative_ThrowsException(int count)
+    {
+        // Arrange
+        // The input 'count' is provided by InlineData.
+
+        // Act
+        void act() => RhombusGenerator.GetRhombus(count);
+
+        // Assert
+        var exception = Assert.Throws<Exception>(act);
+        Assert.Equal("Error. Invalid input", exception.Message);
+    }
+
+    [Theory]
+    [InlineData(2)]
+    [InlineData(4)]
+    [InlineData(100)]
+    public void GetRhombus_WhenCountIsEven_ThrowsException(int count)
+    {
+        // Arrange
+        // The input 'count' is provided by InlineData.
+
+        // Act
+        void act() => RhombusGenerator.GetRhombus(count);
+
+        // Assert
+        var exception = Assert.Throws<Exception>(act);
+        Assert.Equal("Error. Invalid input", exception.Message);
+    }
+
+    [Fact]
+    public void GetRhombus_WhenCountIsOne_ReturnsSingleZeroElementArray()
+    {
+        // Arrange
+        int count = 1;
+
+        // Act
+        int[,] result = RhombusGenerator.GetRhombus(count);
+
+        // Assert
+        Assert.Equal(1, result.GetLength(0));
+        Assert.Equal(1, result.GetLength(1));
+        Assert.Equal(0, result[0, 0]);
+    }
+
+    [Fact]
+    public void GetRhombus_WhenCountIsThree_ReturnsCorrectPattern()
+    {
+        // Arrange
+        int count = 3;
+        // Expected logic based on code analysis:
+        // 3x3 Grid. Center (1,1) is unused (0).
+        // Q1 (Top-Left):   [0,0]=1
+        // Q2 (Top-Right):  [0,2]=2
+        // Q3 (Low-Left):   [2,0]=3
+        // Q4 (Low-Right):  [2,2]=4
+        int[,] expected = new int[,]
+        {
+            { 1, 0, 2 },
+            { 0, 0, 0 },
+            { 3, 0, 4 }
+        };
+
+        // Act
+        int[,] result = RhombusGenerator.GetRhombus(count);
+
+        // Assert
+        Assert.Equal(3, result.GetLength(0));
+        Assert.Equal(3, result.GetLength(1));
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void GetRhombus_WhenCountIsFive_ReturnsPyramidCornerPattern()
+    {
+        // Arrange
+        int count = 5;
+        // Logical trace for count=5:
+        // DivRows = 2.
+        // Q1 fills: [0,0]=1, [0,1]=1, [1,0]=1.
+        // Q2 fills: [0,4]=2, [0,3]=2, [1,4]=2.
+        // Q3 fills: [4,0]=3, [4,1]=3, [3,0]=3.
+        // Q4 fills: [4,4]=4, [4,3]=4, [3,4]=4.
+        // Middle row (2) and middle col (2) remain 0.
+        int[,] expected = new int[,]
+        {
+            { 1, 1, 0, 2, 2 },
+            { 1, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0 },
+            { 3, 0, 0, 0, 4 },
+            { 3, 3, 0, 4, 4 }
+        };
+
+        // Act
+        int[,] result = RhombusGenerator.GetRhombus(count);
+
+        // Assert
+        Assert.Equal(5, result.GetLength(0));
+        Assert.Equal(5, result.GetLength(1));
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void GetRhombus_WhenCountIsSeven_ReturnsCorrectLargerPattern()
+    {
+        // Arrange
+        int count = 7;
+        
+        // Act
+        int[,] result = RhombusGenerator.GetRhombus(count);
+
+        // Assert
+        // Verify Dimensions
+        Assert.Equal(7, result.GetLength(0));
+        Assert.Equal(7, result.GetLength(1));
+
+        // Verify specific structural properties based on algorithm
+        
+        // Q1: Top-Left corner is 1
+        Assert.Equal(1, result[0, 0]);
+        // Q2: Top-Right corner is 2
+        Assert.Equal(2, result[0, 6]);
+        // Q3: Bottom-Left corner is 3
+        Assert.Equal(3, result[6, 0]);
+        // Q4: Bottom-Right corner is 4
+        Assert.Equal(4, result[6, 6]);
+
+        // Verify the centers are empty (0)
+        // Center of the matrix
+        Assert.Equal(0, result[3, 3]);
+        // Center row
+        Assert.Equal(0, result[3, 0]);
+        Assert.Equal(0, result[3, 6]);
+        // Center column
+        Assert.Equal(0, result[0, 3]);
+        Assert.Equal(0, result[6, 3]);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+41835,8314
+
+OpenRouterElapsedTimeMilliseconds:
+52952
+
+PromptTokens:
+1716
+
+CompletionTokens:
+4575
+
+TotalTokens:
+6291
+
+TotalCost:
+0,058332

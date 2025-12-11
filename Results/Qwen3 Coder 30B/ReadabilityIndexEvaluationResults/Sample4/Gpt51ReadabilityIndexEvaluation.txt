@@ -1,0 +1,15 @@
+GenerationId:
+gen-1765325731-MQ6fShViGFoFdnXzjyiJ
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern (CompanyServiceTests), clearly indicating the subject under test.",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern and clearly describe behavior (e.g., GetAsync_ValidId_ReturnsMappedCompanyModel).",
+    "AAA pattern is explicitly used, with clear separation via comments and spacing, making test flow easy to follow.",
+    "Asynchronous tests use async Task signatures correctly and avoid async void, aiding clarity and correctness of usage.",
+    "xUnit attributes are used appropriately: [Fact] for a single scenario and [Theory] with [InlineData] for multiple variations of the same scenario.",
+    "Some duplication in Arrange setup (repository, mapper, service creation) slightly reduces maintainability and could be improved with common setup helpers or fixtures."
+  ]
+}

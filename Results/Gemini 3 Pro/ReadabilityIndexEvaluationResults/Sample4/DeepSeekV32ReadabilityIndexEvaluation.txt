@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317783-hGWKLKVvFRV4BCtWZx7Q
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class and method names follow recommended naming conventions clearly",
+		"Tests follow AAA pattern with clear comments separating Arrange/Act/Assert blocks",
+		"Proper use of [Theory] with [InlineData] for parameterized tests and [Fact] for single scenarios",
+		"Clear, meaningful variable names that reflect their purpose",
+		"Good use of async Task signatures instead of async void",
+		"Clean test structure with logical separation of test scenarios",
+		"Consistent formatting and indentation throughout the code",
+		"Proper use of dependency mocking with NSubstitute",
+		"Contains comprehensive edge case tests with clear scenarios",
+		"Assertions are clear and verify both return values and behavior (mock interactions)"
+	]
+}

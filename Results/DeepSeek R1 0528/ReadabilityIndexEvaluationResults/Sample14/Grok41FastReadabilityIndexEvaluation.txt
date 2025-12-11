@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316865-z4GMM9kmhIBxzuFUi5nb
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names adhere to MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Strict adherence to AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"Appropriate use of [Theory] with [InlineData] for invalid inputs, avoiding duplication.",
+		"[Fact] used for unique scenarios with complex expected data.",
+		"Private helper method AssertArrayEqual improves maintainability and reduces assertion duplication.",
+		"Clear, meaningful naming for variables and methods.",
+		"Good formatting of multi-line 2D array initializers.",
+		"No unnecessary comments or nested classes.",
+		"Slight repetition in test structure for different sizes, though mitigated by helper method."
+	]
+}

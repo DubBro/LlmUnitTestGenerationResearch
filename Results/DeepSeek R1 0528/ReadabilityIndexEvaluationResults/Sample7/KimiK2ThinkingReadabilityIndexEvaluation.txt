@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316245-grTqJ3SrgSVlLpZJERSI
+
+Content:
+ {"readabilityIndex":94,"reasons":["Clear test names following MethodUnderTest_Scenario_ExpectedResult pattern","Proper AAA structure with comments and spacing","Correct use of Theory/InlineData for multiple scenarios","Good naming conventions for class and variables","Appropriate async Task signatures","Clean structure without nested classes or extra comments","Minor: _service field could be more explicit like _walkService","Minor: duplicate InlineData could be consolidated for maintainability"]}

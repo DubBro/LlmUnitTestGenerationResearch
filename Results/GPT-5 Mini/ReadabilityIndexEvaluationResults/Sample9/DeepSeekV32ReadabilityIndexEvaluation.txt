@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323523-O3fszxnhrmRYqewPLfmr
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows standard naming convention (ClassUnderTestTests)",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern clearly",
+		"Tests follow AAA pattern with clear Arrange/Act/Assert separation and comments",
+		"Good formatting with proper indentation and spacing enhances readability",
+		"Use of inline comments to explain test edge cases (maxWords - minWords == 1) is helpful",
+		"Tests are well-structured with consistent organization across different scenarios",
+		"All assertions are clear and appropriately named",
+		"Tests maintain logical flow and are easy to understand",
+		"Edge cases (zero paragraphs, equal min/max values) are properly tested",
+		"Method calls are clearly formatted with line breaks for long parameter lists"
+	]
+}

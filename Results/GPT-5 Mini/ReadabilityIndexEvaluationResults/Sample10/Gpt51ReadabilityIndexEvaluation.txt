@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765323657-K0ZvfBCOG3Id83idAhSm
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Clear and consistent test class and method naming following the ClassUnderTestTests and Method_Scenario_Result patterns, making intent easy to understand.",
+    "Tests generally follow the AAA structure with explicit // Arrange, // Act, // Assert comments (or combined Act/Assert where appropriate), giving a clear flow.",
+    "Use of [Theory] with [InlineData] for invalid ID scenarios reduces duplication and improves maintainability.",
+    "Common setup is centralized in the CreateSut helper, eliminating repeated boilerplate and making dependencies explicit and easy to scan.",
+    "Variable names (sut, repo, db, mapper, auction, dto, result, ex) are conventional and descriptive enough for test purposes.",
+    "Formatting and spacing are consistent: each test is compact, blocks are separated by blank lines, and object initializers are neatly formatted.",
+    "Assertions are focused and usually check a single behavior per test, which keeps each test small and readable.",
+    "Minor inconsistency with \"// Act / Assert\" combined comments and some repetitive creation of similar Auction/AuctionDTO instances slightly detracts from perfect clarity but does not significantly harm readability."
+  ]
+}

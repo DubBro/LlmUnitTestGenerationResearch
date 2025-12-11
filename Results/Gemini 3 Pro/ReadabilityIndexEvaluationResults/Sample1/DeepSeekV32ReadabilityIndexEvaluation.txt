@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317543-cLBBfAJinyU14CAjECJu
+
+Content:
+{"readabilityIndex":86,"reasons":["Well-structured test class with meaningful naming and clear purpose","Test method names follow good pattern: MethodUnderTest_Scenario_ExpectedResult","All tests use async Task signature","All tests properly implement AAA pattern with clear Arrange, Act, Assert sections","Code formatting is clean and consistent","No unnecessary nested classes","Tests handle both success and exception cases appropriately","Proper use of xUnit attributes ([Fact])","Mocking setup is clear with NSubstitute","Test assertions are clear and verify both state and behavior when needed"]}

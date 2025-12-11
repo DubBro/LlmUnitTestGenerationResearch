@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765315525-MAXGtcnEpztXBnPeSgtz
+
+Content:
+{
+  "readabilityIndex": 91,
+  "reasons": [
+    "Test class and method names are clear, descriptive, and follow the ClassUnderTest_Method_Scenario_ExpectedResult pattern, making intent immediately obvious.",
+    "Consistent use of async Task signatures for asynchronous tests improves correctness and readability of async flows.",
+    "AAA structure is followed throughout, often explicitly separated with // Arrange, // Act, // Assert, which makes each test easy to visually parse.",
+    "Assertions are focused and expressive (including NSubstitute Received checks), clearly documenting expected behavior and side effects.",
+    "Use of [Theory] with [InlineData] for parameterized scenarios (e.g., invalid user IDs) avoids duplication and keeps related cases grouped.",
+    "Shared test setup via the constructor (substitutes, transaction, service) reduces noise in individual tests and makes common dependencies easy to understand.",
+    "Some tests (e.g., AddAsync_ValidNote_ReturnsIdAndSetsProperties, UpdateAsync_ValidUpdate_ReturnsIdAndSetsProperties) are quite long with complex predicates and multiple assertions, which slightly reduces scan-ability and could benefit from small helper methods or local functions.",
+    "There is repeated setup logic for similar entities and failure scenarios (e.g., Save failed cases) that could be extracted into helper methods to further improve maintainability and reduce duplication."
+  ]
+}

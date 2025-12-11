@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765323690-CACgiDPsP6VvbaM7vLky
+
+Content:
+ {
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test names consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern",
+		"AAA pattern properly implemented with clear comments and separation",
+		"[Theory] and [Fact] attributes used appropriately to avoid duplication",
+		"CreateSut helper method effectively centralizes setup and reduces boilerplate",
+		"Variable names are concise, meaningful, and follow C# conventions (sut, repo, mapper, etc.)",
+		"Clean structure without nested classes or unnecessary comments",
+		"Combined Act/Assert comments appropriately used for simple one-line assertions",
+		"Minor consideration: tuple discard syntax may require familiarity with modern C# features"
+	]
+}

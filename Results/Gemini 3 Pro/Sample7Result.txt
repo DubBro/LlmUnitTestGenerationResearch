@@ -1,0 +1,165 @@
+GenerationId:
+gen-1765215089-LTabF1i81t4FV0NO0BMW
+
+Content:
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using NSubstitute;
+using Xunit;
+
+namespace Dataset.Sample7.UnitTests
+{
+    public class WalkServiceTests
+    {
+        private readonly IWalkRepository _walkRepositoryMock;
+        private readonly WalkService _walkService;
+
+        public WalkServiceTests()
+        {
+            _walkRepositoryMock = Substitute.For<IWalkRepository>();
+            _walkService = new WalkService(_walkRepositoryMock);
+        }
+
+        [Theory]
+        [InlineData("12345678901234")]   // 14 digits
+        [InlineData("1234567890123456")] // 16 digits
+        [InlineData("12345a789012345")]  // Non-digit char
+        [InlineData("")]                 // Empty
+        [InlineData("               ")]  // Whitespace
+        public async Task Get10LongestWalksAsync_WhenImeiIsInvalid_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            // No setup needed for mock as exception occurs before call
+
+            // Act
+            Func<Task> act = () => _walkService.Get10LongestWalksAsync(invalidImei);
+
+            // Assert
+            await Assert.ThrowsAsync<BusinessException>(act);
+            await _walkRepositoryMock.DidNotReceive().Get10LongestWalksAsync(Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_WhenImeiIsValidAndDataExists_ReturnsRenumberedDtos()
+        {
+            // Arrange
+            var validImei = "123456789012345";
+            var entities = new List<WalkEntity>
+            {
+                new WalkEntity { Distance = 100.5m, Duration = 60.0m },
+                new WalkEntity { Distance = 200.0m, Duration = 120.0m },
+                new WalkEntity { Distance = 150.0m, Duration = 90.0m }
+            };
+
+            _walkRepositoryMock.Get10LongestWalksAsync(validImei).Returns(entities);
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Collection(result,
+                item1 =>
+                {
+                    Assert.Equal(1, item1.Number);
+                    Assert.Equal(100.5m, item1.Distance);
+                    Assert.Equal(60.0m, item1.Duration);
+                },
+                item2 =>
+                {
+                    Assert.Equal(2, item2.Number);
+                    Assert.Equal(200.0m, item2.Distance);
+                    Assert.Equal(120.0m, item2.Duration);
+                },
+                item3 =>
+                {
+                    Assert.Equal(3, item3.Number);
+                    Assert.Equal(150.0m, item3.Distance);
+                    Assert.Equal(90.0m, item3.Duration);
+                });
+
+            await _walkRepositoryMock.Received(1).Get10LongestWalksAsync(validImei);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_WhenImeiIsValidAndRepositoryReturnsEmpty_ReturnsEmptyList()
+        {
+            // Arrange
+            var validImei = "123456789012345";
+            _walkRepositoryMock.Get10LongestWalksAsync(validImei).Returns(Enumerable.Empty<WalkEntity>());
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+            await _walkRepositoryMock.Received(1).Get10LongestWalksAsync(validImei);
+        }
+
+        [Theory]
+        [InlineData("123")]               // Too short
+        [InlineData("abcdefghijklmno")]  // Letters
+        [InlineData("!@#$%^&*()12345")] // Special chars
+        public async Task GetWalksGeneralInfoAsync_WhenImeiIsInvalid_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            // No setup needed
+
+            // Act
+            Func<Task> act = () => _walkService.GetWalksGeneralInfoAsync(invalidImei);
+
+            // Assert
+            await Assert.ThrowsAsync<BusinessException>(act);
+            await _walkRepositoryMock.DidNotReceive().GetWalksGeneralInfoAsync(Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_WhenImeiIsValid_ReturnsMappedDto()
+        {
+            // Arrange
+            var validImei = "987654321098765";
+            var entity = new WalksGeneralInfoEntity
+            {
+                TotalCount = 10,
+                TotalDistance = 500.5m,
+                TotalDuration = 1000.2m
+            };
+
+            _walkRepositoryMock.GetWalksGeneralInfoAsync(validImei).Returns(entity);
+
+            // Act
+            var result = await _walkService.GetWalksGeneralInfoAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.TotalCount, result.TotalCount);
+            Assert.Equal(entity.TotalDistance, result.TotalDistance);
+            Assert.Equal(entity.TotalDuration, result.TotalDuration);
+
+            await _walkRepositoryMock.Received(1).GetWalksGeneralInfoAsync(validImei);
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+31866,2199
+
+OpenRouterElapsedTimeMilliseconds:
+34806
+
+PromptTokens:
+1762
+
+CompletionTokens:
+3379
+
+TotalTokens:
+5141
+
+TotalCost:
+0,044072

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765325092-P598oT42I67TfN7pxFGb
+
+Content:
+{
+	"readabilityIndex": 68,
+	"reasons": [
+		"Test class and method names follow recommended conventions (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult)",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and clear separation",
+		"Proper use of async Task for asynchronous tests",
+		"Concise exception tests using Assert.ThrowsAsync with combined Act & Assert",
+		"Clear mocking setup in constructor, reused across tests",
+		"High code duplication in repeated EmployeeEntity and EmployeeModel initializations across tests",
+		"Verbose assertions listing every property individually, reducing scannability",
+		"Missed opportunity for [Theory] and [InlineData] to parameterize similar validation tests and reduce duplication",
+		"Lengthy Arrange and Assert sections due to boilerplate data setup",
+		"Overall logical structure but maintenance hindered by repetition"
+	]
+}

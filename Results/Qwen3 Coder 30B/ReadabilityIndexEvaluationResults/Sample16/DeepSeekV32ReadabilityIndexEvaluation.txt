@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327595-a0JNcVOBugbUhzUzQzhe
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows proper convention (AsciiHelpersTests)",
+		"Test method names are clear and follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Tests follow AAA pattern with clear comment separators",
+		"Good use of [Theory] with [InlineData] to avoid code duplication for multiple test cases",
+		"Clean formatting with proper indentation and spacing",
+		"Variable names are meaningful and clear (input, result, expected)",
+		"No unnecessary comments or code clutter",
+		"All tests are self-contained and easy to understand",
+		"Good balance between individual [Fact] tests for edge cases and [Theory] for parameterized testing",
+		"Proper handling of async methods (not applicable here, but structure is correct for synchronous tests)"
+	]
+}

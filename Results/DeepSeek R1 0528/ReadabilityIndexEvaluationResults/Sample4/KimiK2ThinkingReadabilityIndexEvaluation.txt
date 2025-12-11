@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765315656-GMccY4ZTVpBExxavdYHe
+
+Content:
+ {"readabilityIndex":90,"reasons":["Test class name follows the ClassUnderTestTests pattern clearly.","All test method names adhere to MethodUnderTest_Scenario_ExpectedResult pattern and are highly descriptive.","Consistent and correct application of AAA pattern with comments and blank line separation.","Appropriate use of [Fact] for single cases and [Theory] with [InlineData] for multiple inputs.","Asynchronous tests correctly use async Task signatures, not async void.","Clean test fixture setup with well-named dependencies and the SUT (_sut pattern).","No unnecessary comments or code; tests are focused and maintainable.","Follows standard C# naming conventions for variables, fields, and methods.","Minor visual noise from null-forgiving operators (null!) required by NSubstitute, but idiomatic for the framework.","Slight reliance on hardcoded values in some tests, though contexts remain clear and understandable."]}

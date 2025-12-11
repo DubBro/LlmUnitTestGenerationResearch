@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765323198-8xI4Q3dDpAhbtX0FZ07Y
+
+Content:
+ {
+	"readabilityIndex": 73,
+	"reasons": [
+		"High setup code duplication: repository and service instantiation repeated in every test method, reducing maintainability",
+		"Extremely long 101-character string literal in InlineData is unreadable and lacks clear intent",
+		"Non-standard namespace 'Gpt5MiniUnitTests' does not follow typical C# naming conventions",
+		"Complex FolderEntity object graphs created inline without helper methods, increasing test verbosity",
+		"Verbose lambda assertions with multiple AND conditions reduce clarity of verification logic",
+		"Test method names are descriptive and consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Proper use of async Task signatures and AAA pattern comments throughout all tests"
+	]
+}

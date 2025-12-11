@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765325182-NhQFV6cmvg44luXpZCpr
+
+Content:
+ {"readabilityIndex":95,"reasons":["Test class and method names follow prescribed patterns and clearly convey purpose","Consistent AAA pattern with appropriate comments and block separation","All async tests properly return Task instead of void","Clean dependency setup in constructor using NSubstitute","No unnecessary comments or code","Follows standard C# naming conventions for all identifiers","Exception tests follow a clear, idiomatic pattern despite similar structure","Object mock setups are straightforward and readable","Test structure is uniform across all methods, aiding maintainability","Minimal complexity; even advanced mock patterns are used appropriately"]}

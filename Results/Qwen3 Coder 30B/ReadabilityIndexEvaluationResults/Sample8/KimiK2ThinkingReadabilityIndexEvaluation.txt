@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765326336-vUOPAXYRQ2pw3M82W3Tp
+
+Content:
+ {"readabilityIndex": 88, "reasons": ["Test methods follow MethodUnderTest_Scenario_ExpectedResult pattern perfectly","AAA pattern correctly implemented with clear comments and spacing","Variable names are clear and meaningful within test bodies","No unnecessary comments or code clutter","Proper use of [Fact] attribute for single scenarios","Minor setup code duplication: new Lu() instance created in each test","SUT class name 'Lu' is cryptic, reducing immediate domain understanding","Namespace is context-specific and not descriptive","Inconsistent array initialization syntax between tests","Overall structure is clean with consistent formatting"]}

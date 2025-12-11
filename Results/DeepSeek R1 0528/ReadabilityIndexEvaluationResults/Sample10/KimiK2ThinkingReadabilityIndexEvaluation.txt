@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316512-3icelWBiSuXcX0B47ppJ
+
+Content:
+ {"readabilityIndex":89,"reasons":["Test class name follows the ClassUnderTestTests pattern: AuctionServiceTests","All 21 test methods follow the MethodUnderTest_Scenario_ExpectedResult naming convention consistently","Clear and meaningful variable names (invalidId, customerName, expectedDto) improve test understanding","Proper AAA pattern structure with // Arrange, // Act, // Assert comments in most tests","No unnecessary comments beyond AAA block markers","Consistent test organization: tests grouped by method with similar scenarios (invalid, not found, valid)","Appropriate use of [Fact] attribute for distinct scenarios; no misuse of [Theory]","Synchronous test methods correctly use void return type instead of async void","Clean constructor setup with clear dependency mocking using NSubstitute","Minor deviation: some exception tests combine Act and Assert blocks with // Act & Assert comment (idiomatic but slightly deviates from ideal separation)"]}

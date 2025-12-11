@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765318865-h18aQrdSkvJlWItE11VI
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name `Base64HelpersTests` clearly follows the `ClassUnderTestTests` convention and reflects the subject under test.",
+		"Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, making intent immediately clear.",
+		"Use of `[Theory]` with `[InlineData]` for input variations avoids duplication and groups related scenarios logically.",
+		"AAA pattern is followed in every test, with clear `// Arrange`, `// Act`, `// Assert` separators and blank lines enhancing visual structure.",
+		"Parameter names and local variable names (`plainText`, `expectedBase64`, `base64Data`, etc.) are self-explanatory and domain-appropriate.",
+		"Tests are short, focused, and each covers a single scenario, which improves scanability and future maintainability.",
+		"Formatting is consistent (spacing, braces, line breaks), making the code easy to visually parse.",
+		"Unnecessary complexity is avoided; tests target simple behaviors of a static helper class with minimal setup.",
+		"Null-forgiving operator (`!`) in some tests is slightly distracting and may raise questions, but does not significantly harm readability.",
+		"Occasional inline comments in attributes and ‘No specific state setup required’ comments are mildly redundant but not confusing."
+	]
+}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765321171-utgO7NnHjTQpLnH9sJ8i
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test.",
+    "Test method names strictly follow the Method_Scenario_ExpectedResult convention and are self-explanatory.",
+    "Consistent use of AAA pattern with clear // Arrange, // Act, // Assert comments and blank-line separation improves scanability.",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for parameterized tests is appropriate and avoids duplication.",
+    "Local variable names (minWords, maxSentences, numParagraphs, etc.) are clear, descriptive, and reflect their purpose.",
+    "Code formatting (indentation, line breaks, and argument wrapping) is clean and consistent, making the tests easy to follow.",
+    "Assertions are generally straightforward and close to the Act step, preserving a clear logical flow.",
+    "No unnecessary nested classes or complex fixtures; the test class remains flat and simple to navigate.",
+    "Some minor duplication in Arrange sections (repeated parameter sets) could be abstracted or more heavily parameterized to improve maintainability.",
+    "A small number of inline comments like 'Parameters provided by InlineData' are unnecessary noise, slightly detracting from the otherwise clean structure."
+  ]
+}

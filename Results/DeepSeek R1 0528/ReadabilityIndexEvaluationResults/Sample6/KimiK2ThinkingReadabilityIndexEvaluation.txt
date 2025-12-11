@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316182-Bc6pPNtNLX67Xo6N69V0
+
+Content:
+ {
+	"readabilityIndex": 88,
+	"reasons": [
+		"Consistent AAA pattern with clear comments and proper spacing",
+		"Test names follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Appropriate use of [Fact] and [Theory]/[InlineData]",
+		"Clear and descriptive naming for test class, fields, and variables",
+		"Follows standard C# and .NET naming conventions",
+		"Tests are focused, short, and easy to understand",
+		"No unnecessary nested classes or extraneous comments",
+		"Constructor setup centralizes common dependencies",
+		"Slight verbosity in a few test names but still understandable",
+		"One assertion checks DTO side effect which is slightly unclear"
+	]
+}

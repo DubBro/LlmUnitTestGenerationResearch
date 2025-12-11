@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327087-UitEQSnY2MGPeD7lulZm
+
+Content:
+ {
+	"readabilityIndex": 88,
+	"reasons": [
+		"Consistent MethodUnderTest_Scenario_ExpectedResult naming pattern",
+		"AAA pattern properly implemented with clear block separation",
+		"Clear and meaningful variable names",
+		"Test class name follows standard convention",
+		"Minor code duplication in Arrange blocks across three tests",
+		"Exception test appropriately combines Act and Assert",
+		"String assertions rely on Contains checks rather than exact format verification",
+		"Proper use of discards for unused parameters",
+		"Clean and consistent code formatting",
+		"No unnecessary comments or nested classes"
+	]
+}

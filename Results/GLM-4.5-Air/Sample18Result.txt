@@ -1,0 +1,151 @@
+GenerationId:
+gen-1765204386-43uPBt1m9KbI2SYSmnVD
+
+Content:
+```csharp
+using Xunit;
+
+namespace Dataset.Sample18.UnitTests;
+
+public class CaesarEncoderTests
+{
+    [Fact]
+    public void Encode_PassingNullText_ThrowsArgumentNullException()
+    {
+        // Arrange
+        string text = null;
+        int key = 1;
+
+        // Act
+        var exception = Assert.Throws<ArgumentNullException>(() => CaesarEncoder.Encode(text, key));
+
+        // Assert
+        Assert.Equal("text", exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("123")]
+    [InlineData("!@#")]
+    public void Encode_PassingNonAlphabeticText_ReturnsSameText(string text)
+    {
+        // Arrange
+        int key = 1;
+
+        // Act
+        var result = CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Equal(text, result);
+    }
+
+    [Theory]
+    [InlineData("A", 1, "B")]
+    [InlineData("a", 1, "b")]
+    [InlineData("Z", 1, "A")]
+    [InlineData("z", 1, "a")]
+    [InlineData("Hello", 3, "Khoor")]
+    [InlineData("World", 5, "Btwqi")]
+    [InlineData("Programming", 13, "Cebtenzzvat")]
+    [InlineData("XYZ", 5, "CDE")]
+    [InlineData("abc", 30, "efg")]
+    [InlineData("ABC", -1, "ZAB")]
+    [InlineData("abc", -3, "xyz")]
+    public void Encode_PassingAlphabeticTextAndKey_ReturnsEncodedText(string text, int key, string expectedResult)
+    {
+        // Arrange
+        // Act
+        var result = CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Decode_PassingNullText_ThrowsArgumentNullException()
+    {
+        // Arrange
+        string text = null;
+        int key = 1;
+
+        // Act
+        var exception = Assert.Throws<ArgumentNullException>(() => CaesarEncoder.Decode(text, key));
+
+        // Assert
+        Assert.Equal("text", exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("123")]
+    [InlineData("!@#")]
+    public void Decode_PassingNonAlphabeticText_ReturnsSameText(string text)
+    {
+        // Arrange
+        int key = 1;
+
+        // Act
+        var result = CaesarEncoder.Decode(text, key);
+
+        // Assert
+        Assert.Equal(text, result);
+    }
+
+    [Theory]
+    [InlineData("B", 1, "A")]
+    [InlineData("b", 1, "a")]
+    [InlineData("A", 1, "Z")]
+    [InlineData("a", 1, "z")]
+    [InlineData("Khoor", 3, "Hello")]
+    [InlineData("Btwqi", 5, "World")]
+    [InlineData("Cebtenzzvat", 13, "Programming")]
+    [InlineData("CDE", 5, "XYZ")]
+    [InlineData("efg", 30, "abc")]
+    [InlineData("ZAB", -1, "ABC")]
+    [InlineData("xyz", -3, "abc")]
+    public void Decode_PassingAlphabeticTextAndKey_ReturnsDecodedText(string text, int key, string expectedResult)
+    {
+        // Arrange
+        // Act
+        var result = CaesarEncoder.Decode(text, key);
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void EncodeAndDecode_AreInverseOperations()
+    {
+        // Arrange
+        string originalText = "This is a test string for the Caesar cipher.";
+        int key = 7;
+
+        // Act
+        string encodedText = CaesarEncoder.Encode(originalText, key);
+        string decodedText = CaesarEncoder.Decode(encodedText, key);
+
+        // Assert
+        Assert.Equal(originalText, decodedText);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+8334,4765
+
+OpenRouterElapsedTimeMilliseconds:
+8193
+
+PromptTokens:
+1188
+
+CompletionTokens:
+844
+
+TotalTokens:
+2032
+
+TotalCost:
+0,000599296

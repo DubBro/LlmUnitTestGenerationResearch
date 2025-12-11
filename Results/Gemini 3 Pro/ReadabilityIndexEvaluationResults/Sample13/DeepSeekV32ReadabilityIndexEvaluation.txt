@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765318623-YO8K7577r8aqE5yraKtd
+
+Content:
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class and method names follow recommended naming conventions (OntologyHelperTests, ParseNode_When...).",
+		"AAA pattern followed with clear separation using comments and blank lines.",
+		"Good use of [Theory] with [InlineData] to avoid code duplication for similar scenarios.",
+		"Variables and mock setup are clearly named and easy to understand.",
+		"Helpful inline comments explain edge-case logic analysis.",
+		"All tests are self-contained with clear Arrange, Act, Assert flow.",
+		"Proper use of async Task signature is not needed as tests are synchronous.",
+		"No unnecessary nested classes.",
+		"Adheres to standard C# naming and formatting conventions.",
+		"Only minor improvement possible: some scenario names could be more succinct, but clarity is high."
+	]
+}

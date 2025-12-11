@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample19Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample19;
+
+namespace Gpt5MiniUnitTests
+{
+    public class StringExtensionsTests
+    {
+        [Theory]
+        [InlineData(&#39;0&#39;)]
+        [InlineData(&#39;5&#39;)]
+        [InlineData(&#39;9&#39;)]
+        public void IsDigit_CharIsDigit_ReturnsTrue(char input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsDigit();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData(&#39;a&#39;)]
+        [InlineData(&#39;/&#39;)]
+        [InlineData(&#39;:&#39;)]
+        public void IsDigit_CharIsNotDigit_ReturnsFalse(char input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsDigit();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(&quot;123&quot;)]
+        [InlineData(&quot;-1&quot;)]
+        [InlineData(&quot; 123 &quot;)]
+        public void IsInteger_ValidIntegerStrings_ReturnsTrue(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsInteger();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;   &quot;)]
+        [InlineData(&quot;1.2&quot;)]
+        [InlineData(&quot;abc&quot;)]
+        [InlineData(&quot;2147483648&quot;)]
+        public void IsInteger_InvalidIntegerStrings_ReturnsFalse(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsInteger();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(&quot;123&quot;)]
+        [InlineData(&quot;-123&quot;)]
+        [InlineData(&quot;1e3&quot;)]
+        public void IsNumber_ValidNumberStrings_ReturnsTrue(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsNumber();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;   &quot;)]
+        [InlineData(&quot;abc&quot;)]
+        public void IsNumber_InvalidNumberStrings_ReturnsFalse(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsNumber();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;   &quot;)]
+        public void Reverse_NullOrEmptyOrWhitespace_ReturnsSame(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.Reverse();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void Reverse_NormalString_ReturnsReversed()
+        {
+            // Arrange
+            var input = &quot;abc&quot;;
+
+            // Act
+            var result = input.Reverse();
+
+            // Assert
+            Assert.Equal(&quot;cba&quot;, result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        public void ToCsvCompatible_NullOrEmpty_ReturnsSame(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_NoSpecialCharacters_ReturnsSameString()
+        {
+            // Arrange
+            var input = &quot;hello&quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;hello&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsComma_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = &quot;a,b&quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot;a,b\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsSemicolon_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = &quot;a;b&quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot;a;b\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_LeadingSpace_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = &quot; hello&quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot; hello\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_TrailingSpace_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = &quot;hello &quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot;hello \&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsNewline_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = &quot;a\nb&quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot;a\nb\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsQuote_ReplacesAndWraps()
+        {
+            // Arrange
+            var input = &quot;He said \&quot;Hi\&quot;&quot;;
+            var expected = &quot;\&quot;He said \&quot;\&quot;Hi\&quot;\&quot;\&quot;&quot;;
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_NullOrWhitespace_ReturnsSame()
+        {
+            // Arrange
+            string? inputNull = null;
+            var inputWhitespace = &quot;   &quot;;
+
+            // Act
+            var resultNull = inputNull.GetFileExtension();
+            var resultWhitespace = inputWhitespace.GetFileExtension();
+
+            // Assert
+            Assert.Null(resultNull);
+            Assert.Equal(inputWhitespace, resultWhitespace);
+        }
+
+        [Fact]
+        public void GetFileExtension_NoDot_ReturnsEmptyString()
+        {
+            // Arrange
+            var input = &quot;file&quot;;
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_LeadingDot_ReturnsExtension()
+        {
+            // Arrange
+            var input = &quot;.gitignore&quot;;
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;gitignore&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_TrailingDot_ReturnsEmptyString()
+        {
+            // Arrange
+            var input = &quot;file.&quot;;
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_MultipleDots_ReturnsAfterLastDot()
+        {
+            // Arrange
+            var input = &quot;archive.tar.gz&quot;;
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;gz&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_ExtensionWithSpaces_IsTrimmed()
+        {
+            // Arrange
+            var input = &quot;file. txt &quot;;
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;txt&quot;, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,10,1],[16,13,16,42,1],[19,13,19,33,1],[20,9,20,10,1],[27,9,27,10,1],[31,13,31,42,1],[34,13,34,34,1],[35,9,35,10,1],[42,9,42,10,1],[46,13,46,44,1],[49,13,49,33,1],[50,9,50,10,1],[60,9,60,10,1],[64,13,64,44,1],[67,13,67,34,1],[68,9,68,10,1],[75,9,75,10,1],[79,13,79,43,1],[82,13,82,33,1],[83,9,83,10,1],[91,9,91,10,1],[95,13,95,43,1],[98,13,98,34,1],[99,9,99,10,1],[106,9,106,10,1],[110,13,110,42,1],[113,13,113,41,1],[114,9,114,10,1],[118,9,118,10,1],[120,13,120,31,1],[123,13,123,42,1],[126,13,126,41,1],[127,9,127,10,1],[133,9,133,10,1],[137,13,137,50,1],[140,13,140,41,1],[141,9,141,10,1],[145,9,145,10,1],[147,13,147,33,1],[150,13,150,50,1],[153,13,153,43,1],[154,9,154,10,1],[158,9,158,10,1],[160,13,160,31,1],[163,13,163,50,1],[166,13,166,45,1],[167,9,167,10,1],[171,9,171,10,1],[173,13,173,31,1],[176,13,176,50,1],[179,13,179,45,1],[180,9,180,10,1],[184,9,184,10,1],[186,13,186,34,1],[189,13,189,50,1],[192,13,192,48,1],[193,9,193,10,1],[197,9,197,10,1],[199,13,199,34,1],[202,13,202,50,1],[205,13,205,48,1],[206,9,206,10,1],[210,9,210,10,1],[212,13,212,32,1],[215,13,215,50,1],[218,13,218,46,1],[219,9,219,10,1],[223,9,223,10,1],[225,13,225,42,1],[226,13,226,53,1],[229,13,229,50,1],[232,13,232,44,1],[233,9,233,10,1],[237,9,237,10,1],[239,13,239,38,1],[240,13,240,41,1],[243,13,243,59,1],[244,13,244,71,1],[247,13,247,37,1],[248,13,248,61,1],[249,9,249,10,1],[253,9,253,10,1],[255,13,255,32,1],[258,13,258,51,1],[261,13,261,48,1],[262,9,262,10,1],[266,9,266,10,1],[268,13,268,38,1],[271,13,271,51,1],[274,13,274,47,1],[275,9,275,10,1],[279,9,279,10,1],[281,13,281,33,1],[284,13,284,51,1],[287,13,287,48,1],[288,9,288,10,1],[292,9,292,10,1],[294,13,294,42,1],[297,13,297,51,1],[300,13,300,40,1],[301,9,301,10,1],[305,9,305,10,1],[307,13,307,38,1],[310,13,310,51,1],[313,13,313,41,1],[314,9,314,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319920-41CFwuPQ1XEE5rbQb55s
+
+Content:
+{
+	"readabilityIndex": 82,
+	"reasons": [
+		"Perfect adherence to AAA pattern with // Arrange, // Act, // Assert comments and clear separation in all tests",
+		"Test class name follows ClassUnderTestTests convention",
+		"Most test method names follow MethodUnderTest_Scenario_ExpectedResult pattern effectively",
+		"Proper use of async Task for all asynchronous tests",
+		"Standard C# naming conventions and clear variable names throughout",
+		"Appropriate use of [Fact] attributes without unnecessary [Theory]",
+		"Constructor-based setup for shared mocks promotes consistency and maintainability",
+		"One test redundantly recreates mocks instead of using class fields, introducing code duplication",
+		"One test name (GetAsync_WithDefaultId_UsesDefaultId) is slightly vague about the default value",
+		"Minor unnecessary mapper configuration in null-return test scenario"
+	]
+}

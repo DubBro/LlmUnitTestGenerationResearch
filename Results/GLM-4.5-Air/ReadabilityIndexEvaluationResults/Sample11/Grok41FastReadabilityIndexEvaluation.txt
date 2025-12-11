@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765321812-yzjiOFMRgsFcCeKwp9qS
+
+Content:
+{
+	"readabilityIndex": 96,
+	"reasons": [
+		"Perfect adherence to AAA pattern with // Arrange, // Act, // Assert comments in all tests",
+		"Test method names precisely follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Test class name follows ClassUnderTestTests convention",
+		"Clear, meaningful variable names and consistent setup across tests",
+		"Appropriate use of [Fact] attributes for single scenarios, no unnecessary code duplication",
+		"Standard xUnit patterns for exception testing with Action and Assert.Throws",
+		"No extraneous comments, excellent formatting and structure for easy maintenance"
+	]
+}

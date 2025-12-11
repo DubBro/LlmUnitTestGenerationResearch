@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765324110-gt20ibb04KUbFeDlxgnD
+
+Content:
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class and method names follow clear naming conventions (AsciiHelpersTests, Method_Scenario_ExpectedResult).",
+		"Tests use proper AAA pattern with comments to separate Arrange, Act, Assert blocks.",
+		"Good use of [Theory] with [InlineData] to test multiple scenarios without code duplication.",
+		"Tests are well-structured and logically grouped by functionality.",
+		"Variable names are clear and meaningful (input, replacement, expected, result).",
+		"No unnecessary comments or nested classes present.",
+		"Consistent formatting and spacing throughout the test class.",
+		"Edge cases are explicitly tested with appropriate test data.",
+		"Good balance between [Fact] and [Theory] attributes based on testing needs.",
+		"Test scenarios are straightforward and easy to understand at a glance."
+	]
+}

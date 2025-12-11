@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765327552-0emcXLg9Xf4479dso3OI
+
+Content:
+```json
+{
+	"readabilityIndex": 75,
+	"reasons": [
+		"Test class name follows the recommended pattern 'ClassUnderTestTests'",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is properly implemented with clear comment separators in all tests",
+		"Good use of [Theory] and [InlineData] to reduce code duplication for similar scenarios",
+		"Clear and meaningful variable names throughout the test code",
+		"Code adheres to standard C# and .NET naming conventions",
+		"Some code duplication exists: separate [Fact] tests for null, empty, and whitespace could be consolidated into the existing [Theory] test",
+		"Tests 'Encode_NullString_ReturnsEmptyString', 'Encode_EmptyString_ReturnsEmptyString', and 'Encode_WhitespaceString_ReturnsEmptyString' are redundant given the presence of 'Encode_InputNullOrWhitespace_ReturnsEmptyString'",
+		"Similar duplication exists for Decode tests which could also benefit from a [Theory] approach",
+		"Overall structure is clean and maintainable despite minor redundancy issues"
+	]
+}
+```

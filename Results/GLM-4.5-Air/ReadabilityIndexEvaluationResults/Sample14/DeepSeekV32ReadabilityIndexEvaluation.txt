@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322069-NmDWiZrw0O3s29VllNvD
+
+Content:
+{
+    "readabilityIndex": 78,
+    "reasons": [
+        "Clear test class and method naming following standard patterns.",
+        "Well-structured AAA pattern with explicit block separators and comments.",
+        "Good use of [Theory] with [InlineData] for multiple invalid input cases, reducing duplication.",
+        "Excessive repetitive assertions in second test make the test long and hard to verify visually.",
+        "Lack of helper methods or test data builders to reduce duplication and improve clarity in large assertions.",
+        "Hard-coded expected values in assertions could be extracted to well-named variables for better readability.",
+        "Some assertions are grouped by logical sections (quarters) with comments, which aids understanding.",
+        "No unnecessary nested classes or complex setup.",
+        "Assert.Throws used correctly for exception testing.",
+        "Tests are generally logical and maintainable despite verbosity in one test."
+    ]
+}

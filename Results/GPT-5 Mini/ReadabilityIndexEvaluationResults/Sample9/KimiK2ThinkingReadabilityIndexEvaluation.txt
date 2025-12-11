@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323591-poCEjNAOFKN1n6H0kBkw
+
+Content:
+ {
+	"readabilityIndex": 55,
+	"reasons": [
+		"Extraneous inline comments explaining logic violate the 'no comments other than AAA' rule.",
+		"Exception tests combine Act and Assert blocks, deviating from pure AAA pattern.",
+		"Significant code duplication in Arrange sections across multiple tests.",
+		"Opportunity to use [Theory] with [InlineData] is missed for parameterized scenarios.",
+		"Test names are overly verbose, reducing readability despite following the pattern.",
+		"Expected value calculations mixed directly into Arrange block could be encapsulated.",
+		"Use of Assert.False with string.IsNullOrEmpty is less idiomatic than Assert.NotEmpty.",
+		"Verbose string splitting logic for counting tokens could be simplified.",
+		"Lack of shared setup helper methods leads to repetitive boilerplate code.",
+		"Inline comments on same lines reduce visual separation and clarity."
+	]
+}

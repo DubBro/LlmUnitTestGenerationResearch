@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324164-zNfe7X3VIO9qSWkS8ZhT
+
+Content:
+ {"readabilityIndex":92,"reasons":["Clear and consistent test naming following MethodUnderTest_Scenario_ExpectedResult pattern","Proper use of [Theory] with [InlineData] for parameterized tests and [Fact] for single scenarios","All tests correctly implement AAA pattern with clear Arrange/Act/Assert comments and proper spacing","Test class name AsciiHelpersTests follows ClassUnderTestTests convention","Variable names (input, replacement, result, expected) are meaningful and descriptive","No unnecessary comments - only AAA separators as recommended","No nested classes or complex structures that reduce readability","Minimal code duplication through effective use of parameterized tests","Consistent formatting and adherence to C#/.NET naming conventions","Comprehensive test scenarios covering edge cases without compromising clarity"]}

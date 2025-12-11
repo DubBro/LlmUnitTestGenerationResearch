@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317345-d0JmBm5RzxkO8VEBGem9
+
+Content:
+ {
+	"readabilityIndex": 96,
+	"reasons": [
+		"Test class and method names are clear and follow recommended patterns",
+		"AAA pattern is consistently applied with proper comments and spacing",
+		"[Fact] and [Theory] attributes are used appropriately for test scenarios",
+		"Variable names are meaningful and follow C# naming conventions",
+		"No unnecessary code or comments beyond AAA block markers",
+		"Each test is self-contained with minimal and clear setup logic",
+		"No nested classes or complex inheritance structures",
+		"Code adheres to standard C# formatting and style guidelines",
+		"Inline data covers edge cases (empty, single, duplicate elements) effectively",
+		"No issues with async void patterns"
+	]
+}

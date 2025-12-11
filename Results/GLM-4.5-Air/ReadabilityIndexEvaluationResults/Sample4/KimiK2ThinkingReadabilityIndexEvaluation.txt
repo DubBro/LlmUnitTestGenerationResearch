@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319933-8KemqAql3A9RVfEsg8SK
+
+Content:
+ {
+	"readabilityIndex": 73,
+	"reasons": [
+		"Redundant test 'GetAsync_WhenCalledThroughInterface_ReturnsMappedModel' duplicates logic of the first test, creating maintenance burden and confusion",
+		"Vague expected result in test name 'GetAsync_WithDefaultId_UsesDefaultId' does not clearly describe the outcome",
+		"All tests correctly follow the AAA pattern with clear comments and blank line separation",
+		"Test class name 'CompanyServiceTests' follows the required naming convention",
+		"Proper use of 'async Task' signatures for asynchronous tests",
+		"Correct application of standard C# naming conventions for variables and fields",
+		"Appropriate use of '[Fact]' attribute as scenarios don't require parameterized testing",
+		"Test setup in the constructor promotes DRY principles for common dependencies",
+		"Test method names mostly follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern",
+		"Code is free of unnecessary comments, maintaining focus on test logic"
+	]
+}

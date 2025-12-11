@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765324349-O2AjVvMokvKhCTyLzry2
+
+Content:
+{
+	"readabilityIndex": 94,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern",
+		"Test method names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Strict adherence to AAA pattern with // Arrange, // Act, // Assert comments and empty line separation",
+		"No unnecessary comments or nested classes",
+		"Appropriate use of [Theory] with [InlineData] for parameterized tests, minimizing duplication",
+		"[Fact] used correctly for single-scenario tests",
+		"Clear, meaningful variable names and standard C# conventions",
+		"Very short, focused test bodies enhance scannability",
+		"Minor flaw: GetFileExtension_NullOrWhitespace_ReturnsSame mixes null and whitespace in one Fact with dual asserts",
+		"Some scenario names like 'NormalString' slightly vague but not critical"
+	]
+}

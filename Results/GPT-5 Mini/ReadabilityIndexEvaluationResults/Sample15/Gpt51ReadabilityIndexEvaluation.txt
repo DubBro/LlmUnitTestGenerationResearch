@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765324062-tKFxnWOn7qKBSPe69a9W
+
+Content:
+{
+  "readabilityIndex": 94,
+  "reasons": [
+    "Test class name `Base64HelpersTests` clearly follows the `ClassUnderTestTests` pattern and reflects its purpose.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` convention and are self-explanatory.",
+    "AAA pattern is clearly followed in all tests, with `// Arrange`, `// Act`, and `// Assert` comments and visual separation.",
+    "Use of `[Theory]` with `[InlineData]` for multiple input variations avoids duplication and makes scenarios easy to scan.",
+    "Assertions are simple and direct, with minimal logic inside the tests, which aids readability and maintainability.",
+    "Consistent use of UTF8 and `Convert.ToBase64String` in tests makes intent explicit for Unicode-related scenarios.",
+    "No unnecessary comments or nested classes; the file is focused and free of noise.",
+    "Code formatting (spacing, line breaks, and indentation) is clean and consistent with common C# conventions.",
+    "Combination of `Act & Assert` in the exception test is idiomatic for xUnit and still clearly readable.",
+    "Minor inconsistency where most tests use extension methods (`input.Encode()` / `.Decode()`) but the last uses `Base64Helpers.Decode(...)`, slightly reducing uniformity."
+  ]
+}

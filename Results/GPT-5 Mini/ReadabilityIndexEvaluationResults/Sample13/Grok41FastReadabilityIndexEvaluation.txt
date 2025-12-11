@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323937-9hbKw0WJ72hlk6YpmGWS
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern.",
+		"Test method names precisely follow 'MethodUnderTest_Scenario_ExpectedResult' pattern.",
+		"Consistent use of AAA pattern with clear // Arrange, // Act, // Assert comments and proper separation.",
+		"[Fact] for single scenarios and [Theory] with [InlineData] for parameterized tests, avoiding duplication.",
+		"Clear, meaningful variable names (e.g., 'node', 'result') reflecting purpose.",
+		"No unnecessary comments or nested classes.",
+		"Adheres to C# naming conventions and standard formatting.",
+		"Short, focused tests that are easy to scan and maintain.",
+		"Appropriate use of Act & Assert combination for exception tests.",
+		"High consistency across all tests enhances maintainability."
+	]
+}

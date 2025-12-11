@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765323921-1mtsKvVtJpciIbhrgPJH
+
+Content:
+{
+  "readabilityIndex": 93,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test (OntologyHelperTests).",
+    "Test method names follow the Method_Scenario_ExpectedResult style and are descriptive, making each scenario easy to understand.",
+    "AAA pattern is consistently applied with clear // Arrange, // Act, and // Assert comments and blank-line separation, improving visual structure.",
+    "Use of [Theory] with [InlineData] for the common ‘other node types’ scenario reduces duplication and improves maintainability.",
+    "Naming of variables (e.g., node, result) is clear and consistent, and the use of NSubstitute is straightforward and readable.",
+    "Exception scenarios are clearly expressed using Assert.Throws with concise, readable lambda expressions.",
+    "No extraneous comments or dead code; tests are short, focused, and each covers one behavior.",
+    "Code style adheres to standard C#/.NET conventions, including casing, spacing, and attribute placement.",
+    "Minor duplication in Arrange steps across several tests could be refactored (e.g., helper methods or data-driven tests) but does not significantly hurt readability."
+  ]
+}

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765318209-2JAADocdsOq3s2s7xNhd
+
+Content:
+{"readabilityIndex":78,"reasons":["Test class name follows the pattern 'ClassUnderTestTests'","Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern","AAA pattern is clearly followed with commented sections","Proper use of [Fact] and [Theory] attributes for single vs. multiple scenarios","Good separation of logical blocks with empty lines","Good naming of local variables and parameters","Some tests include complex assertion logic with multiple verification steps that could be simplified","Some inline comments in test body explain SUT logic which could be extracted to helper methods","The test for valid args has lengthy comments about algorithm which affects readability","Overall structure is clean and well-organized"]}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765326885-c9wGiKmYP9nC4z3dpGUS
+
+Content:
+{
+	"readabilityIndex": 75,
+	"reasons": [
+		"Test names follow the MethodUnderTest_Scenario_ExpectedResult pattern and are descriptive",
+		"Tests follow the AAA pattern with clear Arrange, Act, Assert sections separated by comments and empty lines",
+		"Code uses proper xUnit attributes ([Fact]) and follows C# naming conventions",
+		"Test class naming follows the ClassUnderTestTests pattern",
+		"Assertions are clear and use xUnit assertion methods appropriately",
+		"Test methods are organized logically and focus on single responsibilities",
+		"The Arrange sections use consistent matrix data formatting",
+		"No unnecessary nested classes or complex structures",
+		"Some test duplication exists in Arrange sections (same matrix repeated)",
+		"Test signatures are synchronous but test methods don't require async"
+	]
+}

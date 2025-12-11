@@ -1,0 +1,165 @@
+using Dataset.Sample9;
+
+namespace Gpt5MiniUnitTests
+{
+    public class LoremIpsumGeneratorTests
+    {
+        [Fact]
+        public void GenerateLoremIpsumString_WithDeterministicBounds_ReturnsExpectedSentenceAndWordCounts()
+        {
+            // Arrange
+            var minWords = 1;
+            var maxWords = 2; // maxWords - minWords == 1 -> Next(1) => 0 -> numWords == minWords + 1 == 2
+            var minSentences = 1;
+            var maxSentences = 2; // similarly numSentences == 2
+            var numParagraphs = 3;
+
+            var expectedWordsPerSentence = minWords + 1;
+            var expectedSentencesPerParagraph = minSentences + 1;
+            var expectedTotalSentences = expectedSentencesPerParagraph * numParagraphs;
+            var expectedTotalSpaces = expectedTotalSentences * (expectedWordsPerSentence - 1);
+
+            // Act
+            var result = LoremIpsumGenerator.GenerateLoremIpsumString(
+                minWords, maxWords, minSentences, maxSentences, numParagraphs);
+
+            // Assert
+            Assert.False(string.IsNullOrEmpty(result));
+            Assert.DoesNotContain("<p>", result);
+            var sentenceTerminatorCount = result.Split(new[] { ". " }, StringSplitOptions.None).Length - 1;
+            Assert.Equal(expectedTotalSentences, sentenceTerminatorCount);
+            var spaceCount = result.Count(c => c == ' ');
+            Assert.Equal(expectedTotalSpaces, spaceCount);
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumHtmlSafe_WithDeterministicBounds_ReturnsParagraphWrappersAndSentences()
+        {
+            // Arrange
+            var minWords = 1;
+            var maxWords = 2;
+            var minSentences = 1;
+            var maxSentences = 2;
+            var numParagraphs = 4;
+
+            var expectedWordsPerSentence = minWords + 1;
+            var expectedSentencesPerParagraph = minSentences + 1;
+            var expectedTotalSentences = expectedSentencesPerParagraph * numParagraphs;
+
+            // Act
+            var result = LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+                minWords, maxWords, minSentences, maxSentences, numParagraphs);
+
+            // Assert
+            Assert.False(string.IsNullOrEmpty(result));
+            var openPCount = result.Split(new[] { "<p>" }, StringSplitOptions.None).Length - 1;
+            var closePCount = result.Split(new[] { "</p>" }, StringSplitOptions.None).Length - 1;
+            Assert.Equal(numParagraphs, openPCount);
+            Assert.Equal(numParagraphs, closePCount);
+            Assert.StartsWith("<p>", result);
+            Assert.EndsWith("</p>", result);
+            var sentenceTerminatorCount = result.Split(new[] { ". " }, StringSplitOptions.None).Length - 1;
+            Assert.Equal(expectedTotalSentences, sentenceTerminatorCount);
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumString_WhenNumParagraphsIsZero_ReturnsEmptyString()
+        {
+            // Arrange
+            var minWords = 1;
+            var maxWords = 2;
+            var minSentences = 1;
+            var maxSentences = 2;
+            var numParagraphs = 0;
+
+            // Act
+            var result = LoremIpsumGenerator.GenerateLoremIpsumString(
+                minWords, maxWords, minSentences, maxSentences, numParagraphs);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumHtmlSafe_WhenNumParagraphsIsZero_ReturnsEmptyString()
+        {
+            // Arrange
+            var minWords = 1;
+            var maxWords = 2;
+            var minSentences = 1;
+            var maxSentences = 2;
+            var numParagraphs = 0;
+
+            // Act
+            var result = LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+                minWords, maxWords, minSentences, maxSentences, numParagraphs);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumString_WhenMaxEqualsMinWords_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var minWords = 2;
+            var maxWords = 2; // difference 0 -> Random.Next(0) -> throws
+            var minSentences = 1;
+            var maxSentences = 3;
+            var numParagraphs = 1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                LoremIpsumGenerator.GenerateLoremIpsumString(
+                    minWords, maxWords, minSentences, maxSentences, numParagraphs));
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumString_WhenMaxEqualsMinSentences_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var minWords = 1;
+            var maxWords = 3;
+            var minSentences = 5;
+            var maxSentences = 5; // difference 0 -> Random.Next(0) -> throws
+            var numParagraphs = 1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                LoremIpsumGenerator.GenerateLoremIpsumString(
+                    minWords, maxWords, minSentences, maxSentences, numParagraphs));
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumHtmlSafe_WhenMaxEqualsMinWords_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var minWords = 4;
+            var maxWords = 4;
+            var minSentences = 1;
+            var maxSentences = 2;
+            var numParagraphs = 1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+                    minWords, maxWords, minSentences, maxSentences, numParagraphs));
+        }
+
+        [Fact]
+        public void GenerateLoremIpsumHtmlSafe_WhenMaxEqualsMinSentences_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var minWords = 1;
+            var maxWords = 3;
+            var minSentences = 2;
+            var maxSentences = 2;
+            var numParagraphs = 1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+                    minWords, maxWords, minSentences, maxSentences, numParagraphs));
+        }
+    }
+}

@@ -1,0 +1,15 @@
+GenerationId:
+gen-1765316215-UcCd7W5mziovl7qXzWCr
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Clear, descriptive class and test method names that follow the ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult patterns.",
+    "Consistent use of async Task signatures and xUnit attributes ([Fact] for single scenarios, [Theory] with [InlineData] for variants).",
+    "Tests generally follow the AAA pattern with explicit Arrange/Act/Assert separation and good whitespace formatting.",
+    "Assertions are focused and readable, using Assert.Collection and simple equality checks that clearly express expectations.",
+    "Use of NSubstitute is straightforward, with mocks created in the constructor and reused, improving clarity and reducing setup noise.",
+    "Some duplication of IMEI test data between theories and repeated magic strings slightly reduces maintainability but does not significantly harm readability."
+  ]
+}

@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765327559-rbHaJWehSKKChXQqRUoh
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Perfect adherence to AAA pattern with // Arrange, // Act, // Assert comments and empty line separation.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] for multiple inputs, reducing some duplication.",
+		"Clear, meaningful variable names (input, result, expected).",
+		"No unnecessary comments, nested classes, or deviations from C# naming conventions.",
+		"Slight redundancy in separate [Fact]s for null/empty/whitespace before consolidating in [Theory], minor maintainability impact.",
+		"Logical grouping of related tests for Encode and Decode methods."
+	]
+}

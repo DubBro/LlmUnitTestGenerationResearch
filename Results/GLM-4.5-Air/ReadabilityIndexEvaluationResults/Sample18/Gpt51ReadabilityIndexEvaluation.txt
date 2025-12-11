@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322467-OgKPyaMYVkZPCu1bolej
+
+Content:
+{
+  "readabilityIndex": 93,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test (CaesarEncoderTests).",
+    "Test method names consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern and are descriptive.",
+    "AAA pattern is clearly used in all tests with // Arrange, // Act, // Assert comments and blank-line separation, improving scanability.",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for multiple input variations is appropriate and reduces duplication.",
+    "Parameter names in theory tests (text, key, expectedResult) are clear and self-explanatory.",
+    "No unnecessary nested classes or extraneous comments; the file is structurally simple and easy to navigate.",
+    "Code style and naming conventions (PascalCase for methods/classes, camelCase for variables) adhere to standard C# and .NET guidelines.",
+    "InlineData sets are well-organized and grouped logically, making intent of each theory test understandable.",
+    "Arrange blocks are minimal and focused, avoiding noise and helping maintain clarity of what each test is setting up.",
+    "Symmetry between Encode and Decode test sets improves mental mapping and maintainability when updating test cases."
+  ]
+}

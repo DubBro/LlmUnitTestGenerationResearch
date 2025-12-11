@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample8Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample8;
+
+namespace DeepSeekR10528UnitTests;
+
+public class LuTests
+{
+    private readonly Lu _lu = new Lu();
+
+    [Fact]
+    public void Decompose_MatrixIsNotSquare_ThrowsArgumentException()
+    {
+        // Arrange
+        var nonSquareMatrix = new double[2, 3];
+
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentException&gt;(() =&gt; _lu.Decompose(nonSquareMatrix));
+    }
+
+    [Fact]
+    public void Decompose_1x1Matrix_ReturnsIdentityAndUpperMatrix()
+    {
+        // Arrange
+        var matrix = new double[1, 1] { { 5 } };
+
+        // Act
+        var (l, u) = _lu.Decompose(matrix);
+
+        // Assert
+        Assert.Equal(1, l[0, 0]);
+        Assert.Equal(5, u[0, 0]);
+    }
+
+    [Fact]
+    public void Decompose_2x2Matrix_CorrectDecomposition()
+    {
+        // Arrange
+        var matrix = new double[2, 2] { { 4, 3 }, { 6, 3 } };
+        double[,] expectedL = { { 1, 0 }, { 1.5, 1 } };
+        double[,] expectedU = { { 4, 3 }, { 0, -1.5 } };
+
+        // Act
+        var (l, u) = _lu.Decompose(matrix);
+
+        // Assert
+        Assert.Equal(expectedL[0, 0], l[0, 0]);
+        Assert.Equal(expectedL[0, 1], l[0, 1]);
+        Assert.Equal(expectedL[1, 0], l[1, 0]);
+        Assert.Equal(expectedL[1, 1], l[1, 1]);
+        Assert.Equal(expectedU[0, 0], u[0, 0]);
+        Assert.Equal(expectedU[0, 1], u[0, 1]);
+        Assert.Equal(expectedU[1, 0], u[1, 0]);
+        Assert.Equal(expectedU[1, 1], u[1, 1]);
+    }
+
+    [Fact]
+    public void Eliminate_MatrixIsNotSquare_ThrowsArgumentException()
+    {
+        // Arrange
+        var nonSquareMatrix = new double[2, 3];
+        var coefficients = new double[2];
+
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentException&gt;(() =&gt; _lu.Eliminate(nonSquareMatrix, coefficients));
+    }
+
+    [Fact]
+    public void Eliminate_1x1System_ReturnsCorrectSolution()
+    {
+        // Arrange
+        var matrix = new double[1, 1] { { 2 } };
+        var coefficients = new double[] { 8 };
+        var expectedSolution = new double[] { 4 };
+
+        // Act
+        var solution = _lu.Eliminate(matrix, coefficients);
+
+        // Assert
+        Assert.Equal(expectedSolution[0], solution[0]);
+    }
+
+    [Fact]
+    public void Eliminate_2x2System_ReturnsCorrectSolution()
+    {
+        // Arrange
+        var matrix = new double[2, 2] { { 3, 1 }, { 1, 2 } };
+        var coefficients = new double[] { 9, 8 };
+        var expectedSolution = new double[] { 2, 3 };
+
+        // Act
+        var solution = _lu.Eliminate(matrix, coefficients);
+
+        // Assert
+        Assert.Equal(expectedSolution[0], solution[0], 5);
+        Assert.Equal(expectedSolution[1], solution[1], 5);
+    }
+
+    [Fact]
+    public void Eliminate_ZeroInUDiagonal_ThrowsDivideByZeroException()
+    {
+        // Arrange
+        var matrix = new double[2, 2] { { 0, 0 }, { 0, 0 } };
+        var coefficients = new double[] { 1, 2 };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; _lu.Eliminate(matrix, coefficients));
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[7,5,7,40,1],[11,5,11,6,1],[13,9,13,48,1],[16,9,16,48,1],[16,48,16,78,1],[16,78,16,80,1],[17,5,17,6,1],[21,5,21,6,1],[23,9,23,49,1],[26,9,26,44,1],[29,9,29,34,1],[30,9,30,34,1],[31,5,31,6,1],[35,5,35,6,1],[37,9,37,62,1],[38,9,38,56,1],[39,9,39,57,1],[42,9,42,44,1],[45,9,45,48,1],[46,9,46,48,1],[47,9,47,48,1],[48,9,48,48,1],[49,9,49,48,1],[50,9,50,48,1],[51,9,51,48,1],[52,9,52,48,1],[53,5,53,6,1],[57,5,57,6,1],[59,9,59,48,1],[60,9,60,42,1],[63,9,63,48,1],[63,48,63,92,1],[63,92,63,94,1],[64,5,64,6,1],[68,5,68,6,1],[70,9,70,49,1],[71,9,71,47,1],[72,9,72,51,1],[75,9,75,60,1],[78,9,78,56,1],[79,5,79,6,1],[83,5,83,6,1],[85,9,85,62,1],[86,9,86,50,1],[87,9,87,54,1],[90,9,90,60,1],[93,9,93,59,1],[94,9,94,59,1],[95,5,95,6,1],[99,5,99,6,1],[101,9,101,62,1],[102,9,102,50,1],[105,9,105,52,1],[105,52,105,87,1],[105,87,105,89,1],[106,5,106,6,0]]);
+    </script>
+  </body>
+</html>

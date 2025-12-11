@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample16Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample16;
+
+namespace Gpt5MiniUnitTests
+{
+    public class AsciiHelpersTests
+    {
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot; &quot;)]
+        [InlineData(&quot;\t&quot;)]
+        [InlineData(&quot;\r\n&quot;)]
+        public void ReplaceNonAsciiCharsWith_NullOrWhitespace_ReturnsEmptyString(string input)
+        {
+            // Arrange
+            char replacement = &#39;*&#39;;
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot; &quot;)]
+        [InlineData(&quot;\t&quot;)]
+        [InlineData(&quot;\r\n&quot;)]
+        public void RemoveNonAsciiChars_NullOrWhitespace_ReturnsEmptyString(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_AllAscii_ReturnsOriginalString()
+        {
+            // Arrange
+            string input = &quot;Hello, World! 123 ~\u007F&quot;;
+            char replacement = &#39;#&#39;;
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_AllAscii_ReturnsOriginalString()
+        {
+            // Arrange
+            string input = &quot;ASCII: ~!@#$%^&amp;*()_+[]{}|;:&#39;,.&lt;&gt;?/`1234567890\u007F&quot;;
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_ReplacesNonAsciiCharacters_WithSpecifiedChar()
+        {
+            // Arrange
+            string input = &quot;Caf&#233;&#128640;&quot;; // &#39;&#233;&#39; and emoji are non-ASCII
+            char replacement = &#39;*&#39;;
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(&quot;Caf**&quot;, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_RemovesNonAsciiCharacters()
+        {
+            // Arrange
+            string input = &quot;Caf&#233;&#128640;&quot;; // &#39;&#233;&#39; and emoji are non-ASCII
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(&quot;Caf&quot;, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_ReplacesCombiningMarksOnly_LeavesBaseCharacters()
+        {
+            // Arrange
+            string input = &quot;Cafe\u0301 Test&quot;; // &#39;e&#39; + combining acute accent (non-ASCII)
+            char replacement = &#39;_&#39;;
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(&quot;Cafe_ Test&quot;, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_RemovesCombiningMarksOnly_LeavesBaseCharacters()
+        {
+            // Arrange
+            string input = &quot;Cafe\u0301 Test&quot;; // &#39;e&#39; + combining acute accent (non-ASCII)
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(&quot;Cafe Test&quot;, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;a&#169;b&#163;c&quot;, &quot;abc&quot;)]
+        [InlineData(&quot;日本語ABC&quot;, &quot;ABC&quot;)]
+        [InlineData(&quot;&#128077;thumbs_up&#128077;&quot;, &quot;thumbs_up&quot;)]
+        public void RemoveNonAsciiChars_RemovesVariousNonAsciiPatterns(string input, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;a&#169;b&#163;c&quot;, &#39;*&#39;, &quot;a*b*c&quot;)]
+        [InlineData(&quot;日本語ABC&quot;, &#39;-&#39;, &quot;---ABC&quot;)]
+        [InlineData(&quot;&#128077;thumbs_up&#128077;&quot;, &#39;X&#39;, &quot;Xthumbs_upX&quot;)]
+        public void ReplaceNonAsciiCharsWith_ReplacesVariousNonAsciiPatterns(string input, char replacement, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[14,9,14,10,1],[16,13,16,36,1],[19,13,19,70,1],[22,13,22,48,1],[23,9,23,10,1],[32,9,32,10,1],[36,13,36,54,1],[39,13,39,48,1],[40,9,40,10,1],[44,9,44,10,1],[46,13,46,56,1],[47,13,47,36,1],[50,13,50,70,1],[53,13,53,41,1],[54,9,54,10,1],[58,9,58,10,1],[60,13,60,82,1],[63,13,63,54,1],[66,13,66,41,1],[67,9,67,10,1],[71,9,71,10,1],[73,13,73,37,1],[74,13,74,36,1],[77,13,77,70,1],[80,13,80,43,1],[81,9,81,10,0],[85,9,85,10,1],[87,13,87,37,1],[90,13,90,54,1],[93,13,93,41,1],[94,9,94,10,1],[98,9,98,10,1],[100,13,100,46,1],[101,13,101,36,1],[104,13,104,70,1],[107,13,107,48,1],[108,9,108,10,1],[112,9,112,10,1],[114,13,114,46,1],[117,13,117,54,1],[120,13,120,47,1],[121,9,121,10,1],[128,9,128,10,1],[132,13,132,54,1],[135,13,135,44,1],[136,9,136,10,1],[143,9,143,10,1],[147,13,147,70,1],[150,13,150,44,1],[151,9,151,10,1]]);
+    </script>
+  </body>
+</html>

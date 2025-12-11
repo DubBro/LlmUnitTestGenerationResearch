@@ -1,0 +1,158 @@
+using Dataset.Sample11;
+
+namespace DeepSeekR10528UnitTests;
+
+public class MatrixChainMultiplicationTests
+{
+    [Fact]
+    public void MatrixChainOrder_OneMatrix_ReturnsZero()
+    {
+        // Arrange
+        int[] p = { 10, 20 };
+        int n = 2;
+
+        // Act
+        int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+        // Assert
+        Assert.Equal(0, cost);
+        Assert.NotNull(s);
+        Assert.Equal(2, s.GetLength(0));
+        Assert.Equal(2, s.GetLength(1));
+    }
+
+    [Fact]
+    public void MatrixChainOrder_TwoMatrices_Returns6000()
+    {
+        // Arrange
+        int[] p = { 10, 20, 30 };
+        int n = 3;
+
+        // Act
+        int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+        // Assert
+        Assert.Equal(6000, cost);
+        Assert.NotNull(s);
+        Assert.Equal(3, s.GetLength(0));
+        Assert.Equal(3, s.GetLength(1));
+        Assert.Equal(1, s[1, 2]);
+    }
+
+    [Fact]
+    public void MatrixChainOrder_ThreeMatrices_Returns7500AndSetsSCorrectly()
+    {
+        // Arrange
+        int[] p = { 10, 100, 5, 50 };
+        int n = 4;
+
+        // Act
+        int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+        // Assert
+        Assert.Equal(7500, cost);
+        Assert.NotNull(s);
+        Assert.Equal(4, s.GetLength(0));
+        Assert.Equal(4, s.GetLength(1));
+        Assert.Equal(1, s[1, 2]);
+        Assert.Equal(2, s[2, 3]);
+        Assert.Equal(2, s[1, 3]);
+    }
+
+    [Fact]
+    public void GetOptimalParentheses_SingleMatrix_ReturnsA1()
+    {
+        // Arrange
+        int[,] s = new int[2, 2];
+        int i = 1;
+        int j = 1;
+
+        // Act
+        string result = MatrixChainMultiplication.GetOptimalParentheses(s, i, j);
+
+        // Assert
+        Assert.Equal("A1", result);
+    }
+
+    [Fact]
+    public void GetOptimalParentheses_TwoMatrices_ReturnsParenthesesCorrectly()
+    {
+        // Arrange
+        int[,] s = new int[3, 3];
+        s[1, 2] = 1;
+        int i = 1;
+        int j = 2;
+
+        // Act
+        string result = MatrixChainMultiplication.GetOptimalParentheses(s, i, j);
+
+        // Assert
+        Assert.Equal("(A1A2)", result);
+    }
+
+    [Fact]
+    public void GetOptimalParentheses_ThreeMatricesSplitAtTwo_ReturnsDoubleParenthesized()
+    {
+        // Arrange
+        int[,] s = new int[4, 4];
+        s[1, 2] = 1;
+        s[1, 3] = 2;
+        int i = 1;
+        int j = 3;
+
+        // Act
+        string result = MatrixChainMultiplication.GetOptimalParentheses(s, i, j);
+
+        // Assert
+        Assert.Equal("((A1A2)A3)", result);
+    }
+
+    [Fact]
+    public void GetOptimalParentheses_ThreeMatricesSplitAtOne_ReturnsAlternateParenthesization()
+    {
+        // Arrange
+        int[,] s = new int[4, 4];
+        s[2, 3] = 2;
+        s[1, 3] = 1;
+        int i = 1;
+        int j = 3;
+
+        // Act
+        string result = MatrixChainMultiplication.GetOptimalParentheses(s, i, j);
+
+        // Assert
+        Assert.Equal("(A1(A2A3))", result);
+    }
+
+    [Fact]
+    public void CombinedMethods_ThreeMatrices_CorrectCostAndParentheses()
+    {
+        // Arrange
+        int[] p = { 10, 100, 5, 50 };
+        int n = 4;
+
+        // Act
+        int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+        string parentheses = MatrixChainMultiplication.GetOptimalParentheses(s, 1, n - 1);
+
+        // Assert
+        Assert.Equal(7500, cost);
+        Assert.Equal("((A1A2)A3)", parentheses);
+    }
+
+    [Fact]
+    public void CombinedMethods_TwoMatrices_CorrectCostAndParentheses()
+    {
+        // Arrange
+        int[] p = { 10, 20, 30 };
+        int n = 3;
+
+        // Act
+        int cost = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+        string parentheses = MatrixChainMultiplication.GetOptimalParentheses(s, 1, n - 1);
+
+        // Assert
+        Assert.Equal(6000, cost);
+        Assert.Equal("(A1A2)", parentheses);
+    }
+}

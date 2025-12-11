@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315342-5kafytP7mpWua8tt2gV0
+
+Content:
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Good adherence to the AAA pattern with clear comments separating Arrange, Act, Assert blocks",
+		"Test names follow the MethodUnderTest_Scenario_ExpectedResult pattern, making purpose clear",
+		"Test class name follows ClassUnderTestTests pattern (DepartmentServiceTests)",
+		"Proper use of async Task signatures for asynchronous test methods",
+		"Setup in constructor isolates test dependencies cleanly",
+		"Clear use of mocking framework (NSubstitute) with readable stubs",
+		"Assertions are straightforward but could be improved with assertion frameworks for better readability",
+		"Some tests could benefit from [Theory] with [InlineData] to reduce duplication (e.g., GetAsync tests)",
+		"For loop in ListAsync_WhenRepositoryReturnsNonEmptyList_ReturnsMappedCollection reduces readability compared to single assertion",
+		"Missing test cases for edge scenarios and null/empty strings in data"
+	]
+}

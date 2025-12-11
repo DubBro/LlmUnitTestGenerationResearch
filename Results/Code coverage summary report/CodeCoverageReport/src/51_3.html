@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample9Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample9;
+
+namespace Qwen3Coder30BUnitTests;
+
+public class LoremIpsumGeneratorTests
+{
+    [Fact]
+    public void GenerateLoremIpsumString_ValidInputs_ReturnsStringWithCorrectNumberOfParagraphs()
+    {
+        // Arrange
+        var minWords = 1;
+        var maxWords = 5;
+        var minSentences = 1;
+        var maxSentences = 3;
+        var numParagraphs = 2;
+
+        // Act
+        var result = LoremIpsumGenerator.GenerateLoremIpsumString(
+            minWords,
+            maxWords,
+            minSentences,
+            maxSentences,
+            numParagraphs);
+
+        // Assert
+        var paragraphCount = result.Split(new[] { &quot;\n\n&quot; }, StringSplitOptions.None).Length;
+        Assert.Equal(numParagraphs, paragraphCount);
+    }
+
+    [Theory]
+    [InlineData(1, 1, 1, 1, 1)]
+    [InlineData(1, 5, 1, 3, 2)]
+    [InlineData(2, 10, 2, 5, 3)]
+    public void GenerateLoremIpsumString_ValidInputs_ReturnsStringWithCorrectStructure(
+        int minWords,
+        int maxWords,
+        int minSentences,
+        int maxSentences,
+        int numParagraphs)
+    {
+        // Arrange
+        var expectedParagraphCount = numParagraphs;
+
+        // Act
+        var result = LoremIpsumGenerator.GenerateLoremIpsumString(
+            minWords,
+            maxWords,
+            minSentences,
+            maxSentences,
+            numParagraphs);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Contains(&quot;. &quot;, result);
+        Assert.Contains(&quot;\n\n&quot;, result);
+    }
+
+    [Theory]
+    [InlineData(0, 5, 1, 3, 1)]
+    [InlineData(1, 5, 0, 3, 1)]
+    [InlineData(1, 5, 1, 0, 1)]
+    [InlineData(1, 5, 1, 3, 0)]
+    public void GenerateLoremIpsumString_InvalidInputs_ThrowsArgumentException(
+        int minWords,
+        int maxWords,
+        int minSentences,
+        int maxSentences,
+        int numParagraphs)
+    {
+        // Arrange
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentException&gt;(() =&gt; LoremIpsumGenerator.GenerateLoremIpsumString(
+            minWords,
+            maxWords,
+            minSentences,
+            maxSentences,
+            numParagraphs));
+    }
+
+    [Fact]
+    public void GenerateLoremIpsumHtmlSafe_ValidInputs_ReturnsHtmlStringWithCorrectStructure()
+    {
+        // Arrange
+        var minWords = 1;
+        var maxWords = 5;
+        var minSentences = 1;
+        var maxSentences = 3;
+        var numParagraphs = 1;
+
+        // Act
+        var result = LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+            minWords,
+            maxWords,
+            minSentences,
+            maxSentences,
+            numParagraphs);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.StartsWith(&quot;&lt;p&gt;&quot;, result);
+        Assert.EndsWith(&quot;&lt;/p&gt;&quot;, result);
+        Assert.Contains(&quot;. &quot;, result);
+    }
+
+    [Theory]
+    [InlineData(1, 1, 1, 1, 1)]
+    [InlineData(1, 5, 1, 3, 2)]
+    public void GenerateLoremIpsumHtmlSafe_ValidInputs_ReturnsHtmlStringWithCorrectParagraphCount(
+        int minWords,
+        int maxWords,
+        int minSentences,
+        int maxSentences,
+        int numParagraphs)
+    {
+        // Arrange
+        var expectedParagraphCount = numParagraphs;
+
+        // Act
+        var result = LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+            minWords,
+            maxWords,
+            minSentences,
+            maxSentences,
+            numParagraphs);
+
+        // Assert
+        Assert.NotNull(result);
+        var openTags = new StringReader(result).ReadToEnd().Split(&#39;&lt;&#39;).Length;
+        var closeTags = new StringReader(result).ReadToEnd().Split(&#39;&gt;&#39;).Length;
+        Assert.Contains(&quot;&lt;p&gt;&quot;, result);
+        Assert.Contains(&quot;&lt;/p&gt;&quot;, result);
+    }
+
+    [Theory]
+    [InlineData(0, 5, 1, 3, 1)]
+    [InlineData(1, 5, 0, 3, 1)]
+    [InlineData(1, 5, 1, 0, 1)]
+    [InlineData(1, 5, 1, 3, 0)]
+    public void GenerateLoremIpsumHtmlSafe_InvalidInputs_ThrowsArgumentException(
+        int minWords,
+        int maxWords,
+        int minSentences,
+        int maxSentences,
+        int numParagraphs)
+    {
+        // Arrange
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentException&gt;(() =&gt; LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+            minWords,
+            maxWords,
+            minSentences,
+            maxSentences,
+            numParagraphs));
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,26,1],[12,9,12,26,1],[13,9,13,30,1],[14,9,14,30,1],[15,9,15,31,1],[18,9,23,28,1],[26,9,26,93,1],[27,9,27,53,1],[28,5,28,6,0],[40,5,40,6,1],[42,9,42,52,1],[45,9,50,28,1],[53,9,53,32,1],[54,9,54,39,1],[55,9,55,41,1],[56,5,56,6,0],[69,5,69,6,1],[72,9,72,48,1],[72,48,77,27,1],[77,27,77,29,1],[78,5,78,6,0],[82,5,82,6,1],[84,9,84,26,1],[85,9,85,26,1],[86,9,86,30,1],[87,9,87,30,1],[88,9,88,31,1],[91,9,96,28,1],[99,9,99,32,1],[100,9,100,42,1],[101,9,101,41,1],[102,9,102,39,1],[103,5,103,6,1],[114,5,114,6,1],[116,9,116,52,1],[119,9,124,28,1],[127,9,127,32,1],[128,9,128,79,1],[129,9,129,80,1],[130,9,130,40,1],[131,9,131,41,1],[132,5,132,6,1],[145,5,145,6,1],[148,9,148,48,1],[148,48,153,27,1],[153,27,153,29,1],[154,5,154,6,0]]);
+    </script>
+  </body>
+</html>

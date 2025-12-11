@@ -1,0 +1,316 @@
+using Dataset.Sample19;
+
+namespace Gpt5MiniUnitTests
+{
+    public class StringExtensionsTests
+    {
+        [Theory]
+        [InlineData('0')]
+        [InlineData('5')]
+        [InlineData('9')]
+        public void IsDigit_CharIsDigit_ReturnsTrue(char input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsDigit();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData('a')]
+        [InlineData('/')]
+        [InlineData(':')]
+        public void IsDigit_CharIsNotDigit_ReturnsFalse(char input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsDigit();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData("123")]
+        [InlineData("-1")]
+        [InlineData(" 123 ")]
+        public void IsInteger_ValidIntegerStrings_ReturnsTrue(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsInteger();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("1.2")]
+        [InlineData("abc")]
+        [InlineData("2147483648")]
+        public void IsInteger_InvalidIntegerStrings_ReturnsFalse(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsInteger();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData("123")]
+        [InlineData("-123")]
+        [InlineData("1e3")]
+        public void IsNumber_ValidNumberStrings_ReturnsTrue(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsNumber();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("abc")]
+        public void IsNumber_InvalidNumberStrings_ReturnsFalse(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.IsNumber();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        public void Reverse_NullOrEmptyOrWhitespace_ReturnsSame(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.Reverse();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void Reverse_NormalString_ReturnsReversed()
+        {
+            // Arrange
+            var input = "abc";
+
+            // Act
+            var result = input.Reverse();
+
+            // Assert
+            Assert.Equal("cba", result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void ToCsvCompatible_NullOrEmpty_ReturnsSame(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_NoSpecialCharacters_ReturnsSameString()
+        {
+            // Arrange
+            var input = "hello";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal("hello", result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsComma_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = "a,b";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal("\"a,b\"", result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsSemicolon_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = "a;b";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal("\"a;b\"", result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_LeadingSpace_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = " hello";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal("\" hello\"", result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_TrailingSpace_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = "hello ";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal("\"hello \"", result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsNewline_WrapsWithQuotes()
+        {
+            // Arrange
+            var input = "a\nb";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal("\"a\nb\"", result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_ContainsQuote_ReplacesAndWraps()
+        {
+            // Arrange
+            var input = "He said \"Hi\"";
+            var expected = "\"He said \"\"Hi\"\"\"";
+
+            // Act
+            var result = input.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_NullOrWhitespace_ReturnsSame()
+        {
+            // Arrange
+            string? inputNull = null;
+            var inputWhitespace = "   ";
+
+            // Act
+            var resultNull = inputNull.GetFileExtension();
+            var resultWhitespace = inputWhitespace.GetFileExtension();
+
+            // Assert
+            Assert.Null(resultNull);
+            Assert.Equal(inputWhitespace, resultWhitespace);
+        }
+
+        [Fact]
+        public void GetFileExtension_NoDot_ReturnsEmptyString()
+        {
+            // Arrange
+            var input = "file";
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_LeadingDot_ReturnsExtension()
+        {
+            // Arrange
+            var input = ".gitignore";
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal("gitignore", result);
+        }
+
+        [Fact]
+        public void GetFileExtension_TrailingDot_ReturnsEmptyString()
+        {
+            // Arrange
+            var input = "file.";
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_MultipleDots_ReturnsAfterLastDot()
+        {
+            // Arrange
+            var input = "archive.tar.gz";
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal("gz", result);
+        }
+
+        [Fact]
+        public void GetFileExtension_ExtensionWithSpaces_IsTrimmed()
+        {
+            // Arrange
+            var input = "file. txt ";
+
+            // Act
+            var result = input.GetFileExtension();
+
+            // Assert
+            Assert.Equal("txt", result);
+        }
+    }
+}

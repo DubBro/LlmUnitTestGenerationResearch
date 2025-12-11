@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765322052-vz1UqpC1UbALRPD1UERV
+
+Content:
+ {
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class and method names follow conventions and are highly descriptive",
+		"Proper use of AAA pattern with clear block separation",
+		"Correct choice between [Fact] and [Theory]/[InlineData] attributes",
+		"Considerable code duplication in mock setup across tests",
+		"No helper methods for common Arrange logic",
+		"Consistent structure makes individual tests readable",
+		"No nested classes or unnecessary abstractions",
+		"Inline test data is clear and well-organized"
+	]
+}

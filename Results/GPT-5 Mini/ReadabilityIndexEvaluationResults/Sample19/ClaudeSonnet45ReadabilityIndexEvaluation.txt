@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765324342-o1h3wrel5k5ReoQej5qp
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"Test method names consistently follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern, making intentions clear",
+		"Appropriate use of [Theory] with [InlineData] for parameterized tests, avoiding code duplication",
+		"AAA pattern is clearly followed with comment markers (// Arrange, // Act, // Assert) and proper spacing",
+		"Variable names are clear and descriptive (input, result, expected)",
+		"No unnecessary comments or nested classes, keeping the structure clean",
+		"Standard C# and .NET naming conventions are followed throughout",
+		"One minor inconsistency: GetFileExtension_NullOrWhitespace_ReturnsSame tests two scenarios in one test method, slightly deviating from single-responsibility principle",
+		"Overall excellent readability with consistent formatting and logical test organization"
+	]
+}
+```

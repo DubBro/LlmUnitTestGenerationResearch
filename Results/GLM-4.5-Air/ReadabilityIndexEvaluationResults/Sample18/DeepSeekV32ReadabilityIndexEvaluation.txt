@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322410-alJeijNxJawNPgLogsvE
+
+Content:
+{
+	"readabilityIndex": 94,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern correctly.",
+		"Test method names use clear 'MethodUnderTest_Scenario_ExpectedResult' pattern.",
+		"All tests follow AAA pattern with clear Arrange/Act/Assert sections separated by comments and empty lines.",
+		"Proper use of [Fact] and [Theory] attributes with meaningful [InlineData] for parameterized tests.",
+		"Excellent test grouping: similar scenarios are grouped logically (null handling, non-alphabetic, alphabetic with various keys).",
+		"Test data examples are well-chosen and demonstrate edge cases clearly.",
+		"Variable names are meaningful and consistent throughout all tests.",
+		"The final test demonstrates a property-based verification that Encode and Decode are inverse operations.",
+		"Code formatting is consistent with proper indentation and spacing.",
+		"Tests are self-contained and easy to understand without external context."
+	]
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample1Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample1;
+using NSubstitute;
+
+namespace DeepSeekR10528UnitTests
+{
+    public class DepartmentServiceTests
+    {
+        private readonly IDepartmentRepository _repositorySubstitute;
+        private readonly DepartmentService _sut;
+
+        public DepartmentServiceTests()
+        {
+            _repositorySubstitute = Substitute.For&lt;IDepartmentRepository&gt;();
+            _sut = new DepartmentService(_repositorySubstitute);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenIdExists_ReturnsMappedModel()
+        {
+            // Arrange
+            var testId = 1;
+            var mockEntity = new DepartmentEntity { Id = testId, Name = &quot;Test Department&quot;, Description = &quot;Test Description&quot; };
+            _repositorySubstitute.GetAsync(testId).Returns(Task.FromResult(mockEntity));
+
+            // Act
+            var result = await _sut.GetAsync(testId);
+
+            // Assert
+            Assert.Equal(mockEntity.Id, result.Id);
+            Assert.Equal(mockEntity.Name, result.Name);
+            Assert.Equal(mockEntity.Description, result.Description);
+        }
+
+        [Fact]
+        public async Task GetAsync_WhenRepositoryReturnsNull_ThrowsNullReferenceException()
+        {
+            // Arrange
+            var testId = 1;
+            _repositorySubstitute.GetAsync(testId).Returns(Task.FromResult&lt;DepartmentEntity&gt;(null));
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;NullReferenceException&gt;(() =&gt; _sut.GetAsync(testId));
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenRepositoryReturnsEmptyList_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var emptyList = new List&lt;DepartmentEntity&gt;();
+            _repositorySubstitute.ListAsync().Returns(Task.FromResult&lt;ICollection&lt;DepartmentEntity&gt;&gt;(emptyList));
+
+            // Act
+            var result = await _sut.ListAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task ListAsync_WhenRepositoryReturnsNonEmptyList_ReturnsMappedCollection()
+        {
+            // Arrange
+            var entities = new List&lt;DepartmentEntity&gt;
+            {
+                new DepartmentEntity { Id = 1, Name = &quot;Dept1&quot;, Description = &quot;Desc1&quot; },
+                new DepartmentEntity { Id = 2, Name = &quot;Dept2&quot;, Description = &quot;Desc2&quot; }
+            };
+            _repositorySubstitute.ListAsync().Returns(Task.FromResult&lt;ICollection&lt;DepartmentEntity&gt;&gt;(entities));
+
+            // Act
+            var result = await _sut.ListAsync();
+
+            // Assert
+            Assert.Equal(entities.Count, result.Count);
+            for (var i = 0; i &lt; entities.Count; i++)
+            {
+                Assert.Equal(entities[i].Id, result.ElementAt(i).Id);
+                Assert.Equal(entities[i].Name, result.ElementAt(i).Name);
+                Assert.Equal(entities[i].Description, result.ElementAt(i).Description);
+            }
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,9,11,40,1],[12,9,12,10,1],[13,13,13,77,1],[14,13,14,65,1],[15,9,15,10,1],[19,9,19,10,1],[21,13,21,28,1],[22,13,22,127,1],[23,13,23,89,1],[26,13,26,54,1],[29,13,29,52,1],[30,13,30,56,1],[31,13,31,70,1],[32,9,32,10,1],[36,9,36,10,1],[38,13,38,28,1],[39,13,39,101,1],[42,13,42,68,1],[42,68,42,89,1],[42,89,42,91,1],[43,9,43,10,1],[47,9,47,10,1],[49,13,49,58,1],[50,13,50,114,1],[53,13,53,49,1],[56,13,56,36,1],[57,13,57,34,1],[58,9,58,10,1],[62,9,62,10,1],[64,13,68,15,1],[69,13,69,113,1],[72,13,72,49,1],[75,13,75,56,1],[76,18,76,27,1],[76,29,76,47,1],[76,49,76,52,1],[77,13,77,14,1],[78,17,78,70,1],[79,17,79,74,1],[80,17,80,88,1],[81,13,81,14,1],[82,9,82,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315368-1QAVKy0icg3NYHpI77Ak
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests convention (`DepartmentServiceTests`) and clearly indicates the subject under test.",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern, making intent and behavior easy to understand.",
+    "All async tests correctly use `async Task` signatures, avoiding `async void` and improving clarity and reliability.",
+    "AAA pattern is consistently used and visually separated with `// Arrange`, `// Act`, `// Assert` comments, improving structure and scanability.",
+    "Dependencies are clearly expressed via private readonly fields (`_repositorySubstitute`, `_sut`) and initialized in the constructor, making setup straightforward.",
+    "Assertions are explicit and directly related to arranged data, making it easy to see what each test verifies (e.g., mapping of properties).",
+    "Use of NSubstitute is clear and localized in Arrange sections, with simple `Returns` setups that are easy to follow.",
+    "Collection test setup and verification are straightforward, though the `for` + `ElementAt` pattern is slightly more verbose than necessary for readability.",
+    "\"Act & Assert\" combined comment in one test slightly deviates from the ideal AAA separation, but the structure is still understandable.",
+    "Minor opportunities for simplification (e.g., `Returns(mockEntity)` instead of `Task.FromResult`, using collection assertion helpers) keep it just short of perfect readability."
+  ]
+}

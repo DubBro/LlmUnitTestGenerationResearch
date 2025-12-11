@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327545-WEouzErjToaVpMrwEqA3
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name `Base64HelpersTests` clearly follows the `ClassUnderTestTests` convention and reflects the subject under test.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, making intent immediately clear.",
+    "AAA structure is explicitly used and visually separated with `// Arrange`, `// Act`, `// Assert` comments, improving scanability.",
+    "Code formatting, spacing, and brace style are uniform and adhere to standard C# conventions.",
+    "No unnecessary comments or nested classes; each test is focused on a single scenario.",
+    "Use of `[Theory]` with `[InlineData]` for multiple decode scenarios reduces duplication and clarifies parameterized behavior.",
+    "Use of `string.Empty` instead of hard-coded empty strings improves consistency and clarity of expectations.",
+    "Tests are short and self-contained with simple, obvious setup and assertions, aiding quick comprehension.",
+    "Some duplication in separate `[Fact]` tests versus the final `[Theory]` for encode null/whitespace could be consolidated, slightly impacting maintainability.",
+    "The mix of individual facts and parameterized tests for similar encode scenarios is mildly inconsistent, but not significantly harmful to readability."
+  ]
+}

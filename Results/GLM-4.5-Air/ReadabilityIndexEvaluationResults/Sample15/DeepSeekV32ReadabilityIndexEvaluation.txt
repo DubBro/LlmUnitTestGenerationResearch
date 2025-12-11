@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322141-mqnQyQI1UbaFsRZjKHMs
+
+Content:
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Clear and meaningful test names following the MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Proper use of AAA pattern with explicit comments for Arrange, Act, Assert blocks",
+		"Good separation of concerns with each test covering a single scenario",
+		"Clean structure with logical grouping of Encode and Decode tests",
+		"Appropriate use of [Fact] attributes for individual test cases",
+		"Consistent formatting and adherence to C# naming conventions",
+		"Tests are self-explanatory and easy to understand",
+		"Could benefit from [Theory] with [InlineData] to reduce duplication for similar edge cases",
+		"Exception testing follows standard patterns with Action delegate",
+		"Test class name follows proper convention (ClassUnderTestTests)"
+	]
+}

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765320865-xxliMuFEMI61k4DyqnYA
+
+Content:
+ {"readabilityIndex":55,"reasons":["Unnecessary nested test classes violate guidelines and reduce discoverability","Massive code duplication across tests, especially in Get*Lots* methods","Validation tests could be consolidated using [Theory] but aren't","Test method naming uses BDD style instead of prescribed MethodUnderTest_Scenario_ExpectedResult pattern","Combined Act & Assert blocks violate AAA pattern separation","Inconsistent test naming (some include When clauses, others don't)","Method under test name is not explicitly in test method names, requiring context from nested class","Setup logic could be simplified with helper methods to reduce duplication"]}

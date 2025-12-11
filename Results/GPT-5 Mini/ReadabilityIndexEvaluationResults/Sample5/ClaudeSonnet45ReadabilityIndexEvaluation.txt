@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765323183-bTHwka1JrKnUlanZuzE5
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class follows the recommended naming pattern 'FolderServiceTests'",
+		"All test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is clearly implemented with proper comment separators and blank lines between sections",
+		"Asynchronous tests correctly use 'async Task' signature instead of 'async void'",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication for similar test scenarios",
+		"Variable and field names are clear, meaningful, and reflect their purpose throughout all tests",
+		"Code adheres to standard C# and .NET naming conventions consistently",
+		"No unnecessary comments beyond AAA separators, keeping tests clean and focused",
+		"Well-structured mocking setup using NSubstitute with clear arrange-act-assert flow",
+		"Minor consideration: Some tests have slightly verbose assertion blocks, but this doesn't significantly impact readability"
+	]
+}
+```

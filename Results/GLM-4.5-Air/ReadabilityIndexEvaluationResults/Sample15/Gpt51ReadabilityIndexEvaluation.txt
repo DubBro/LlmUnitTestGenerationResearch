@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765322186-lkFtWMrsBe5gKPv4vHxW
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name `Base64HelpersTests` clearly follows the `ClassUnderTestTests` convention and reflects the subject under test.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, making intent immediately clear.",
+    "AAA pattern is explicitly used with `// Arrange`, `// Act`, `// Assert` comments and blank lines, giving each test a clear, recognizable structure.",
+    "Variable names such as `plainText` and `base64EncodedData` are descriptive and accurately convey purpose.",
+    "Formatting and spacing are clean and consistent, with no nested classes and no distracting or unrelated comments.",
+    "Each `[Fact]` test is focused on a single scenario, keeping test bodies short and easy to scan.",
+    "There is some duplication across tests (e.g., null/empty/whitespace cases for both Encode and Decode) that could be reduced using `[Theory]` and `[InlineData]`, which would slightly improve maintainability."
+  ]
+}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765318298-p7MruoCBp8stmUAU0K6I
+
+Content:
+{
+	"readabilityIndex": 80,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern correctly",
+		"Test methods follow naming pattern 'MethodUnderTest_Scenario_ExpectedResult' consistently",
+		"Tests follow AAA pattern with clear Arrange, Act, Assert sections",
+		"Uses [Theory] with [InlineData] appropriately for parameterized tests",
+		"Good separation of test regions for different methods under test",
+		"Clear and meaningful variable names",
+		"No unnecessary comments, only AAA separators where helpful",
+		"Properly structured constructor for test setup",
+		"Good use of spacing and formatting for readability",
+		"Some test names could be slightly more descriptive (e.g., 'Bet_ValidScenario_UpdatesAuctionAndCommits' could specify scenario more clearly)"
+	]
+}

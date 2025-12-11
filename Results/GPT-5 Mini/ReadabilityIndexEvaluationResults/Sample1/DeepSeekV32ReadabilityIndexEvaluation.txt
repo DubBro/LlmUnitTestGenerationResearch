@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765322773-tC5vcBPUXHgD9xvU50Gw
+
+Content:
+{"readabilityIndex": 85, "reasons": ["Test class name follows the ClassUnderTestTests pattern", "Test methods follow the MethodUnderTest_Scenario_ExpectedResult naming convention", "All tests follow the AAA pattern with clear Arrange, Act, Assert sections", "Test methods use async Task signature appropriately", "Good use of NSubstitute for mocking dependencies", "Assertions are clear and specific", "Code formatting is clean with proper indentation", "Test scenarios cover both happy paths and error cases", "Minor issue: Assert block in ListAsync_WhenCalled_ReturnsMappedCollection has repetitive assertions that could be simplified", "Good separation of concerns between test cases"]}

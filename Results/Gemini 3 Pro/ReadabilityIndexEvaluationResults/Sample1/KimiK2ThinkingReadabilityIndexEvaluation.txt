@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317583-qIu9bFw1FN70qD20FNXG
+
+Content:
+ {"readabilityIndex":95,"reasons":["Test class and method names follow the recommended naming patterns precisely","Consistent AAA pattern with clear comments and empty line separation","All asynchronous tests correctly use async Task signature","Variable and field names are clear, meaningful, and follow C# conventions","Tests are focused, self-contained, with minimal and readable setup","No unnecessary comments or code - only AAA block markers","Appropriate use of [Fact] attribute for distinct test scenarios","Clean constructor-based dependency setup using NSubstitute","Exception tests correctly combine Act & Assert blocks","Well-formatted code with modern C# syntax and proper spacing"]}

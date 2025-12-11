@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315544-afEyKFwlA2HC23TBmXwX
+
+Content:
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Strict adherence to AAA pattern with // Arrange, // Act, // Assert markers and separations.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] for variations.",
+		"Clear, meaningful names for variables, fields, and mocks (e.g., _unitOfWorkSub).",
+		"Shared constructor setup for mocks reduces duplication while allowing per-test overrides.",
+		"No unnecessary comments, nested classes, or deviations from C# naming conventions.",
+		"Some complex NSubstitute setups and long Arg.Is lambdas in Arrange/Assert reduce scannability.",
+		"Combined Act & Assert in exception tests is standard but slightly blurs AAA.",
+		"Overall logical flow and structure support high maintainability."
+	]
+}

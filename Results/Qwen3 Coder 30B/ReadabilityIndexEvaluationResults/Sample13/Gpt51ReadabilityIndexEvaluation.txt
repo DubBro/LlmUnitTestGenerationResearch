@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327216-9kmGSJZoJDA674QuOjLO
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests convention and clearly indicates the subject under test (OntologyHelperTests).",
+    "Test method names are mostly in the MethodUnderTest_Scenario_ExpectedResult pattern and describe behavior in a readable, intention-revealing way.",
+    "AAA structure is consistently followed and explicitly separated by // Arrange, // Act, // Assert comments, making test flow easy to follow.",
+    "Formatting is clean and consistent (spacing, braces, and line breaks), which improves scanability.",
+    "Use of [Theory] with [InlineData] for multiple input variations avoids duplication and keeps similar scenarios grouped.",
+    "Mocking with NSubstitute is used in a straightforward way, with minimal setup noise and clear expectations.",
+    "No extraneous comments or logic in tests; each test focuses on a single scenario and assertion, simplifying maintenance.",
+    "Some test names use vague suffixes like ReturnsExpectedResult instead of describing the concrete expected outcome, slightly reducing clarity.",
+    "There is noticeable duplication in arranging the INode substitute across tests; a small factory/helper could improve maintainability.",
+    "A few scenario descriptions (e.g., WhenNoHashExists_ReturnsWholeString) are slightly misleading compared to the actual expectation, which can cause minor confusion for future readers."
+  ]
+}

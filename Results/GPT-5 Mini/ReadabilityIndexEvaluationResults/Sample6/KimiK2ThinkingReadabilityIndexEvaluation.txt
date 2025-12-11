@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323297-X8hM2v7UAGRgUuMfkwsB
+
+Content:
+ {
+	"readabilityIndex": 72,
+	"reasons": [
+		"Test class and method names follow standard patterns making purposes clear",
+		"Consistent AAA pattern implementation with comments and proper separation",
+		"Appropriate use of [Fact] and [Theory] attributes to avoid duplication",
+		"The CreateSut method is overly complex with verbose mapper mock setup",
+		"Mapper configuration duplicates mapping logic three times creating maintenance burden",
+		"Some test names like 'ReturnsMapped' are vague about expected results",
+		"Test data uses non-descriptive placeholder strings reducing clarity",
+		"Modern tuple deconstruction syntax makes test dependencies less explicit",
+		"Exception testing uses clean lambda pattern for Act block",
+		"Overall structure is logical but helper method complexity hinders quick understanding"
+	]
+}

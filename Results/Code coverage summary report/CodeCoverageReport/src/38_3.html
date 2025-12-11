@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample16Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample16;
+
+namespace Qwen3Coder30BUnitTests;
+
+public class AsciiHelpersTests
+{
+    [Fact]
+    public void ReplaceNonAsciiCharsWith_InputIsNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string input = null;
+
+        // Act
+        var result = input.ReplaceNonAsciiCharsWith(&#39;x&#39;);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void ReplaceNonAsciiCharsWith_InputIsEmptyString_ReturnsEmptyString()
+    {
+        // Arrange
+        string input = string.Empty;
+
+        // Act
+        var result = input.ReplaceNonAsciiCharsWith(&#39;x&#39;);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void ReplaceNonAsciiCharsWith_InputContainsOnlyAsciiChars_ReturnsOriginalString()
+    {
+        // Arrange
+        string input = &quot;Hello World&quot;;
+
+        // Act
+        var result = input.ReplaceNonAsciiCharsWith(&#39;x&#39;);
+
+        // Assert
+        Assert.Equal(&quot;Hello World&quot;, result);
+    }
+
+    [Fact]
+    public void ReplaceNonAsciiCharsWith_InputContainsNonAsciiChars_ReplacesWithSpecifiedChar()
+    {
+        // Arrange
+        string input = &quot;Hello W&#248;rld&quot;;
+
+        // Act
+        var result = input.ReplaceNonAsciiCharsWith(&#39;x&#39;);
+
+        // Assert
+        Assert.Equal(&quot;Hello Wxld&quot;, result);
+    }
+
+    [Fact]
+    public void ReplaceNonAsciiCharsWith_InputContainsOnlyNonAsciiChars_ReplacesAllWithSpecifiedChar()
+    {
+        // Arrange
+        string input = &quot;W&#248;rld&quot;;
+
+        // Act
+        var result = input.ReplaceNonAsciiCharsWith(&#39;x&#39;);
+
+        // Assert
+        Assert.Equal(&quot;xxx&quot;, result);
+    }
+
+    [Fact]
+    public void RemoveNonAsciiChars_InputIsNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string input = null;
+
+        // Act
+        var result = input.RemoveNonAsciiChars();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void RemoveNonAsciiChars_InputIsEmptyString_ReturnsEmptyString()
+    {
+        // Arrange
+        string input = string.Empty;
+
+        // Act
+        var result = input.RemoveNonAsciiChars();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void RemoveNonAsciiChars_InputContainsOnlyAsciiChars_ReturnsOriginalString()
+    {
+        // Arrange
+        string input = &quot;Hello World&quot;;
+
+        // Act
+        var result = input.RemoveNonAsciiChars();
+
+        // Assert
+        Assert.Equal(&quot;Hello World&quot;, result);
+    }
+
+    [Fact]
+    public void RemoveNonAsciiChars_InputContainsNonAsciiChars_RemovesAllNonAsciiChars()
+    {
+        // Arrange
+        string input = &quot;Hello W&#248;rld&quot;;
+
+        // Act
+        var result = input.RemoveNonAsciiChars();
+
+        // Assert
+        Assert.Equal(&quot;Hello Wld&quot;, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;Hello W&#248;rld&quot;, &quot;Hello Wld&quot;)]
+    [InlineData(&quot;Caf&#233;&quot;, &quot;Caf&quot;)]
+    [InlineData(&quot;na&#239;ve&quot;, &quot;nave&quot;)]
+    public void RemoveNonAsciiChars_InputWithVariousNonAsciiChars_RemovesAllNonAsciiChars(string input, string expected)
+    {
+        // Act
+        var result = input.RemoveNonAsciiChars();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,29,1],[14,9,14,58,1],[17,9,17,44,1],[18,5,18,6,1],[22,5,22,6,1],[24,9,24,37,1],[27,9,27,58,1],[30,9,30,44,1],[31,5,31,6,1],[35,5,35,6,1],[37,9,37,38,1],[40,9,40,58,1],[43,9,43,45,1],[44,5,44,6,1],[48,5,48,6,1],[50,9,50,38,1],[53,9,53,58,1],[56,9,56,44,1],[57,5,57,6,0],[61,5,61,6,1],[63,9,63,32,1],[66,9,66,58,1],[69,9,69,37,1],[70,5,70,6,0],[74,5,74,6,1],[76,9,76,29,1],[79,9,79,50,1],[82,9,82,44,1],[83,5,83,6,1],[87,5,87,6,1],[89,9,89,37,1],[92,9,92,50,1],[95,9,95,44,1],[96,5,96,6,1],[100,5,100,6,1],[102,9,102,38,1],[105,9,105,50,1],[108,9,108,45,1],[109,5,109,6,1],[113,5,113,6,1],[115,9,115,38,1],[118,9,118,50,1],[121,9,121,43,1],[122,5,122,6,0],[129,5,129,6,1],[131,9,131,50,1],[134,9,134,40,1],[135,5,135,6,1]]);
+    </script>
+  </body>
+</html>

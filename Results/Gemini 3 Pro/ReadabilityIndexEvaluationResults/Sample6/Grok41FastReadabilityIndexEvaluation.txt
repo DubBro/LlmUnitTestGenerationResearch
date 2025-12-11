@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317991-DJTJwexXOvn7NHi6tqIz
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern.",
+		"Test method names consistently follow 'MethodUnderTest_Scenario_ExpectedResult' pattern.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] reduces duplication.",
+		"Consistent AAA structure with // Arrange, // Act, // Assert comments in most tests.",
+		"Clear, meaningful variable and field names (e.g., _sut, lotDto).",
+		"Efficient shared mock setup in constructor promotes maintainability.",
+		"Standard C# naming conventions and formatting adhered to.",
+		"InlineData includes explanatory comments for clarity.",
+		"Minor deviation: one extraneous 'Note:' comment.",
+		"Occasional combined Act & Assert for exceptions, still readable but not strict AAA blocks."
+	]
+}

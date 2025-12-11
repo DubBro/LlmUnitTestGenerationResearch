@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765323082-jr00IjXb4UGJ7mMHtD6C
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the correct pattern 'ClassUnderTestTests'",
+		"All tests properly follow the AAA pattern with clear comments separating Arrange, Act, and Assert blocks",
+		"Test method signatures correctly use 'async Task' for asynchronous tests",
+		"Variable names are clear and meaningful (repository, mapper, entity, model, result)",
+		"Test names are descriptive and explain the scenario being tested, though they don't strictly follow 'MethodUnderTest_Scenario_ExpectedResult' pattern",
+		"No unnecessary comments outside of AAA block separators",
+		"Code adheres to standard C# naming conventions",
+		"Could benefit from using [Theory] with [InlineData] to reduce duplication between the first two tests which test similar scenarios with different IDs",
+		"Test structure is consistent across all three test methods making them easy to read and maintain",
+		"Empty lines properly separate AAA blocks improving visual clarity"
+	]
+}
+```

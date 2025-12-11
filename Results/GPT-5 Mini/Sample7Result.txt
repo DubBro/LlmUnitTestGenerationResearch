@@ -1,0 +1,177 @@
+GenerationId:
+gen-1765217836-IAAw0JuwqcmD6wbgbfu6
+
+Content:
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using NSubstitute;
+using Xunit;
+using Dataset.Sample7;
+
+namespace Dataset.Sample7.UnitTests
+{
+    public class WalkServiceTests
+    {
+        [Fact]
+        public async Task Get10LongestWalksAsync_ValidImei_ReturnsMappedWalksWithSequentialNumbers()
+        {
+            // Arrange
+            var imei = "123456789012345";
+            var walkEntities = new List<WalkEntity>
+            {
+                new WalkEntity { Distance = 10.5m, Duration = 5.5m },
+                new WalkEntity { Distance = 8.0m, Duration = 4.0m },
+                new WalkEntity { Distance = 3.25m, Duration = 1.75m },
+            };
+
+            var repo = Substitute.For<IWalkRepository>();
+            repo.Get10LongestWalksAsync(imei).Returns(Task.FromResult<IEnumerable<WalkEntity>>(walkEntities));
+
+            var service = new WalkService(repo);
+
+            // Act
+            var result = await service.Get10LongestWalksAsync(imei);
+
+            // Assert
+            var list = Assert.IsType<List<WalkDTO>>(new List<WalkDTO>(result));
+            Assert.Equal(3, list.Count);
+            Assert.Equal(1, list[0].Number);
+            Assert.Equal(10.5m, list[0].Distance);
+            Assert.Equal(5.5m, list[0].Duration);
+
+            Assert.Equal(2, list[1].Number);
+            Assert.Equal(8.0m, list[1].Distance);
+            Assert.Equal(4.0m, list[1].Duration);
+
+            Assert.Equal(3, list[2].Number);
+            Assert.Equal(3.25m, list[2].Distance);
+            Assert.Equal(1.75m, list[2].Duration);
+
+            repo.Received(1).Get10LongestWalksAsync(imei);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_EmptyResult_ReturnsEmptyList()
+        {
+            // Arrange
+            var imei = "123456789012345";
+            var repo = Substitute.For<IWalkRepository>();
+            repo.Get10LongestWalksAsync(imei).Returns(Task.FromResult<IEnumerable<WalkEntity>>(new List<WalkEntity>()));
+            var service = new WalkService(repo);
+
+            // Act
+            var result = await service.Get10LongestWalksAsync(imei);
+
+            // Assert
+            var list = Assert.IsType<List<WalkDTO>>(new List<WalkDTO>(result));
+            Assert.Empty(list);
+            repo.Received(1).Get10LongestWalksAsync(imei);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("123")]
+        [InlineData("abcdefghijklmno")]
+        [InlineData("12345678901234")] // 14 digits
+        [InlineData("1234567890123456")] // 16 digits
+        public async Task Get10LongestWalksAsync_InvalidImei_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            var repo = Substitute.For<IWalkRepository>();
+            var service = new WalkService(repo);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<BusinessException>(() => service.Get10LongestWalksAsync(invalidImei));
+            await repo.DidNotReceiveWithAnyArgs().Get10LongestWalksAsync(default);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_NullImei_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? imei = null;
+            var repo = Substitute.For<IWalkRepository>();
+            var service = new WalkService(repo);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => service.Get10LongestWalksAsync(imei!));
+            await repo.DidNotReceiveWithAnyArgs().Get10LongestWalksAsync(default);
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_ValidImei_ReturnsMappedGeneralInfo()
+        {
+            // Arrange
+            var imei = "987654321098765";
+            var entity = new WalksGeneralInfoEntity
+            {
+                TotalCount = 42,
+                TotalDistance = 1234.5m,
+                TotalDuration = 678.25m
+            };
+
+            var repo = Substitute.For<IWalkRepository>();
+            repo.GetWalksGeneralInfoAsync(imei).Returns(Task.FromResult(entity));
+            var service = new WalkService(repo);
+
+            // Act
+            var result = await service.GetWalksGeneralInfoAsync(imei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(42, result.TotalCount);
+            Assert.Equal(1234.5m, result.TotalDistance);
+            Assert.Equal(678.25m, result.TotalDuration);
+            repo.Received(1).GetWalksGeneralInfoAsync(imei);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("short")]
+        [InlineData("abcdefghijklmnop")]
+        public async Task GetWalksGeneralInfoAsync_InvalidImei_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            var repo = Substitute.For<IWalkRepository>();
+            var service = new WalkService(repo);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<BusinessException>(() => service.GetWalksGeneralInfoAsync(invalidImei));
+            await repo.DidNotReceiveWithAnyArgs().GetWalksGeneralInfoAsync(default);
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_NullImei_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? imei = null;
+            var repo = Substitute.For<IWalkRepository>();
+            var service = new WalkService(repo);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => service.GetWalksGeneralInfoAsync(imei!));
+            await repo.DidNotReceiveWithAnyArgs().GetWalksGeneralInfoAsync(default);
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+39411,8373
+
+OpenRouterElapsedTimeMilliseconds:
+47335
+
+PromptTokens:
+1544
+
+CompletionTokens:
+2542
+
+TotalTokens:
+4086
+
+TotalCost:
+0,00547

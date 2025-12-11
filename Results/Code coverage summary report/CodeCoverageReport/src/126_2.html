@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample18Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample18;
+
+namespace Glm45AirUnitTests;
+
+public class CaesarEncoderTests
+{
+    [Fact]
+    public void Encode_PassingNullText_ThrowsArgumentNullException()
+    {
+        // Arrange
+        string text = null;
+        int key = 1;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; CaesarEncoder.Encode(text, key));
+
+        // Assert
+        Assert.Equal(&quot;text&quot;, exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot; &quot;)]
+    [InlineData(&quot;123&quot;)]
+    [InlineData(&quot;!@#&quot;)]
+    public void Encode_PassingNonAlphabeticText_ReturnsSameText(string text)
+    {
+        // Arrange
+        int key = 1;
+
+        // Act
+        var result = CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Equal(text, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;A&quot;, 1, &quot;B&quot;)]
+    [InlineData(&quot;a&quot;, 1, &quot;b&quot;)]
+    [InlineData(&quot;Z&quot;, 1, &quot;A&quot;)]
+    [InlineData(&quot;z&quot;, 1, &quot;a&quot;)]
+    [InlineData(&quot;Hello&quot;, 3, &quot;Khoor&quot;)]
+    [InlineData(&quot;World&quot;, 5, &quot;Btwqi&quot;)]
+    [InlineData(&quot;Programming&quot;, 13, &quot;Cebtenzzvat&quot;)]
+    [InlineData(&quot;XYZ&quot;, 5, &quot;CDE&quot;)]
+    [InlineData(&quot;abc&quot;, 30, &quot;efg&quot;)]
+    [InlineData(&quot;ABC&quot;, -1, &quot;ZAB&quot;)]
+    [InlineData(&quot;abc&quot;, -3, &quot;xyz&quot;)]
+    public void Encode_PassingAlphabeticTextAndKey_ReturnsEncodedText(string text, int key, string expectedResult)
+    {
+        // Arrange
+        // Act
+        var result = CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Decode_PassingNullText_ThrowsArgumentNullException()
+    {
+        // Arrange
+        string text = null;
+        int key = 1;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; CaesarEncoder.Decode(text, key));
+
+        // Assert
+        Assert.Equal(&quot;text&quot;, exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot; &quot;)]
+    [InlineData(&quot;123&quot;)]
+    [InlineData(&quot;!@#&quot;)]
+    public void Decode_PassingNonAlphabeticText_ReturnsSameText(string text)
+    {
+        // Arrange
+        int key = 1;
+
+        // Act
+        var result = CaesarEncoder.Decode(text, key);
+
+        // Assert
+        Assert.Equal(text, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;B&quot;, 1, &quot;A&quot;)]
+    [InlineData(&quot;b&quot;, 1, &quot;a&quot;)]
+    [InlineData(&quot;A&quot;, 1, &quot;Z&quot;)]
+    [InlineData(&quot;a&quot;, 1, &quot;z&quot;)]
+    [InlineData(&quot;Khoor&quot;, 3, &quot;Hello&quot;)]
+    [InlineData(&quot;Btwqi&quot;, 5, &quot;World&quot;)]
+    [InlineData(&quot;Cebtenzzvat&quot;, 13, &quot;Programming&quot;)]
+    [InlineData(&quot;CDE&quot;, 5, &quot;XYZ&quot;)]
+    [InlineData(&quot;efg&quot;, 30, &quot;abc&quot;)]
+    [InlineData(&quot;ZAB&quot;, -1, &quot;ABC&quot;)]
+    [InlineData(&quot;xyz&quot;, -3, &quot;abc&quot;)]
+    public void Decode_PassingAlphabeticTextAndKey_ReturnsDecodedText(string text, int key, string expectedResult)
+    {
+        // Arrange
+        // Act
+        var result = CaesarEncoder.Decode(text, key);
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void EncodeAndDecode_AreInverseOperations()
+    {
+        // Arrange
+        string originalText = &quot;This is a test string for the Caesar cipher.&quot;;
+        int key = 7;
+
+        // Act
+        string encodedText = CaesarEncoder.Encode(originalText, key);
+        string decodedText = CaesarEncoder.Decode(encodedText, key);
+
+        // Assert
+        Assert.Equal(originalText, decodedText);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,28,1],[12,9,12,21,1],[15,9,15,68,1],[15,68,15,99,1],[15,99,15,101,1],[18,9,18,51,0],[19,5,19,6,0],[27,5,27,6,1],[29,9,29,21,1],[32,9,32,54,1],[35,9,35,36,1],[36,5,36,6,1],[51,5,51,6,1],[54,9,54,54,1],[57,9,57,46,1],[58,5,58,6,1],[62,5,62,6,1],[64,9,64,28,1],[65,9,65,21,1],[68,9,68,68,1],[68,68,68,99,1],[68,99,68,101,1],[71,9,71,51,0],[72,5,72,6,0],[80,5,80,6,1],[82,9,82,21,1],[85,9,85,54,1],[88,9,88,36,1],[89,5,89,6,1],[104,5,104,6,1],[107,9,107,54,1],[110,9,110,46,1],[111,5,111,6,1],[115,5,115,6,1],[117,9,117,78,1],[118,9,118,21,1],[121,9,121,70,1],[122,9,122,69,1],[125,9,125,49,1],[126,5,126,6,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample18Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample18;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class CaesarEncoderTests
+    {
+        [Fact]
+        public void Encode_WithValidTextAndKey_ReturnsEncodedText()
+        {
+            // Arrange
+            var text = &quot;Hello&quot;;
+            var key = 3;
+
+            // Act
+            var result = CaesarEncoder.Encode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Khoor&quot;, result);
+        }
+
+        [Fact]
+        public void Decode_WithValidTextAndKey_ReturnsDecodedText()
+        {
+            // Arrange
+            var text = &quot;Khoor&quot;;
+            var key = 3;
+
+            // Act
+            var result = CaesarEncoder.Decode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Hello&quot;, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;ABC&quot;, 1, &quot;BCD&quot;)]
+        [InlineData(&quot;XYZ&quot;, 3, &quot;ABC&quot;)]
+        [InlineData(&quot;abc&quot;, 1, &quot;bcd&quot;)]
+        [InlineData(&quot;xyz&quot;, 3, &quot;abc&quot;)]
+        public void Encode_WithVariousInputs_ReturnsCorrectlyEncodedText(string input, int key, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = CaesarEncoder.Encode(input, key);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;BCD&quot;, 1, &quot;ABC&quot;)]
+        [InlineData(&quot;ABC&quot;, 3, &quot;XYZ&quot;)]
+        [InlineData(&quot;bcd&quot;, 1, &quot;abc&quot;)]
+        [InlineData(&quot;abc&quot;, 3, &quot;xyz&quot;)]
+        public void Decode_WithVariousInputs_ReturnsCorrectlyDecodedText(string input, int key, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = CaesarEncoder.Decode(input, key);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Encode_WithEmptyString_ReturnsEmptyString()
+        {
+            // Arrange
+            var text = string.Empty;
+            var key = 5;
+
+            // Act
+            var result = CaesarEncoder.Encode(text, key);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Decode_WithEmptyString_ReturnsEmptyString()
+        {
+            // Arrange
+            var text = string.Empty;
+            var key = 5;
+
+            // Act
+            var result = CaesarEncoder.Decode(text, key);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Encode_WithNonAlphabeticCharacters_ReturnsTextWithNonAlphabeticCharactersUnchanged()
+        {
+            // Arrange
+            var text = &quot;Hello, World!&quot;;
+            var key = 3;
+
+            // Act
+            var result = CaesarEncoder.Encode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Khoor, Zruog!&quot;, result);
+        }
+
+        [Fact]
+        public void Decode_WithNonAlphabeticCharacters_ReturnsTextWithNonAlphabeticCharactersUnchanged()
+        {
+            // Arrange
+            var text = &quot;Khoor, Zruog!&quot;;
+            var key = 3;
+
+            // Act
+            var result = CaesarEncoder.Decode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Hello, World!&quot;, result);
+        }
+
+        [Fact]
+        public void Encode_WithNegativeKey_ReturnsCorrectlyEncodedText()
+        {
+            // Arrange
+            var text = &quot;Hello&quot;;
+            var key = -3;
+
+            // Act
+            var result = CaesarEncoder.Encode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Ebiil&quot;, result);
+        }
+
+        [Fact]
+        public void Decode_WithNegativeKey_ReturnsCorrectlyDecodedText()
+        {
+            // Arrange
+            var text = &quot;Ebiil&quot;;
+            var key = -3;
+
+            // Act
+            var result = CaesarEncoder.Decode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Hello&quot;, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;Hello&quot;, 26, &quot;Hello&quot;)]
+        [InlineData(&quot;Hello&quot;, 52, &quot;Hello&quot;)]
+        [InlineData(&quot;Hello&quot;, -26, &quot;Hello&quot;)]
+        public void Encode_WithKeyThatIsMultipleOf26_ReturnsOriginalText(string input, int key, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = CaesarEncoder.Encode(input, key);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;Hello&quot;, 26, &quot;Hello&quot;)]
+        [InlineData(&quot;Hello&quot;, 52, &quot;Hello&quot;)]
+        [InlineData(&quot;Hello&quot;, -26, &quot;Hello&quot;)]
+        public void Decode_WithKeyThatIsMultipleOf26_ReturnsOriginalText(string input, int key, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = CaesarEncoder.Decode(input, key);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Encode_WithKeyZero_ReturnsOriginalText()
+        {
+            // Arrange
+            var text = &quot;Hello&quot;;
+            var key = 0;
+
+            // Act
+            var result = CaesarEncoder.Encode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Hello&quot;, result);
+        }
+
+        [Fact]
+        public void Decode_WithKeyZero_ReturnsOriginalText()
+        {
+            // Arrange
+            var text = &quot;Hello&quot;;
+            var key = 0;
+
+            // Act
+            var result = CaesarEncoder.Decode(text, key);
+
+            // Assert
+            Assert.Equal(&quot;Hello&quot;, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[11,13,11,32,1],[12,13,12,25,1],[15,13,15,58,1],[18,13,18,43,1],[19,9,19,10,1],[23,9,23,10,1],[25,13,25,32,1],[26,13,26,25,1],[29,13,29,58,1],[32,13,32,43,1],[33,9,33,10,1],[41,9,41,10,1],[45,13,45,59,1],[48,13,48,44,1],[49,9,49,10,1],[57,9,57,10,1],[61,13,61,59,1],[64,13,64,44,1],[65,9,65,10,1],[69,9,69,10,1],[71,13,71,37,1],[72,13,72,25,1],[75,13,75,58,1],[78,13,78,48,1],[79,9,79,10,1],[83,9,83,10,1],[85,13,85,37,1],[86,13,86,25,1],[89,13,89,58,1],[92,13,92,48,1],[93,9,93,10,1],[97,9,97,10,1],[99,13,99,40,1],[100,13,100,25,1],[103,13,103,58,1],[106,13,106,51,1],[107,9,107,10,1],[111,9,111,10,1],[113,13,113,40,1],[114,13,114,25,1],[117,13,117,58,1],[120,13,120,51,1],[121,9,121,10,1],[125,9,125,10,1],[127,13,127,32,1],[128,13,128,26,1],[131,13,131,58,1],[134,13,134,43,1],[135,9,135,10,1],[139,9,139,10,1],[141,13,141,32,1],[142,13,142,26,1],[145,13,145,58,1],[148,13,148,43,1],[149,9,149,10,1],[156,9,156,10,1],[160,13,160,59,1],[163,13,163,44,1],[164,9,164,10,1],[171,9,171,10,1],[175,13,175,59,1],[178,13,178,44,1],[179,9,179,10,1],[183,9,183,10,1],[185,13,185,32,1],[186,13,186,25,1],[189,13,189,58,1],[192,13,192,43,1],[193,9,193,10,1],[197,9,197,10,1],[199,13,199,32,1],[200,13,200,25,1],[203,13,203,58,1],[206,13,206,43,1],[207,9,207,10,1]]);
+    </script>
+  </body>
+</html>

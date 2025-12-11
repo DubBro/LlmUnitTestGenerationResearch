@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317572-pdKooWYOgYxs3PetWHw7
+
+Content:
+{
+	"readabilityIndex": 96,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern.",
+		"Test method names adhere to 'MethodUnderTest_Scenario_ExpectedResult' pattern.",
+		"Strict adherence to AAA pattern with clear // Arrange, // Act, // Assert comments and separations.",
+		"Async tests correctly use 'async Task' signatures.",
+		"Clear and meaningful naming for variables, fields, and properties.",
+		"Efficient constructor-based setup for mocks reduces duplication.",
+		"Appropriate use of [Fact] attributes without unnecessary [Theory].",
+		"Verifies repository interactions with Received calls.",
+		"Minor deviation: combined // Act & Assert in exception tests.",
+		"List assertions use ElementAt instead of indexers or Assert.Collection, slightly less idiomatic."
+	]
+}

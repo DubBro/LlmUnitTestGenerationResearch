@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324008-1GklhfOgrokoYTRxJecO
+
+Content:
+ {"readabilityIndex":73,"reasons":["Consistently follows AAA pattern with clear comments and block separation","Test class name adheres to standard ClassUnderTestTests convention","Good use of [Theory] with [InlineData] for testing multiple invalid input scenarios","Significant code duplication in assertion logic between pattern tests reduces maintainability","Test method names follow convention but 'InvalidCount' is vague about invalidity conditions","Exception variable 'ex' could be more descriptive for better clarity","Clean formatting with no unnecessary comments or nested classes","Clear and meaningful variable names for test data and expected results"]}

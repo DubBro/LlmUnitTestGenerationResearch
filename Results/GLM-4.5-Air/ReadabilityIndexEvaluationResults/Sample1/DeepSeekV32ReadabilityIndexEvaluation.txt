@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319593-iiJZkPtw7g0J3ao32wfq
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows 'ClassUnderTestTests' pattern",
+		"Test method names follow 'MethodUnderTest_Scenario_ExpectedResult' pattern",
+		"Clear AAA pattern with explicit comments separating blocks",
+		"Proper async Task signature for asynchronous tests",
+		"Good variable naming that reflects purpose",
+		"Consistent formatting and indentation",
+		"Minimal code duplication within reason (though could benefit from theory attributes for edge cases)",
+		"Setup in constructor is clean and readable",
+		"Assertions are clear but could be more expressive (e.g., using Should() or Assert.Equivalent)",
+		"Some repetition in test data creation could be extracted to helper methods"
+	]
+}

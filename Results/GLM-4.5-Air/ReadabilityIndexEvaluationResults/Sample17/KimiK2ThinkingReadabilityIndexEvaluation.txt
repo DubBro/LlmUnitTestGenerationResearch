@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322388-vDuWzodHTA9IguBo7jOf
+
+Content:
+ {
+	"readabilityIndex": 94,
+	"reasons": [
+		"Test class and method names follow standard naming conventions consistently and clearly describe purpose",
+		"AAA pattern is properly implemented with clear comments and separation throughout all tests",
+		"Appropriate use of [Fact] for single scenarios and [Theory]/[InlineData] for multiple inputs",
+		"Variable names are descriptive and clearly indicate their purpose in each test",
+		"No nested classes or unnecessary code structures that reduce clarity",
+		"Code formatting is consistent and adheres to standard C# conventions",
+		"Test scenarios are logically organized and grouped by the method under test",
+		"Assertions are explicit and clearly communicate expected outcomes",
+		"Theory tests contain additional clarifying comments beyond AAA separators",
+		"Namespace and using directive lack descriptive contextual meaning"
+	]
+}

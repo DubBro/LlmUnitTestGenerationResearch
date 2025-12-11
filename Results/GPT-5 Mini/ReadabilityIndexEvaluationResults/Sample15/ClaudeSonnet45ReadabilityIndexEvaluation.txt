@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765324077-AwNlmlQ7nw0e4VVp2tvP
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the recommended pattern (Base64HelpersTests)",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern consistently",
+		"AAA pattern is properly applied with comment separators in all tests",
+		"Good use of [Theory] with [InlineData] to avoid code duplication for similar scenarios",
+		"Variable names are clear and meaningful (input, expected, result, original, base64)",
+		"Tests are well-structured and easy to understand at a glance",
+		"Proper separation of logical blocks with empty lines enhances readability",
+		"One minor inconsistency: Decode_InvalidBase64_ThrowsFormatException uses static method call (Base64Helpers.Decode) instead of extension method pattern used elsewhere",
+		"Empty Arrange blocks could be removed entirely to reduce visual clutter, though this is a minor point"
+	]
+}
+```

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample7Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample7;
+using NSubstitute;
+
+namespace DeepSeekR10528UnitTests;
+
+public class WalkServiceTests
+{
+    private readonly IWalkRepository _walkRepositorySubstitute;
+    private readonly IWalkService _service;
+
+    public WalkServiceTests()
+    {
+        _walkRepositorySubstitute = Substitute.For&lt;IWalkRepository&gt;();
+        _service = new WalkService(_walkRepositorySubstitute);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot; &quot;)]
+    [InlineData(&quot;12345678901234&quot;)]   // 14 digits
+    [InlineData(&quot;1234567890123456&quot;)] // 16 digits
+    [InlineData(&quot;12345678901234A&quot;)]  // non-digit
+    [InlineData(&quot;IM1234567890123&quot;)]  // non-digit at beginning
+    public async Task Get10LongestWalksAsync_InvalidImei_ThrowsBusinessException(string invalidImei)
+    {
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;BusinessException&gt;(
+            () =&gt; _service.Get10LongestWalksAsync(invalidImei)
+        );
+    }
+
+    [Fact]
+    public async Task Get10LongestWalksAsync_ValidImei_ReturnsOrderedDTOsWithNumbers()
+    {
+        // Arrange
+        string validImei = &quot;123456789012345&quot;;
+        var entities = new List&lt;WalkEntity&gt;
+        {
+            new WalkEntity { Distance = 20, Duration = 100 },
+            new WalkEntity { Distance = 15, Duration = 90 }
+        };
+        _walkRepositorySubstitute.Get10LongestWalksAsync(validImei).Returns(entities);
+
+        // Act
+        var result = await _service.Get10LongestWalksAsync(validImei);
+
+        // Assert
+        Assert.Collection(result,
+            dto1 =&gt;
+            {
+                Assert.Equal(1, dto1.Number);
+                Assert.Equal(20, dto1.Distance);
+                Assert.Equal(100, dto1.Duration);
+            },
+            dto2 =&gt;
+            {
+                Assert.Equal(2, dto2.Number);
+                Assert.Equal(15, dto2.Distance);
+                Assert.Equal(90, dto2.Duration);
+            }
+        );
+    }
+
+    [Fact]
+    public async Task Get10LongestWalksAsync_RepositoryReturnsEmpty_ReturnsEmptyList()
+    {
+        // Arrange
+        string validImei = &quot;123456789012345&quot;;
+        _walkRepositorySubstitute.Get10LongestWalksAsync(validImei).Returns(new List&lt;WalkEntity&gt;());
+
+        // Act
+        var result = await _service.Get10LongestWalksAsync(validImei);
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot; &quot;)]
+    [InlineData(&quot;12345678901234&quot;)]
+    [InlineData(&quot;1234567890123456&quot;)]
+    [InlineData(&quot;12345678901234A&quot;)]
+    [InlineData(&quot;IM1234567890123&quot;)]
+    public async Task GetWalksGeneralInfoAsync_InvalidImei_ThrowsBusinessException(string invalidImei)
+    {
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;BusinessException&gt;(
+            () =&gt; _service.GetWalksGeneralInfoAsync(invalidImei)
+        );
+    }
+
+    [Fact]
+    public async Task GetWalksGeneralInfoAsync_ValidImei_MapsEntityToDTO()
+    {
+        // Arrange
+        string validImei = &quot;123456789012345&quot;;
+        var entity = new WalksGeneralInfoEntity
+        {
+            TotalCount = 10,
+            TotalDistance = 150,
+            TotalDuration = 500
+        };
+        _walkRepositorySubstitute.GetWalksGeneralInfoAsync(validImei).Returns(entity);
+
+        // Act
+        var result = await _service.GetWalksGeneralInfoAsync(validImei);
+
+        // Assert
+        Assert.Equal(10, result.TotalCount);
+        Assert.Equal(150, result.TotalDistance);
+        Assert.Equal(500, result.TotalDuration);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,5,11,30,1],[12,5,12,6,1],[13,9,13,71,1],[14,9,14,63,1],[15,5,15,6,1],[26,5,26,6,1],[28,9,29,19,1],[29,19,29,63,1],[29,63,30,11,1],[31,5,31,6,1],[35,5,35,6,1],[37,9,37,46,1],[38,9,42,11,1],[43,9,43,87,1],[46,9,46,71,1],[49,9,51,13,1],[51,13,51,14,1],[51,14,52,17,1],[52,17,52,46,1],[52,46,53,17,1],[53,17,53,49,1],[53,49,54,17,1],[54,17,54,50,1],[54,50,55,13,1],[55,13,55,14,1],[55,14,57,13,1],[57,13,57,14,1],[57,14,58,17,1],[58,17,58,46,1],[58,46,59,17,1],[59,17,59,49,1],[59,49,60,17,1],[60,17,60,49,1],[60,49,61,13,1],[61,13,61,14,1],[61,14,62,11,1],[63,5,63,6,1],[67,5,67,6,1],[69,9,69,46,1],[70,9,70,101,1],[73,9,73,71,1],[76,9,76,30,1],[77,5,77,6,1],[88,5,88,6,1],[90,9,91,19,1],[91,19,91,65,1],[91,65,92,11,1],[93,5,93,6,1],[97,5,97,6,1],[99,9,99,46,1],[100,9,105,11,1],[106,9,106,87,1],[109,9,109,73,1],[112,9,112,45,1],[113,9,113,49,1],[114,9,114,49,1],[115,5,115,6,1]]);
+    </script>
+  </body>
+</html>

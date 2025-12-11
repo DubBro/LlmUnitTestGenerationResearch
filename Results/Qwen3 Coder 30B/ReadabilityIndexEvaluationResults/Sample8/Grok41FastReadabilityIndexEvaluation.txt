@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765326327-6p2DdVwBuBu8gL3fAqgy
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern as LuTests.",
+		"Test method names precisely follow the MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"All tests strictly adhere to the AAA pattern with clear // Arrange, // Act, // Assert comments and proper separation.",
+		"Variable and parameter names are clear, meaningful, and reflect their purpose (e.g., source, matrix, coefficients, L, U).",
+		"No extraneous comments; only AAA separators used.",
+		"Appropriate use of [Fact] attributes without unnecessary [Theory].",
+		"Consistent formatting, standard C# conventions, and readable matrix/array initializations.",
+		"Logical structure makes tests easy to scan and maintain.",
+		"Minor vagueness in one test name ('MatrixAndCoefficientsAreValid' could be more specific).",
+		"No nested classes, duplication, or clutter."
+	]
+}

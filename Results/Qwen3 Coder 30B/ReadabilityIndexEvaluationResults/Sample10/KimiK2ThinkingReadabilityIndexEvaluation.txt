@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765326786-SJXEpE0hzv9ZnZKeb2CY
+
+Content:
+ {"readabilityIndex":96,"reasons":["Test class and method names follow clear conventions (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult patterns)","Consistent AAA pattern with explicit comments and proper separation by empty lines throughout all tests","All variable names are meaningful and clearly represent their purpose in the test context","Tests are self-contained with minimal reliance on shared state, improving maintainability","Proper use of xUnit constructs including Assert.Throws for exception testing","Constructor properly initializes all dependencies using NSubstitute mocking framework","Exception assertions consistently store result in unused variable (could use discards for modern C# style)","Some code duplication across similar test scenarios could be reduced with [Theory] and [InlineData] attributes","Test setup is explicit and easy to understand without requiring navigation to helper methods","All tests follow standard C# naming conventions for private fields and local variables"]}

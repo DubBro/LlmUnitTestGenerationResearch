@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316946-BfCq0XQLyQFymWNrx0I3
+
+Content:
+{"readabilityIndex":95,"reasons":["Test class name follows the `ClassUnderTestTests` pattern.","Test method names adhere to the `MethodUnderTest_Scenario_ExpectedResult` pattern.","Appropriate use of `[Theory]` and `[InlineData]` to avoid code duplication.","Consistent AAA pattern with `// Arrange`, `// Act`, `// Assert` markers in all tests.","Clear, meaningful variable names and standard C# conventions.","Empty Arrange sections are appropriately minimal with no setup needed.","Minor flaw: extra explanatory comment in `[InlineData]` violates 'no comments other than AAA markers'.","Minor flaw: combined `// Act & Assert` in throwing test slightly deviates from strict AAA separation."]}

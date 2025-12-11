@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765320962-mzZreoWnfN8lZylHh5W1
+
+Content:
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Nested classes for grouping tests by method deviate from flat structure recommendation, potentially confusing maintenance.",
+		"High code duplication in identical invalid IMEI exception tests across nested classes harms maintainability.",
+		"Test names use consistent BDD style (Given_When_Expected) which is clear but not exact MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Excellent adherence to AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"Clear, meaningful names for classes, methods, variables reflecting purpose.",
+		"Proper async Task signatures for asynchronous tests.",
+		"Effective shared setup via base class constructor with NSubstitute mocks.",
+		"No extraneous comments or violations of C# naming conventions."
+	]
+}

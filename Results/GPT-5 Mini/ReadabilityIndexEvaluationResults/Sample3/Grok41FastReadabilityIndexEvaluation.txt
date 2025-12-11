@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765323012-ISoOCSM8vEW0vrbLlL48
+
+Content:
+{
+	"readabilityIndex": 87,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names mostly follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"All async tests correctly use async Task signatures.",
+		"Consistent use of AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to avoid duplication in parameterized tests.",
+		"Clear, meaningful variable and mock names reflecting purpose.",
+		"No unnecessary comments or nested classes.",
+		"Adheres to C# naming conventions and good formatting.",
+		"Repetitive mock setup (unitOfWork, notesRepo) in every test reduces maintainability.",
+		"Some tests combine // Act & Assert for exceptions, slightly deviating from strict AAA.",
+		"Verbose assertions in places (e.g., multiple Assert.Contains) could be more concise."
+	]
+}

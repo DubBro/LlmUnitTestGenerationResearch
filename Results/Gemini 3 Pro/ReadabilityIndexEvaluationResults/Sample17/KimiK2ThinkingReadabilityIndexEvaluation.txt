@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765319024-WjheeRWb46LQub7mLrNI
+
+Content:
+ {"readabilityIndex":95,"reasons":["AAA pattern consistently applied with clear block separation and comments","Test names precisely follow MethodUnderTest_Scenario_ExpectedResult pattern","Appropriate and effective use of [Fact] and [Theory] with [InlineData]","Variables and test data are clearly named and easy to understand","No code duplication; each test is focused and independent","Test class name follows ClassUnderTestTests convention","Follows standard C# naming conventions and uses modern syntax","Assertions are explicit and directly verify expected outcomes","No nested classes or unnecessary structural complexity","Minor guideline violation: contains one extra comment in Arrange block"]}

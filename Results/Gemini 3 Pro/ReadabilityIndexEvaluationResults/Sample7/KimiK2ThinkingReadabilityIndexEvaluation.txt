@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765318102-Ru4FXKnTSVCCaKZewJJB
+
+Content:
+ {"readabilityIndex":88,"reasons":["Test class name follows the ClassUnderTestTests pattern and methods follow MethodUnderTest_Scenario_ExpectedResult pattern","All tests properly implement the AAA pattern with explicit comments and blank line separation","Correct use of [Theory] with descriptive [InlineData] comments and [Fact] for single scenarios","Asynchronous tests properly use async Task signature instead of async void","Clear and meaningful variable naming that reflects purpose throughout the code","Minor violation: explanatory comments present in Arrange blocks (2 instances) deviating from 'no comments' rule","Well-structured assertions using Assert.Collection for detailed verification of collection items","Consistent formatting, proper indentation, and clean code organization","Efficient test setup with shared constructor for mock instantiation reducing duplication","Comprehensive test patterns covering both success and exception scenarios with appropriate mock verification"]}

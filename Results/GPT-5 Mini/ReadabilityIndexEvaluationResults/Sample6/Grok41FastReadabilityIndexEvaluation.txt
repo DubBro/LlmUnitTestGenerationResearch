@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323290-NvwZsepPFdMgnyeLOwRa
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Consistent AAA pattern with clear // Arrange, // Act, // Assert comments and separation.",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern effectively.",
+		"Class name LotServiceTests follows recommended convention.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to reduce duplication.",
+		"Clean tuple destructuring from CreateSut() for SUT and dependencies.",
+		"Complex, verbose CreateSut() with lengthy manual mapper configurations harms readability.",
+		"Repetitive manual property mapping in three mapper Returns calls introduces duplication.",
+		"No unnecessary nested classes, comments, or deviations from C# naming conventions."
+	]
+}
+```

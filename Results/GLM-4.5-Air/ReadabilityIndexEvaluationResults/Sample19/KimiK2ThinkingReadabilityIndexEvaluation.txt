@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765322573-6MqTN4E44EwZs6E7vQyJ
+
+Content:
+ {"readabilityIndex":90,"reasons":["Consistent AAA pattern with clear comments and block separation","Excellent test method naming following MethodUnderTest_Scenario_ExpectedResult convention","Appropriate use of [Fact] and [Theory]/[InlineData] attributes to avoid duplication","Clear, concise variable names and logical test organization","Test class name follows standard convention","Non-descriptive namespace and using statement lack clear purpose"]}

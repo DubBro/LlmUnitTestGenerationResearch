@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765325866-1m41UDZIIXkbGEmczvpD
+
+Content:
+{
+  "readabilityIndex": 88,
+  "reasons": [
+    "Test class name `FolderServiceTests` clearly follows the ClassUnderTestTests convention and indicates the SUT.",
+    "Test method names consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern, making intent immediately clear.",
+    "All async tests correctly use async Task signatures and are clearly structured with AAA comments (or Act & Assert for exception scenarios).",
+    "Arrangements are generally short and close to the assertions, making setup data and expectations easy to correlate.",
+    "Use of NSubstitute is straightforward and readable, with mocks configured in a way that closely reflects the scenarios being tested.",
+    "Some duplication in test setup (repeated folder entities and repository setups) slightly harms maintainability and could be extracted into helpers/builders.",
+    "Multiple validation scenarios for AddFolderAsync are implemented as separate Facts instead of a Theory with InlineData, leading to minor repetition.",
+    "Use of magic numbers and strings in assertions (e.g., hardcoded IDs, names, counts) slightly reduces expressiveness compared to named constants or variables.",
+    "DTO/entity variable names are mostly clear, but occasional mixing of 'Dto' naming with entity instances (e.g., folderDto vs FolderEntity) can cause minor cognitive friction"
+  ]
+}

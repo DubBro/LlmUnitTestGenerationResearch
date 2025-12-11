@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765321661-rZqRDodCLDJUfdvouR4A
+
+Content:
+ {"readabilityIndex":58,"reasons":["Unnecessary nested classes (BetMethod, CloseAuctionMethod, etc.) violate guidelines and add unnecessary complexity","Inconsistent test naming: one test missing method prefix (BidLessThanOrEqualTo...), inconsistent terminology ('Ended' vs 'Finished')","Awkward nested class names with redundant 'Method' suffix reduce clarity","Good AAA pattern implementation with clear comments and proper separation","Clear and descriptive test names (mostly) following MethodUnderTest_Scenario_ExpectedResult pattern","Proper use of xUnit attributes ([Fact], [Theory], [InlineData]) for test types","Clean mock setup with NSubstitute and clear arrangement of test data","Effective exception testing with proper message verification","Well-structured arrange blocks with meaningful variable naming within tests","Good base class pattern for common test dependencies and setup"]}

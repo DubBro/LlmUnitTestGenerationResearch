@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample15Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample15;
+
+namespace Glm45AirUnitTests;
+
+public class Base64HelpersTests
+{
+    [Fact]
+    public void Encode_PassingNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string plainText = null;
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Encode_PassingEmptyString_ReturnsEmptyString()
+    {
+        // Arrange
+        string plainText = string.Empty;
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Encode_PassingWhitespaceString_ReturnsEmptyString()
+    {
+        // Arrange
+        string plainText = &quot;   &quot;;
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Encode_PassingValidText_ReturnsBase64EncodedString()
+    {
+        // Arrange
+        string plainText = &quot;Hello World&quot;;
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(&quot;SGVsbG8gV29ybGQ=&quot;, result);
+    }
+
+    [Fact]
+    public void Decode_PassingNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string base64EncodedData = null;
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Decode_PassingEmptyString_ReturnsEmptyString()
+    {
+        // Arrange
+        string base64EncodedData = string.Empty;
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Decode_PassingWhitespaceString_ReturnsEmptyString()
+    {
+        // Arrange
+        string base64EncodedData = &quot;   &quot;;
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Decode_PassingValidBase64String_ReturnsDecodedString()
+    {
+        // Arrange
+        string base64EncodedData = &quot;SGVsbG8gV29ybGQ=&quot;;
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(&quot;Hello World&quot;, result);
+    }
+
+    [Fact]
+    public void Decode_PassingInvalidBase64String_ThrowsFormatException()
+    {
+        // Arrange
+        string base64EncodedData = &quot;InvalidBase64String!@#&quot;;
+
+        // Act
+        Action action = () =&gt; Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Throws&lt;FormatException&gt;(action);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,33,1],[14,9,14,57,1],[17,9,17,44,1],[18,5,18,6,1],[22,5,22,6,1],[24,9,24,41,1],[27,9,27,57,1],[30,9,30,44,1],[31,5,31,6,1],[35,5,35,6,1],[37,9,37,34,1],[40,9,40,57,1],[43,9,43,44,1],[44,5,44,6,1],[48,5,48,6,1],[50,9,50,42,1],[53,9,53,57,1],[56,9,56,50,1],[57,5,57,6,1],[61,5,61,6,1],[63,9,63,41,1],[66,9,66,65,1],[69,9,69,44,1],[70,5,70,6,1],[74,5,74,6,1],[76,9,76,49,1],[79,9,79,65,1],[82,9,82,44,1],[83,5,83,6,1],[87,5,87,6,1],[89,9,89,42,1],[92,9,92,65,1],[95,9,95,44,1],[96,5,96,6,1],[100,5,100,6,1],[102,9,102,55,1],[105,9,105,65,1],[108,9,108,45,1],[109,5,109,6,1],[113,5,113,6,1],[115,9,115,61,1],[118,9,118,31,1],[118,31,118,70,1],[118,70,118,71,1],[121,9,121,48,1],[122,5,122,6,1]]);
+    </script>
+  </body>
+</html>

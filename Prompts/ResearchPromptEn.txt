@@ -1,0 +1,58 @@
+**Role:**
+You are a Senior C# developer with 15 years of experience and an expert in unit testing.
+
+---
+
+**Task:**
+Write high-quality unit tests for the given code.
+
+---
+
+**Environment:**
+- Language: C# 12.0.
+- Platform: .NET 8.
+- Test framework: xUnit.
+- Tool for creating test doubles: NSubstitute.
+
+---
+
+**Requirements:**
+- The tests must cover `public` methods.
+- The tests must cover `public` properties that contain logic (for example, validation or data conversion).
+- The tests must not directly test `private`, `protected`, `private protected`, `internal`, or `protected internal` methods --- internal logic must be tested indirectly via `public` methods.
+- If a class under test implements interface members that are only accessible through the interface type, e.g., explicit interface implementations or default interface methods, test these members via a variable of the interface type, for example: `IUserService service = new UserService();`.
+- All tests must follow the AAA pattern, i.e., consist of three blocks --- Arrange (prepare the environment), Act (perform the action), Assert (verify the result of the action).
+- All tests must follow the FIRST principles:
+  - Fast: tests should run quickly; do not use real I/O operations in test code (file system, database, HTTP calls, etc.); do not use `Thread.Sleep`/`Task.Delay` in test code.
+  - Isolated: each test prepares its own state in the Arrange step and does not depend on the results of other tests or on shared mutable static state.
+  - Repeatable: the same test with the same initial state must always produce the same result; do not use `DateTime.Now`/`DateTime.UtcNow`/`DateTime.Today`, `Random`, or dependencies on the current environment in test code.
+  - Self-verifying: each test must contain explicit asserts and must not rely on `Console.WriteLine` or manual inspection of output.
+  - Timely: write tests only for the current behaviour that follows from the given code; do not add new functionality or public methods.
+- External dependencies (DB, file system, HTTP, external services, etc.) must be replaced with test doubles (fakes, mocks, stubs) using NSubstitute, for example: `var someServiceSubstitute = Substitute.For<ISomeService>();`.
+- For assertions, use xUnit’s built-in assertion methods, for example: `Assert.Equal(expectedResult, actualResult);`, `Assert.Throws<Exception>(action);`.
+- If the given code specifies a `namespace`, use the same `namespace` for the tests with the `.UnitTests` suffix added, for example, for `MyApp.Services` it must be `MyApp.Services.UnitTests`; if the `namespace` is absent, use `UnitTests`.
+- The test code must follow standard C# and .NET naming conventions.
+- The names of test classes must follow the `ClassUnderTestTests` pattern, for example: `UserServiceTests`, `ExcelFileExportProviderTests`.
+- The names of tests must follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, for example: `GetUser_PassingInvalidId_ThrowsUserNotFoundException`, `GetUsers_WhenCalled_ReturnsListUserModel`.
+- If a scenario tests an asynchronous method, the test signature must be `async Task`, not `async void`.
+- The tests must cover the key positive, negative, and edge scenarios that logically follow from the given code.
+- A single test must verify only one scenario, i.e., follow the Single Responsibility principle.
+- Use `[Fact]` for single scenarios and `[Theory]` (with `[InlineData]`) to test multiple input variations of the same scenario.
+- Do not modify the production code.
+
+---
+
+**Response format:**
+- The response must contain only one `csharp` block with the test code.
+- Do not add any explanatory text before the code block.
+- Do not add any explanatory text after the code block.
+- The test code must be a complete C# file with the necessary `using` directives, `namespace`, and one or more test classes.
+- Do not include production code (the classes under test) in the response; generate only the test code.
+- Do not add comments in the test code, except for `// Arrange`, `// Act`, `// Assert`; assume that no other comments are critically necessary.
+
+---
+
+**Code:**
+```csharp
+{{CODE}}
+```

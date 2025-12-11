@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323218-oxNxtMh1H49Xu3epRte1
+
+Content:
+{"readabilityIndex":85,"reasons":["Test class and method names follow clear patterns (LotServiceTests, MethodUnderTest_Scenario_ExpectedResult)","Tests adhere to AAA pattern with clear Arrange, Act, Assert sections","Effective use of [Theory] attributes to reduce code duplication","Helper method CreateSut() simplifies test setup but is long and complex","Variable names are generally meaningful but some could be more descriptive","Proper use of assertions with clear expected behavior","Good separation of concerns with mocks properly isolated","Minor issues with overly terse variable names in some test data","All test signatures are synchronous but appropriate for tested methods","Setup method contains complex mapping logic that affects readability but is well-structured"]}

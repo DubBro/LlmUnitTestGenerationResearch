@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765318170-g79CjOLEHxLh35iX2OaR
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern (LuTests).",
+		"Test method names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Mostly adheres to AAA pattern with Arrange, Act, Assert comments.",
+		"Clear, meaningful variable names and standard C# formatting.",
+		"Appropriate use of [Fact] attributes without unnecessary duplication.",
+		"Presence of extra explanatory comments beyond AAA markers reduces purity.",
+		"Some tests combine Act and Assert sections, deviating from strict separation.",
+		"Verbose loop-based assertions in Decompose test slightly impact conciseness.",
+		"Hardcoded values like pivot expose minor maintainability concerns."
+	]
+}

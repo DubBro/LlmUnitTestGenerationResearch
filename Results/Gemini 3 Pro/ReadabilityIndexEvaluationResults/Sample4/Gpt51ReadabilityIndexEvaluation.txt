@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317796-uMBgN4nRnTYCoUNn3XEl
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test (CompanyServiceTests).",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern and clearly communicate intent (e.g., GetAsync_WhenRepositoryThrowsException_ThrowsSameException).",
+    "Consistent use of AAA structure with // Arrange, // Act, // Assert comments and blank lines improves logical separation and readability.",
+    "All async tests correctly use async Task signatures and avoid async void, aligning with best practices and improving maintainability.",
+    "Use of [Theory] with [InlineData] for parameter variations (GetAsync_WhenCalledWithSpecificId_ReturnsMappedModel) reduces duplication and clarifies purpose.",
+    "Mock setup with NSubstitute is straightforward and close to natural language, making behavior and expectations easy to understand.",
+    "Assertions are explicit and focused (NotNull/Null, Equal, Received/DidNotReceive), making test outcomes clear.",
+    "No unnecessary comments or nested classes; the file is short and cohesive, focused on a single responsibility.",
+    "Minor duplication in entity/model setup across tests could be slightly refactored (e.g., helper methods or builders) to further improve maintainability.",
+    "Some tests mix behavioral verification (Received calls) with result verification, which is acceptable but could be streamlined to emphasize the primary behavior under test."
+  ]
+}

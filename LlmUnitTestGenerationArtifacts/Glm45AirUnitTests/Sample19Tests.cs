@@ -1,0 +1,368 @@
+using Dataset.Sample19;
+
+namespace Glm45AirUnitTests;
+
+public class StringExtensionsTests
+{
+    [Fact]
+    public void IsDigit_CharacterIsDigit_ReturnsTrue()
+    {
+        // Arrange
+        char c = '5';
+
+        // Act
+        var result = c.IsDigit();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsDigit_CharacterIsNotDigit_ReturnsFalse()
+    {
+        // Arrange
+        char c = 'a';
+
+        // Act
+        var result = c.IsDigit();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void IsDigit_CharacterIsSymbol_ReturnsFalse()
+    {
+        // Arrange
+        char c = '$';
+
+        // Act
+        var result = c.IsDigit();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData("123")]
+    [InlineData("0")]
+    [InlineData("-456")]
+    public void IsInteger_StringIsValidInteger_ReturnsTrue(string input)
+    {
+        // Arrange
+        // Act
+        var result = input.IsInteger();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("abc")]
+    [InlineData("12.3")]
+    [InlineData(" 123 ")]
+    public void IsInteger_StringIsNotValidInteger_ReturnsFalse(string input)
+    {
+        // Arrange
+        // Act
+        var result = input.IsInteger();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData("123.45")]
+    [InlineData("0.0")]
+    [InlineData("-789.123")]
+    [InlineData("1E10")]
+    public void IsNumber_StringIsValidNumber_ReturnsTrue(string input)
+    {
+        // Arrange
+        // Act
+        var result = input.IsNumber();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("abc")]
+    [InlineData("12a")]
+    [InlineData(" 123.45 ")]
+    public void IsNumber_StringIsNotValidNumber_ReturnsFalse(string input)
+    {
+        // Arrange
+        // Act
+        var result = input.IsNumber();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Reverse_StringIsNull_ReturnsNull()
+    {
+        // Arrange
+        string s = null;
+
+        // Act
+        var result = s.Reverse();
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Reverse_StringIsEmpty_ReturnsEmpty()
+    {
+        // Arrange
+        string s = string.Empty;
+
+        // Act
+        var result = s.Reverse();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Reverse_StringIsWhitespace_ReturnsWhitespace()
+    {
+        // Arrange
+        string s = "   ";
+
+        // Act
+        var result = s.Reverse();
+
+        // Assert
+        Assert.Equal("   ", result);
+    }
+
+    [Theory]
+    [InlineData("hello", "olleh")]
+    [InlineData("12345", "54321")]
+    [InlineData("a", "a")]
+    [InlineData("ab", "ba")]
+    public void Reverse_StringIsValid_ReturnsReversedString(string input, string expected)
+    {
+        // Arrange
+        // Act
+        var result = input.Reverse();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringIsNull_ReturnsNull()
+    {
+        // Arrange
+        string s = null;
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringIsEmpty_ReturnsEmpty()
+    {
+        // Arrange
+        string s = string.Empty;
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringContainsComma_ReturnsQuotedString()
+    {
+        // Arrange
+        string s = "a,b,c";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("\"a,b,c\"", result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringContainsSemicolon_ReturnsQuotedString()
+    {
+        // Arrange
+        string s = "a;b;c";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("\"a;b;c\"", result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringContainsQuote_ReturnsQuotedAndEscapedString()
+    {
+        // Arrange
+        string s = "a\"b\"c";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("\"a\"\"b\"\"c\"", result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringContainsNewline_ReturnsQuotedString()
+    {
+        // Arrange
+        string s = "a\nb\nc";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("\"a\nb\nc\"", result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringStartsWithSpace_ReturnsQuotedString()
+    {
+        // Arrange
+        string s = " abc";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("\" abc\"", result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringEndsWithSpace_ReturnsQuotedString()
+    {
+        // Arrange
+        string s = "abc ";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("\"abc \"", result);
+    }
+
+    [Fact]
+    public void ToCsvCompatible_StringDoesNotRequireQuoting_ReturnsOriginalString()
+    {
+        // Arrange
+        string s = "abc";
+
+        // Act
+        var result = s.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal("abc", result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringIsNull_ReturnsNull()
+    {
+        // Arrange
+        string s = null;
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringIsEmpty_ReturnsEmpty()
+    {
+        // Arrange
+        string s = string.Empty;
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringIsWhitespace_ReturnsWhitespace()
+    {
+        // Arrange
+        string s = "   ";
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Equal("   ", result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringHasNoExtension_ReturnsEmpty()
+    {
+        // Arrange
+        string s = "filename";
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringHasExtension_ReturnsExtension()
+    {
+        // Arrange
+        string s = "filename.txt";
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Equal("txt", result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringHasMultipleExtensions_ReturnsLastExtension()
+    {
+        // Arrange
+        string s = "archive.tar.gz";
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Equal("gz", result);
+    }
+
+    [Fact]
+    public void GetFileExtension_StringHasExtensionWithSpaces_ReturnsTrimmedExtension()
+    {
+        // Arrange
+        string s = "file. txt ";
+
+        // Act
+        var result = s.GetFileExtension();
+
+        // Assert
+        Assert.Equal("txt", result);
+    }
+}

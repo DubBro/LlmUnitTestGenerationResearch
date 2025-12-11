@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316955-vY7W06TnUvHyrqKrkgNo
+
+Content:
+ {"readabilityIndex":93,"reasons":["Test class name follows ClassUnderTestTests pattern","All test names clearly describe method, scenario, and expected result","Effective use of [Theory] with [InlineData] prevents code duplication","Consistent AAA pattern structure with clear comment blocks","Concise, meaningful variable naming (input, expected, result)","Minor format issue: last test combines Act and Assert in comment rather than separating them"]}

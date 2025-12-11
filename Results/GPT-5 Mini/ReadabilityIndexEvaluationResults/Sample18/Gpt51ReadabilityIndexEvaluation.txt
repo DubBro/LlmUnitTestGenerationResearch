@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765324257-K7LKWz7OOQ45e2EIrLCk
+
+Content:
+{
+  "readabilityIndex": 94,
+  "reasons": [
+    "Test class name `CaesarEncoderTests` clearly follows the `ClassUnderTestTests` convention and matches the SUT.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern and clearly describe intent (e.g., `Encode_PreservesNonLetterCharacters_ReturnsExpected`).",
+    "Use of `[Theory]` with `[InlineData]` for input variations is appropriate and avoids duplication, while `[Fact]` is used correctly for single scenarios.",
+    "AAA pattern is followed in all tests with clear `// Arrange`, `// Act`, `// Assert` separators, making the flow easy to follow.",
+    "Variable names like `input`, `key`, `expected`, `actual`, `encoded`, and `decoded` are meaningful and consistent across tests.",
+    "Formatting is clean and consistent: proper spacing, indentation, and no unnecessary comments or nested classes.",
+    "Tests are short, focused, and each scenario is clearly isolated, which aids quick understanding and maintenance.",
+    "The decode behavior is tested via a clearly named test `Decode_WhenApplied_AfterEncode_ReturnsOriginal`, making the relationship between encode and decode explicit.",
+    "The null and empty string edge cases are covered with well-named tests, improving clarity of boundary behavior.",
+    "Minor deviation from strict AAA in the null test (`Act & Assert` combined) is acceptable but prevents it from being absolutely ideal."
+  ]
+}

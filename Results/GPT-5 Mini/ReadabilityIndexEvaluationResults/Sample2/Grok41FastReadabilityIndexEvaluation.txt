@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322917-DVyJjb47PhP8PxFgVKfT
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern perfectly",
+		"All test methods use descriptive names following MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Strict adherence to AAA pattern with // Arrange, // Act, // Assert comments and empty line separation",
+		"Proper use of async Task for asynchronous tests",
+		"Effective use of private static helper methods to create test data, reducing duplication",
+		"Clear mocking setup with NSubstitute and precise Received/DidNotReceive verifications",
+		"Standard C# naming conventions followed throughout",
+		"Minimal comments, mostly limited to AAA separators",
+		"Minor deduction for non-AAA comments like '// Arrange helpers' and inline production note",
+		"Slightly unwieldy long Arg.Is lambda in AddAsync test"
+	]
+}

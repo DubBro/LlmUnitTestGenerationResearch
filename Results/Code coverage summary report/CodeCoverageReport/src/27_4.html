@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample12Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Text;
+using Dataset.Sample12;
+
+namespace Gemini3ProUnitTests;
+
+public class LUPDecompositionTests
+{
+    [Fact]
+    public void Decompose_Valid3x3Matrix_CalculatesLUPCorrectly()
+    {
+        // Arrange
+        double[,] matrix =
+        {
+            { 1.0, 2.0, 4.0 },
+            { 2.0, 8.0, 1.0 },
+            { 5.0, 2.0, 1.0 }
+        };
+        // The Decompose method modifies the input matrix, so we store a copy for verification.
+        double[,] originalMatrix = (double[,])matrix.Clone();
+        int n = 3;
+
+        // Act
+        LUPDecomposition.Decompose(matrix, out double[,] L, out double[,] U, out int[] P);
+
+        // Assert
+        Assert.NotNull(L);
+        Assert.NotNull(U);
+        Assert.NotNull(P);
+        Assert.Equal(n, L.GetLength(0));
+        Assert.Equal(n, L.GetLength(1));
+        Assert.Equal(n, U.GetLength(0));
+        Assert.Equal(n, U.GetLength(1));
+        Assert.Equal(n, P.Length);
+
+        // Verify L is lower triangular with 1s on the diagonal
+        for (int i = 0; i &lt; n; i++)
+        {
+            Assert.Equal(1.0, L[i, i]);
+            for (int j = i + 1; j &lt; n; j++)
+            {
+                Assert.Equal(0.0, L[i, j]);
+            }
+        }
+
+        // Verify U is upper triangular
+        for (int i = 0; i &lt; n; i++)
+        {
+            for (int j = 0; j &lt; i; j++)
+            {
+                Assert.Equal(0.0, U[i, j]);
+            }
+        }
+
+        // Verify Decomposition: P * A = L * U
+        // Meaning: The row i of (L*U) should equal the row P[i] of the original (unpermuted) A.
+        double[,] luProduct = MultiplyMatrices(L, U);
+
+        for (int i = 0; i &lt; n; i++)
+        {
+            int originalRowIndex = P[i];
+            for (int j = 0; j &lt; n; j++)
+            {
+                Assert.Equal(originalMatrix[originalRowIndex, j], luProduct[i, j], 1e-9);
+            }
+        }
+    }
+
+    [Fact]
+    public void Decompose_MatrixRequiringPivoting_SwapsRowsCorrectly()
+    {
+        // Arrange
+        // Matrix with a zero on the main diagonal requires pivoting to avoid division by zero.
+        double[,] matrix =
+        {
+            { 0.0, 1.0 },
+            { 1.0, 0.0 }
+        };
+        double[,] originalMatrix = (double[,])matrix.Clone();
+        int n = 2;
+
+        // Act
+        LUPDecomposition.Decompose(matrix, out double[,] L, out double[,] U, out int[] P);
+
+        // Assert
+        // Logic check: Since matrix[0,0] is 0 and matrix[1,0] is 1, a swap must occur.
+        // P[0] should point to the original row index 1.
+        Assert.Equal(1, P[0]);
+        Assert.Equal(0, P[1]);
+
+        // Verify mathematical correctness
+        double[,] luProduct = MultiplyMatrices(L, U);
+        for (int i = 0; i &lt; n; i++)
+        {
+            int originalRowIndex = P[i];
+            for (int j = 0; j &lt; n; j++)
+            {
+                Assert.Equal(originalMatrix[originalRowIndex, j], luProduct[i, j], 1e-9);
+            }
+        }
+    }
+
+    [Fact]
+    public void Decompose_SingularMatrix_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        // A singular matrix (rows are identical).
+        double[,] matrix =
+        {
+            { 1.0, 2.0 },
+            { 1.0, 2.0 }
+        };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidOperationException&gt;(() =&gt;
+            LUPDecomposition.Decompose(matrix, out _, out _, out _));
+    }
+
+    [Fact]
+    public void Decompose_ZeroMatrix_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        double[,] matrix =
+        {
+            { 0.0, 0.0 },
+            { 0.0, 0.0 }
+        };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidOperationException&gt;(() =&gt;
+            LUPDecomposition.Decompose(matrix, out _, out _, out _));
+    }
+
+    [Fact]
+    public void Decompose_1x1Matrix_ReturnsIdentity()
+    {
+        // Arrange
+        double[,] matrix = { { 5.0 } };
+
+        // Act
+        LUPDecomposition.Decompose(matrix, out double[,] L, out double[,] U, out int[] P);
+
+        // Assert
+        Assert.Equal(1.0, L[0, 0]);
+        Assert.Equal(5.0, U[0, 0]);
+        Assert.Equal(0, P[0]);
+    }
+
+    [Theory]
+    [InlineData(1.5, 2.0, 3.0, 4.5)]
+    [InlineData(-1.0, 0.0, 0.0, 1.0)]
+    public void GetMatrix_ValidMatrix_ReturnsFormattedString(double d1, double d2, double d3, double d4)
+    {
+        // Arrange
+        double[,] matrix = { { d1, d2 }, { d3, d4 } };
+
+        // Build expected string using StringBuilder to mirror the implementation logic
+        // and avoid locale specific hardcoding issues (e.g., comma vs dot).
+        StringBuilder sb = new StringBuilder();
+        sb.Append($&quot;{d1}\t{d2}\t\n&quot;);
+        sb.Append($&quot;{d3}\t{d4}\t\n&quot;);
+        string expected = sb.ToString();
+
+        // Act
+        string result = LUPDecomposition.GetMatrix(matrix);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void GetPermutationMatrix_IdentityPermutation_ReturnsTargetString()
+    {
+        // Arrange
+        int[] P = { 0, 1 };
+        string expected = &quot;1\t0\t\n0\t1\t\n&quot;;
+
+        // Act
+        string result = LUPDecomposition.GetPermutationMatrix(P);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void GetPermutationMatrix_SwappedPermutation_ReturnsTargetString()
+    {
+        // Arrange
+        int[] P = { 1, 0, 2 };
+        // Row 0 has index 1 -&gt; 0 1 0
+        // Row 1 has index 0 -&gt; 1 0 0
+        // Row 2 has index 2 -&gt; 0 0 1
+        string expected = &quot;0\t1\t0\t\n1\t0\t0\t\n0\t0\t1\t\n&quot;;
+
+        // Act
+        string result = LUPDecomposition.GetPermutationMatrix(P);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    private static double[,] MultiplyMatrices(double[,] A, double[,] B)
+    {
+        int n = A.GetLength(0);
+        double[,] C = new double[n, n];
+
+        for (int i = 0; i &lt; n; i++)
+        {
+            for (int j = 0; j &lt; n; j++)
+            {
+                double sum = 0;
+                for (int k = 0; k &lt; n; k++)
+                {
+                    sum += A[i, k] * B[k, j];
+                }
+                C[i, j] = sum;
+            }
+        }
+        return C;
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,5,10,6,1],[12,9,17,11,1],[19,9,19,62,1],[20,9,20,19,1],[23,9,23,91,1],[26,9,26,27,1],[27,9,27,27,1],[28,9,28,27,1],[29,9,29,41,1],[30,9,30,41,1],[31,9,31,41,1],[32,9,32,41,1],[33,9,33,35,1],[36,14,36,23,1],[36,25,36,30,1],[36,32,36,35,1],[37,9,37,10,1],[38,13,38,40,1],[39,18,39,31,1],[39,33,39,38,1],[39,40,39,43,1],[40,13,40,14,1],[41,17,41,44,1],[42,13,42,14,1],[43,9,43,10,1],[46,14,46,23,1],[46,25,46,30,1],[46,32,46,35,1],[47,9,47,10,1],[48,18,48,27,1],[48,29,48,34,1],[48,36,48,39,1],[49,13,49,14,1],[50,17,50,44,1],[51,13,51,14,1],[52,9,52,10,1],[56,9,56,54,1],[58,14,58,23,1],[58,25,58,30,1],[58,32,58,35,1],[59,9,59,10,1],[60,13,60,41,1],[61,18,61,27,1],[61,29,61,34,1],[61,36,61,39,1],[62,13,62,14,1],[63,17,63,90,1],[64,13,64,14,1],[65,9,65,10,1],[66,5,66,6,1],[70,5,70,6,1],[73,9,77,11,1],[78,9,78,62,1],[79,9,79,19,1],[82,9,82,91,1],[87,9,87,31,1],[88,9,88,31,1],[91,9,91,54,1],[92,14,92,23,1],[92,25,92,30,1],[92,32,92,35,1],[93,9,93,10,1],[94,13,94,41,1],[95,18,95,27,1],[95,29,95,34,1],[95,36,95,39,1],[96,13,96,14,1],[97,17,97,90,1],[98,13,98,14,1],[99,9,99,10,1],[100,5,100,6,1],[104,5,104,6,1],[107,9,111,11,1],[114,9,115,13,1],[115,13,115,68,1],[115,68,115,70,1],[116,5,116,6,0],[120,5,120,6,1],[122,9,126,11,1],[129,9,130,13,1],[130,13,130,68,1],[130,68,130,70,1],[131,5,131,6,1],[135,5,135,6,1],[137,9,137,40,1],[140,9,140,91,1],[143,9,143,36,1],[144,9,144,36,1],[145,9,145,31,1],[146,5,146,6,1],[152,5,152,6,1],[154,9,154,55,1],[158,9,158,48,1],[159,9,159,38,1],[160,9,160,38,1],[161,9,161,41,1],[164,9,164,60,1],[167,9,167,40,1],[168,5,168,6,1],[172,5,172,6,1],[174,9,174,28,1],[175,9,175,46,1],[178,9,178,66,1],[181,9,181,40,1],[182,5,182,6,1],[186,5,186,6,1],[188,9,188,31,1],[192,9,192,63,1],[195,9,195,66,1],[198,9,198,40,1],[199,5,199,6,1],[202,5,202,6,1],[203,9,203,32,1],[204,9,204,40,1],[206,14,206,23,1],[206,25,206,30,1],[206,32,206,35,1],[207,9,207,10,1],[208,18,208,27,1],[208,29,208,34,1],[208,36,208,39,1],[209,13,209,14,1],[210,17,210,32,1],[211,22,211,31,1],[211,33,211,38,1],[211,40,211,43,1],[212,17,212,18,1],[213,21,213,46,1],[214,17,214,18,1],[215,17,215,31,1],[216,13,216,14,1],[217,9,217,10,1],[218,9,218,18,1],[219,5,219,6,1]]);
+    </script>
+  </body>
+</html>

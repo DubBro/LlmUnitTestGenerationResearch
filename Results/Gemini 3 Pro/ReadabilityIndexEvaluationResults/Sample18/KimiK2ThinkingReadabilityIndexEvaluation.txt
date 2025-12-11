@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765319102-XJ1ybT9t2Lv3UHYF90Cs
+
+Content:
+ {"readabilityIndex":78,"reasons":["Presence of explanatory comments beyond AAA block markers (e.g., '// Standard ROT13', '// Logic: Decode shifts...', '// Ensure reversibility'), violating the ideal of purely self-documenting test code.","Merging of Arrange and Act blocks in several tests (e.g., '// Arrange & Act'), which is a minor deviation from the preferred AAA pattern separation."]}

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317936-5CuDD9no9U7ihGpSz3Lx
+
+Content:
+{"readabilityIndex":85,"reasons":["Test class name follows standard pattern: LotServiceTests","Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern (e.g., AddLot_ValidLot_AddsLotAndCommits)","Tests follow AAA pattern with clear Arrange, Act, Assert blocks separated by comments","Proper use of [Theory] and [InlineData] to test multiple scenarios without code duplication","Clear and meaningful variable names (lotDto, lotEntity, sut)","Well-structured constructor with proper mock setup","Good separation of concerns with appropriate test organization","Consistent use of xUnit assertions","Minimal and relevant comments focusing only on test structure","Good formatting with proper indentation and spacing"]}

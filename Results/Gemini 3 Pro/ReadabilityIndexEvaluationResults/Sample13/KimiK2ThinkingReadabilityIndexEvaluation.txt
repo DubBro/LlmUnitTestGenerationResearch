@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765318702-RGOypRHyj1EjMUD63Lg8
+
+Content:
+ {
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests convention",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"AAA pattern consistently implemented with proper comments and separation",
+		"Effective use of [Theory] with [InlineData] for testing multiple scenarios",
+		"Variable names are meaningful and reflect their purpose",
+		"Tests are concise, focused, and independent",
+		"No unnecessary nested classes or complex structures",
+		"Contains prohibited implementation analysis comments in some tests"
+	]
+}

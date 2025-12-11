@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324205-1YJTeh6iEiOCIJxCC28b
+
+Content:
+{"readabilityIndex":95,"reasons":["Excellent test method naming following the `MethodUnderTest_Scenario_ExpectedResult` pattern.","Consistent AAA pattern with clear `// Arrange`, `// Act`, `// Assert` comments and proper separation.","Proper use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for parameterized testing, avoiding duplication.","Clear, meaningful variable names (e.g., `original`, `lhs`, `rhs`, `result`) reflecting purpose.","Test class name `VectorExtensionsTests` follows `ClassUnderTestTests` convention.","No unnecessary comments, nested classes, or deviations from standard C# naming conventions.","Minor flaw: exception tests combine `Act & Assert`, slightly deviating from strict AAA.","One assert uses a loop for verification, which is readable but less explicit than individual assertions."]}

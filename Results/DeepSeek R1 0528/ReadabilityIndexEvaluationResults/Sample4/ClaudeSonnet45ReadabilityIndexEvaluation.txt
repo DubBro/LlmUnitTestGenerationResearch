@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765315639-rB3gCXNu2VP352Omu2iw
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class follows the recommended naming pattern 'ClassUnderTestTests'",
+		"Test method names consistently follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern",
+		"All tests properly follow the AAA pattern with clear comment markers and appropriate spacing",
+		"Asynchronous tests correctly use 'async Task' signature instead of 'async void'",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication when testing multiple inputs",
+		"Field naming follows standard C# conventions with readonly modifier and underscore prefix for private fields",
+		"Constructor setup is clean and centralizes dependency initialization using NSubstitute",
+		"No unnecessary comments beyond AAA markers, keeping the code clean and focused",
+		"Consistent formatting and indentation throughout all test methods",
+		"Minor improvement opportunity: some tests could benefit from more descriptive variable names like 'nonExistentId' instead of magic number 999"
+	]
+}
+```

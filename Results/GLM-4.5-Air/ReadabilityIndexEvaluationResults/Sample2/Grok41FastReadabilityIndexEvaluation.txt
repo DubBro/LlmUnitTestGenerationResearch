@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319723-rFoDWmDzHSXajxv0BRXC
+
+Content:
+{
+	"readabilityIndex": 82,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and separations.",
+		"Proper use of async Task for asynchronous tests.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] for parametrized scenarios.",
+		"Clear, meaningful variable and field names adhering to conventions.",
+		"No unnecessary comments or nested classes.",
+		"Repetitive Arrange blocks in multiple similar AddAsync validation tests reduce skimmability.",
+		"Some exception tests merge Act & Assert, slightly deviating from strict AAA.",
+		"Verbose substitute field name but still clear."
+	]
+}

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample19Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample19;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class StringExtensionsTests
+    {
+        [Fact]
+        public void IsDigit_CharIsDigit_ReturnsTrue()
+        {
+            // Arrange
+            char c = &#39;5&#39;;
+
+            // Act
+            var result = c.IsDigit();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsDigit_CharIsNotDigit_ReturnsFalse()
+        {
+            // Arrange
+            char c = &#39;a&#39;;
+
+            // Act
+            var result = c.IsDigit();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsInteger_StringIsNull_ReturnsFalse()
+        {
+            // Arrange
+            string s = null;
+
+            // Act
+            var result = s.IsInteger();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsInteger_StringIsEmpty_ReturnsFalse()
+        {
+            // Arrange
+            string s = &quot;&quot;;
+
+            // Act
+            var result = s.IsInteger();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsInteger_StringIsWhitespace_ReturnsFalse()
+        {
+            // Arrange
+            string s = &quot;   &quot;;
+
+            // Act
+            var result = s.IsInteger();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsInteger_StringIsInteger_ReturnsTrue()
+        {
+            // Arrange
+            string s = &quot;123&quot;;
+
+            // Act
+            var result = s.IsInteger();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsInteger_StringIsNotInteger_ReturnsFalse()
+        {
+            // Arrange
+            string s = &quot;12.3&quot;;
+
+            // Act
+            var result = s.IsInteger();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsNumber_StringIsNull_ReturnsFalse()
+        {
+            // Arrange
+            string s = null;
+
+            // Act
+            var result = s.IsNumber();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsNumber_StringIsEmpty_ReturnsFalse()
+        {
+            // Arrange
+            string s = &quot;&quot;;
+
+            // Act
+            var result = s.IsNumber();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsNumber_StringIsWhitespace_ReturnsFalse()
+        {
+            // Arrange
+            string s = &quot;   &quot;;
+
+            // Act
+            var result = s.IsNumber();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsNumber_StringIsNumber_ReturnsTrue()
+        {
+            // Arrange
+            string s = &quot;12.3&quot;;
+
+            // Act
+            var result = s.IsNumber();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsNumber_StringIsInteger_ReturnsTrue()
+        {
+            // Arrange
+            string s = &quot;123&quot;;
+
+            // Act
+            var result = s.IsNumber();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsNumber_StringIsNotNumber_ReturnsFalse()
+        {
+            // Arrange
+            string s = &quot;abc&quot;;
+
+            // Act
+            var result = s.IsNumber();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Reverse_StringIsNull_ReturnsNull()
+        {
+            // Arrange
+            string s = null;
+
+            // Act
+            var result = s.Reverse();
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Reverse_StringIsEmpty_ReturnsEmptyString()
+        {
+            // Arrange
+            string s = &quot;&quot;;
+
+            // Act
+            var result = s.Reverse();
+
+            // Assert
+            Assert.Equal(&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void Reverse_StringIsSingleCharacter_ReturnsSameCharacter()
+        {
+            // Arrange
+            string s = &quot;a&quot;;
+
+            // Act
+            var result = s.Reverse();
+
+            // Assert
+            Assert.Equal(&quot;a&quot;, result);
+        }
+
+        [Fact]
+        public void Reverse_StringIsMultipleCharacters_ReturnsReversedString()
+        {
+            // Arrange
+            string s = &quot;hello&quot;;
+
+            // Act
+            var result = s.Reverse();
+
+            // Assert
+            Assert.Equal(&quot;olleh&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_StringIsNull_ReturnsNull()
+        {
+            // Arrange
+            string s = null;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_StringIsEmpty_ReturnsEmptyString()
+        {
+            // Arrange
+            string s = &quot;&quot;;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;&quot;, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;simple&quot;)]
+        [InlineData(&quot;with space&quot;)]
+        [InlineData(&quot;with,comma&quot;)]
+        [InlineData(&quot;with;semicolon&quot;)]
+        [InlineData(&quot;with\nnewline&quot;)]
+        public void ToCsvCompatible_StringContainsSpecialChars_ReturnsQuotedString(string input)
+        {
+            // Arrange
+            string s = input;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.StartsWith(&quot;\&quot;&quot;, result);
+            Assert.EndsWith(&quot;\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_StringContainsDoubleQuotes_ReturnsEscapedString()
+        {
+            // Arrange
+            string s = &quot;with\&quot;quote&quot;;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot;with\&quot;\&quot;quote\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_StringStartsWithSpace_ReturnsQuotedString()
+        {
+            // Arrange
+            string s = &quot; start&quot;;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot; start\&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_StringEndsWithSpace_ReturnsQuotedString()
+        {
+            // Arrange
+            string s = &quot;end &quot;;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;\&quot;end \&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void ToCsvCompatible_StringIsNormal_ReturnsUnchangedString()
+        {
+            // Arrange
+            string s = &quot;normal&quot;;
+
+            // Act
+            var result = s.ToCsvCompatible();
+
+            // Assert
+            Assert.Equal(&quot;normal&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_StringIsNull_ReturnsNull()
+        {
+            // Arrange
+            string s = null;
+
+            // Act
+            var result = s.GetFileExtension();
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetFileExtension_StringIsEmpty_ReturnsEmptyString()
+        {
+            // Arrange
+            string s = &quot;&quot;;
+
+            // Act
+            var result = s.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_StringHasNoDot_ReturnsEmptyString()
+        {
+            // Arrange
+            string s = &quot;filename&quot;;
+
+            // Act
+            var result = s.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_StringHasExtension_ReturnsExtension()
+        {
+            // Arrange
+            string s = &quot;file.txt&quot;;
+
+            // Act
+            var result = s.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;txt&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_StringHasDotAtEnd_ReturnsEmptyString()
+        {
+            // Arrange
+            string s = &quot;file.&quot;;
+
+            // Act
+            var result = s.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;&quot;, result);
+        }
+
+        [Fact]
+        public void GetFileExtension_StringHasMultipleDots_ReturnsLastExtension()
+        {
+            // Arrange
+            string s = &quot;file.name.txt&quot;;
+
+            // Act
+            var result = s.GetFileExtension();
+
+            // Assert
+            Assert.Equal(&quot;txt&quot;, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[11,13,11,26,1],[14,13,14,38,1],[17,13,17,33,1],[18,9,18,10,1],[22,9,22,10,1],[24,13,24,26,1],[27,13,27,38,1],[30,13,30,34,1],[31,9,31,10,1],[35,9,35,10,1],[37,13,37,29,1],[40,13,40,40,1],[43,13,43,34,1],[44,9,44,10,1],[48,9,48,10,1],[50,13,50,27,1],[53,13,53,40,1],[56,13,56,34,1],[57,9,57,10,1],[61,9,61,10,1],[63,13,63,30,1],[66,13,66,40,1],[69,13,69,34,1],[70,9,70,10,1],[74,9,74,10,1],[76,13,76,30,1],[79,13,79,40,1],[82,13,82,33,1],[83,9,83,10,1],[87,9,87,10,1],[89,13,89,31,1],[92,13,92,40,1],[95,13,95,34,1],[96,9,96,10,1],[100,9,100,10,1],[102,13,102,29,1],[105,13,105,39,1],[108,13,108,34,1],[109,9,109,10,1],[113,9,113,10,1],[115,13,115,27,1],[118,13,118,39,1],[121,13,121,34,1],[122,9,122,10,1],[126,9,126,10,1],[128,13,128,30,1],[131,13,131,39,1],[134,13,134,34,1],[135,9,135,10,1],[139,9,139,10,1],[141,13,141,31,1],[144,13,144,39,1],[147,13,147,33,1],[148,9,148,10,0],[152,9,152,10,1],[154,13,154,30,1],[157,13,157,39,1],[160,13,160,33,1],[161,9,161,10,1],[165,9,165,10,1],[167,13,167,30,1],[170,13,170,39,1],[173,13,173,34,1],[174,9,174,10,1],[178,9,178,10,1],[180,13,180,29,1],[183,13,183,38,1],[186,13,186,33,1],[187,9,187,10,1],[191,9,191,10,1],[193,13,193,27,1],[196,13,196,38,1],[199,13,199,38,1],[200,9,200,10,1],[204,9,204,10,1],[206,13,206,28,1],[209,13,209,38,1],[212,13,212,39,1],[213,9,213,10,1],[217,9,217,10,1],[219,13,219,32,1],[222,13,222,38,1],[225,13,225,43,1],[226,9,226,10,1],[230,9,230,10,1],[232,13,232,29,1],[235,13,235,46,1],[238,13,238,33,1],[239,9,239,10,1],[243,9,243,10,1],[245,13,245,27,1],[248,13,248,46,1],[251,13,251,38,1],[252,9,252,10,1],[261,9,261,10,1],[263,13,263,30,1],[266,13,266,46,1],[269,13,269,45,1],[270,13,270,43,1],[271,9,271,10,1],[275,9,275,10,1],[277,13,277,38,1],[280,13,280,46,1],[283,13,283,55,1],[284,9,284,10,1],[288,9,288,10,1],[290,13,290,33,1],[293,13,293,46,1],[296,13,296,48,1],[297,9,297,10,1],[301,9,301,10,1],[303,13,303,31,1],[306,13,306,46,1],[309,13,309,46,1],[310,9,310,10,1],[314,9,314,10,1],[316,13,316,33,1],[319,13,319,46,1],[322,13,322,44,1],[323,9,323,10,1],[327,9,327,10,1],[329,13,329,29,1],[332,13,332,47,1],[335,13,335,33,1],[336,9,336,10,1],[340,9,340,10,1],[342,13,342,27,1],[345,13,345,47,1],[348,13,348,38,1],[349,9,349,10,1],[353,9,353,10,1],[355,13,355,35,1],[358,13,358,47,1],[361,13,361,38,1],[362,9,362,10,1],[366,9,366,10,1],[368,13,368,35,1],[371,13,371,47,1],[374,13,374,41,1],[375,9,375,10,1],[379,9,379,10,1],[381,13,381,32,1],[384,13,384,47,1],[387,13,387,38,1],[388,9,388,10,1],[392,9,392,10,1],[394,13,394,40,1],[397,13,397,47,1],[400,13,400,41,1],[401,9,401,10,1]]);
+    </script>
+  </body>
+</html>

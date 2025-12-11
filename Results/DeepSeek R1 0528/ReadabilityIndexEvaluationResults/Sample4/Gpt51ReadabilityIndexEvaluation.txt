@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315632-Jvsx7byi0KRnY8QaNLle
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name `CompanyServiceTests` clearly follows the `ClassUnderTestTests` convention and matches the SUT.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern and clearly describe intent.",
+    "AAA pattern is explicitly used and separated with `// Arrange`, `// Act`, `// Assert` comments, improving structure and scanability.",
+    "Asynchronous tests correctly use `async Task` signatures, avoiding `async void` and improving clarity and correctness of test flow.",
+    "Field names (`_companyRepository`, `_mapper`, `_sut`) and local variables (`entity`, `expectedModel`, `defaultId`) are meaningful and self-explanatory.",
+    "Setup of test doubles is centralized in the constructor, making the SUT and dependencies easy to locate and understand.",
+    "Use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for parameterized scenarios is appropriate and avoids duplication.",
+    "Code formatting (spacing, line breaks, and indentation) is clean and consistent, making tests easy to read.",
+    "Each test focuses on a single responsibility (null return, mapping call, repository call, default id), which helps maintainability and understanding.",
+    "Minor verbosity in mock return setup (e.g., `Task.FromResult<T>` instead of simpler forms) and repeated null mapping setups slightly detract from optimal brevity and elegance."
+  ]
+}

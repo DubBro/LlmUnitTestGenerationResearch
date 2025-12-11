@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322512-YBG8OmZXbp0QZJ9gRJBi
+
+Content:
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class follows 'ClassUnderTestTests' naming pattern: StringExtensionsTests",
+		"Test names follow clear 'MethodUnderTest_Scenario_ExpectedResult' pattern",
+		"AAA pattern consistently used with appropriate comments separating blocks",
+		"Proper use of [Fact] for single scenarios and [Theory] with [InlineData] for multiple data variations",
+		"Code formatting is clean with proper spacing and line breaks",
+		"Method names and variable names are clear and meaningful",
+		"Tests are logically grouped by method under test with clear separation",
+		"No unnecessary nested classes or complex test structures",
+		"Edge cases are clearly tested with descriptive test names",
+		"Test data is minimal and relevant to each scenario"
+	]
+}

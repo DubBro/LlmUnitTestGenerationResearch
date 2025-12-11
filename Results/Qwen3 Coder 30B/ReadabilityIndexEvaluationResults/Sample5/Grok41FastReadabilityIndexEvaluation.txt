@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765325887-gHqeqCw8ECTFTyqa2U5I
+
+Content:
+```json
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern perfectly",
+		"Test method names adhere closely to MethodUnderTest_Scenario_ExpectedResult pattern",
+		"All async tests correctly use async Task signatures",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and clear separation",
+		"No extraneous comments, only AAA separators",
+		"Clear, meaningful variable and field names reflecting purpose",
+		"Mocks properly initialized in constructor for reusability",
+		"Adheres to C# naming conventions and standard formatting",
+		"Appropriate use of [Fact] attributes without unnecessary duplication",
+		"Minor deviation in some exception tests combining Act & Assert, but remains readable"
+	]
+}
+```

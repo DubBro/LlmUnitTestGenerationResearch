@@ -1,0 +1,255 @@
+using Dataset.Sample12;
+
+namespace Glm45AirUnitTests;
+
+public class LUPDecompositionTests
+{
+    [Fact]
+    public void Decompose_PassingNonSquareMatrix_ThrowsArgumentException()
+    {
+        // Arrange
+        double[,] nonSquareMatrix = new double[2, 3];
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => LUPDecomposition.Decompose(nonSquareMatrix, out _, out _, out _));
+    }
+
+    [Fact]
+    public void Decompose_PassingSingularMatrix_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        double[,] singularMatrix = new double[,]
+        {
+            { 1, 2 },
+            { 2, 4 }
+        };
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => LUPDecomposition.Decompose(singularMatrix, out _, out _, out _));
+        Assert.Equal("Матриця є виродженою.", exception.Message);
+    }
+
+    [Fact]
+    public void Decompose_PassingValid2x2Matrix_ReturnsCorrectLUP()
+    {
+        // Arrange
+        double[,] matrix = new double[,]
+        {
+            { 2, 1 },
+            { 1, 2 }
+        };
+
+        // Act
+        LUPDecomposition.Decompose(matrix, out double[,] L, out double[,] U, out int[] P);
+
+        // Assert
+        Assert.Equal(2, L.GetLength(0));
+        Assert.Equal(2, L.GetLength(1));
+        Assert.Equal(2, U.GetLength(0));
+        Assert.Equal(2, U.GetLength(1));
+        Assert.Equal(2, P.Length);
+
+        // Expected L for this permutation (identity)
+        Assert.Equal(1, L[0, 0]);
+        Assert.Equal(0, L[0, 1]);
+        Assert.Equal(0.5, L[1, 0]);
+        Assert.Equal(1, L[1, 1]);
+
+        // Expected U for this permutation
+        Assert.Equal(2, U[0, 0]);
+        Assert.Equal(1, U[0, 1]);
+        Assert.Equal(0, U[1, 0]);
+        Assert.Equal(1.5, U[1, 1]);
+
+        // Expected permutation (identity)
+        Assert.Equal(0, P[0]);
+        Assert.Equal(1, P[1]);
+    }
+
+    [Fact]
+    public void Decompose_PassingValid3x3Matrix_ReturnsCorrectLUP()
+    {
+        // Arrange
+        double[,] matrix = new double[,]
+        {
+            { 1, 2, 3 },
+            { 4, 5, 6 },
+            { 7, 8, 9 }
+        };
+
+        // Act
+        LUPDecomposition.Decompose(matrix, out double[,] L, out double[,] U, out int[] P);
+
+        // Assert
+        Assert.Equal(3, L.GetLength(0));
+        Assert.Equal(3, L.GetLength(1));
+        Assert.Equal(3, U.GetLength(0));
+        Assert.Equal(3, U.GetLength(1));
+        Assert.Equal(3, P.Length);
+
+        // Verify L is unit lower triangular
+        Assert.Equal(1, L[0, 0]);
+        Assert.Equal(0, L[0, 1]);
+        Assert.Equal(0, L[0, 2]);
+        Assert.Equal(4.0 / 7.0, L[1, 0]);
+        Assert.Equal(1, L[1, 1]);
+        Assert.Equal(0, L[1, 2]);
+        Assert.Equal(1.0 / 7.0, L[2, 0]);
+        Assert.Equal(2.0 / 3.0, L[2, 1]);
+        Assert.Equal(1, L[2, 2]);
+
+        // Verify U is upper triangular
+        Assert.Equal(7, U[0, 0]);
+        Assert.Equal(8, U[0, 1]);
+        Assert.Equal(9, U[0, 2]);
+        Assert.Equal(0, U[1, 0]);
+        Assert.Equal(-6.0 / 7.0, U[1, 1]);
+        Assert.Equal(-12.0 / 7.0, U[1, 2]);
+        Assert.Equal(0, U[2, 0]);
+        Assert.Equal(0, U[2, 1]);
+        Assert.Equal(0, U[2, 2]);
+
+        // Verify permutation
+        Assert.Equal(2, P[0]);
+        Assert.Equal(1, P[1]);
+        Assert.Equal(0, P[2]);
+    }
+
+    [Fact]
+    public void Decompose_PassingMatrixRequiringRowSwap_ReturnsCorrectLUP()
+    {
+        // Arrange
+        double[,] matrix = new double[,]
+        {
+            { 0, 0, 0 },
+            { 0, 0, 1 },
+            { 0, 1, 0 }
+        };
+
+        // Act
+        LUPDecomposition.Decompose(matrix, out double[,] L, out double[,] U, out int[] P);
+
+        // Assert
+        Assert.Equal(3, L.GetLength(0));
+        Assert.Equal(3, L.GetLength(1));
+        Assert.Equal(3, U.GetLength(0));
+        Assert.Equal(3, U.GetLength(1));
+        Assert.Equal(3, P.Length);
+
+        // Expected L (identity after permutation)
+        Assert.Equal(1, L[0, 0]);
+        Assert.Equal(0, L[0, 1]);
+        Assert.Equal(0, L[0, 2]);
+        Assert.Equal(0, L[1, 0]);
+        Assert.Equal(1, L[1, 1]);
+        Assert.Equal(0, L[1, 2]);
+        Assert.Equal(0, L[2, 0]);
+        Assert.Equal(1, L[2, 1]);
+        Assert.Equal(1, L[2, 2]);
+
+        // Expected U (swapped rows)
+        Assert.Equal(0, U[0, 0]);
+        Assert.Equal(1, U[0, 1]);
+        Assert.Equal(0, U[0, 2]);
+        Assert.Equal(0, U[1, 0]);
+        Assert.Equal(0, U[1, 1]);
+        Assert.Equal(1, U[1, 2]);
+        Assert.Equal(0, U[2, 0]);
+        Assert.Equal(0, U[2, 1]);
+        Assert.Equal(0, U[2, 2]);
+
+        // Expected permutation (swapped rows 1 and 2)
+        Assert.Equal(0, P[0]);
+        Assert.Equal(2, P[1]);
+        Assert.Equal(1, P[2]);
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(2, 2)]
+    [InlineData(3, 3)]
+    [InlineData(4, 4)]
+    public void GetMatrix_PassingSquareMatrix_ReturnsCorrectStringRepresentation(int size, int n)
+    {
+        // Arrange
+        double[,] matrix = new double[n, n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                matrix[i, j] = i * n + j;
+
+        // Act
+        string result = LUPDecomposition.GetMatrix(matrix);
+
+        // Assert
+        string[] lines = result.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        Assert.Equal(n, lines.Length);
+
+        for (int i = 0; i < n; i++)
+        {
+            string[] values = lines[i].Split('\t', StringSplitOptions.RemoveEmptyEntries);
+            Assert.Equal(n, values.Length);
+
+            for (int j = 0; j < n; j++)
+            {
+                Assert.Equal((i * n + j).ToString(), values[j]);
+            }
+        }
+    }
+
+    [Fact]
+    public void GetMatrix_PassingNonSquareMatrix_ReturnsCorrectStringRepresentation()
+    {
+        // Arrange
+        double[,] matrix = new double[,]
+        {
+            { 1, 2, 3 },
+            { 4, 5, 6 }
+        };
+
+        // Act
+        string result = LUPDecomposition.GetMatrix(matrix);
+
+        // Assert
+        string expected = "1\t2\t3\t\n4\t5\t6\t\n";
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(new int[] { 0 }, 1)]
+    [InlineData(new int[] { 1, 0 }, 2)]
+    [InlineData(new int[] { 1, 2, 0 }, 3)]
+    [InlineData(new int[] { 3, 2, 1, 0 }, 4)]
+    [InlineData(new int[] { 4, 3, 2, 1, 0 }, 5)]
+    public void GetPermutationMatrix_PassingValidPermutation_ReturnsCorrectStringRepresentation(int[] P, int n)
+    {
+        // Arrange
+        // Act
+        string result = LUPDecomposition.GetPermutationMatrix(P);
+
+        // Assert
+        string[] lines = result.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        Assert.Equal(n, lines.Length);
+
+        for (int i = 0; i < n; i++)
+        {
+            string[] values = lines[i].Split('\t', StringSplitOptions.RemoveEmptyEntries);
+            Assert.Equal(n, values.Length);
+
+            for (int j = 0; j < n; j++)
+            {
+                Assert.Equal(j == P[i] ? "1" : "0", values[j]);
+            }
+        }
+    }
+
+    [Fact]
+    public void GetPermutationMatrix_PassingEmptyPermutation_ThrowsArgumentException()
+    {
+        // Arrange
+        int[] emptyPermutation = Array.Empty<int>();
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => LUPDecomposition.GetPermutationMatrix(emptyPermutation));
+    }
+}

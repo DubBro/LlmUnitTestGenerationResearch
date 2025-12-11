@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample12Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample12;
+
+namespace Gpt5MiniUnitTests
+{
+    public class LUPDecompositionTests
+    {
+        [Fact]
+        public void Decompose_SingularMatrix_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            double[,] singular = new double[,]
+            {
+                { 0, 1 },
+                { 0, 2 }
+            };
+
+            // Act
+            var ex = Assert.Throws&lt;InvalidOperationException&gt;(() =&gt; LUPDecomposition.Decompose(singular, out _, out _, out _));
+
+            // Assert
+            Assert.Equal(&quot;Матриця є виродженою.&quot;, ex.Message);
+        }
+
+        [Fact]
+        public void Decompose_OneByOneMatrix_ReturnsExpectedLAndUAndP()
+        {
+            // Arrange
+            double[,] matrix = new double[,] { { 5.0 } };
+
+            // Act
+            LUPDecomposition.Decompose((double[,])matrix.Clone(), out double[,] L, out double[,] U, out int[] P);
+
+            // Assert
+            Assert.Single(P);
+            Assert.Equal(0, P[0]);
+
+            Assert.Equal(1, L[0, 0]);
+            Assert.Equal(5, U[0, 0]);
+        }
+
+        [Fact]
+        public void Decompose_KnownMatrix_ReconstructsPermutedOriginal()
+        {
+            // Arrange
+            double[,] original = new double[,]
+            {
+                { 2.0, 3.0, 1.0 },
+                { 4.0, 7.0, 7.0 },
+                { 6.0, 18.0, 22.0 }
+            };
+            double[,] matrixToDecompose = (double[,])original.Clone();
+
+            // Act
+            LUPDecomposition.Decompose(matrixToDecompose, out double[,] L, out double[,] U, out int[] P);
+
+            // Assert
+            int n = original.GetLength(0);
+            Assert.Equal(n, L.GetLength(0));
+            Assert.Equal(n, U.GetLength(0));
+            Assert.Equal(n, P.Length);
+
+            // L should have ones on diagonal
+            for (int i = 0; i &lt; n; i++)
+                Assert.Equal(1.0, L[i, i], 9);
+
+            // U should be upper triangular (elements below diagonal zero)
+            for (int i = 1; i &lt; n; i++)
+                for (int j = 0; j &lt; i; j++)
+                    Assert.Equal(0.0, U[i, j], 9);
+
+            // Compute L*U
+            double[,] LU = MultiplyMatrices(L, U);
+
+            // Compute permuted original matrix PA where PA[i,j] = original[P[i], j]
+            double[,] PA = new double[n, n];
+            for (int i = 0; i &lt; n; i++)
+                for (int j = 0; j &lt; n; j++)
+                    PA[i, j] = original[P[i], j];
+
+            // Compare LU and PA with tolerance
+            double tolerance = 1e-9;
+            for (int i = 0; i &lt; n; i++)
+                for (int j = 0; j &lt; n; j++)
+                    Assert.InRange(Math.Abs(LU[i, j] - PA[i, j]), 0, tolerance);
+        }
+
+        [Fact]
+        public void GetMatrix_ReturnsExpectedStringRepresentation()
+        {
+            // Arrange
+            double[,] matrix = new double[,]
+            {
+                { 1.0, 2.0 },
+                { 3.0, 4.0 }
+            };
+
+            // Act
+            string result = LUPDecomposition.GetMatrix(matrix);
+
+            // Assert
+            string expected = &quot;1\t2\t\n3\t4\t\n&quot;;
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(new int[] { 0, 1, 2 }, &quot;1\t0\t0\t\n0\t1\t0\t\n0\t0\t1\t\n&quot;)]
+        [InlineData(new int[] { 2, 0, 1 }, &quot;0\t0\t1\t\n1\t0\t0\t\n0\t1\t0\t\n&quot;)]
+        public void GetPermutationMatrix_ReturnsExpectedString(int[] permutation, string expected)
+        {
+            // Arrange &amp; Act
+            string result = LUPDecomposition.GetPermutationMatrix(permutation);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        private static double[,] MultiplyMatrices(double[,] A, double[,] B)
+        {
+            int n = A.GetLength(0);
+            int m = B.GetLength(1);
+            int common = A.GetLength(1);
+            var result = new double[n, m];
+            for (int i = 0; i &lt; n; i++)
+                for (int j = 0; j &lt; m; j++)
+                {
+                    double sum = 0;
+                    for (int k = 0; k &lt; common; k++)
+                        sum += A[i, k] * B[k, j];
+                    result[i, j] = sum;
+                }
+            return result;
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[11,13,15,15,1],[18,13,18,69,1],[18,69,18,126,1],[18,126,18,128,1],[21,13,21,63,1],[22,9,22,10,1],[26,9,26,10,1],[28,13,28,58,1],[31,13,31,114,1],[34,13,34,30,1],[35,13,35,35,1],[37,13,37,38,1],[38,13,38,38,1],[39,9,39,10,1],[43,9,43,10,1],[45,13,50,15,1],[51,13,51,71,1],[54,13,54,106,1],[57,13,57,43,1],[58,13,58,45,1],[59,13,59,45,1],[60,13,60,39,1],[63,18,63,27,1],[63,29,63,34,1],[63,36,63,39,1],[64,17,64,47,1],[67,18,67,27,1],[67,29,67,34,1],[67,36,67,39,1],[68,22,68,31,1],[68,33,68,38,1],[68,40,68,43,1],[69,21,69,51,1],[72,13,72,51,1],[75,13,75,45,1],[76,18,76,27,1],[76,29,76,34,1],[76,36,76,39,1],[77,22,77,31,1],[77,33,77,38,1],[77,40,77,43,1],[78,21,78,50,1],[81,13,81,37,1],[82,18,82,27,1],[82,29,82,34,1],[82,36,82,39,1],[83,22,83,31,1],[83,33,83,38,1],[83,40,83,43,1],[84,21,84,81,1],[85,9,85,10,1],[89,9,89,10,1],[91,13,95,15,1],[98,13,98,64,1],[101,13,101,50,1],[102,13,102,44,1],[103,9,103,10,1],[109,9,109,10,1],[111,13,111,80,1],[114,13,114,44,1],[115,9,115,10,1],[118,9,118,10,1],[119,13,119,36,1],[120,13,120,36,1],[121,13,121,41,1],[122,13,122,43,1],[123,18,123,27,1],[123,29,123,34,1],[123,36,123,39,1],[124,22,124,31,1],[124,33,124,38,1],[124,40,124,43,1],[125,17,125,18,1],[126,21,126,36,1],[127,26,127,35,1],[127,37,127,47,1],[127,49,127,52,1],[128,25,128,50,1],[129,21,129,40,1],[130,17,130,18,1],[131,13,131,27,1],[132,9,132,10,1]]);
+    </script>
+  </body>
+</html>

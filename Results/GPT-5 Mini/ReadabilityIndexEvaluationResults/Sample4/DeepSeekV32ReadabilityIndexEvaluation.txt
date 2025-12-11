@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323047-kxhekjp5YEk7zvi4FGpD
+
+Content:
+{
+	"readabilityIndex": 90,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern (CompanyServiceTests).",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern and are descriptive.",
+		"Tests follow the AAA pattern with clear Arrange, Act, Assert sections separated by comments and empty lines.",
+		"Tests use meaningful variable names that reflect their purpose.",
+		"All tests are properly asynchronous with async Task signatures.",
+		"Each test is independent and well-structured with proper mocking setup.",
+		"Code formatting is consistent with standard C# conventions.",
+		"Minimal code duplication with each test being self-contained but not overly repetitive.",
+		"Good use of mocking framework (NSubstitute) with clear expectations.",
+		"Minor improvement possible: could use [Theory] for parameterized tests to reduce duplication of similar scenarios."
+	]
+}

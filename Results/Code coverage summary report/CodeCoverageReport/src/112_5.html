@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample15Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample15;
+
+namespace DeepSeekR10528UnitTests;
+
+public class Base64HelpersTests
+{
+    [Theory]
+    [InlineData(null, &quot;&quot;)]
+    [InlineData(&quot;&quot;, &quot;&quot;)]
+    [InlineData(&quot;   &quot;, &quot;&quot;)]
+    public void Encode_WithNullOrEmptyOrWhitespace_ReturnsEmptyString(string input, string expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.Encode();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;Hello&quot;, &quot;SGVsbG8=&quot;)]
+    [InlineData(&quot;World&quot;, &quot;V29ybGQ=&quot;)]
+    [InlineData(&quot;Hello, World!&quot;, &quot;SGVsbG8sIFdvcmxkIQ==&quot;)]
+    [InlineData(&quot;12345&quot;, &quot;MTIzNDU=&quot;)]
+    [InlineData(&quot;αβγ&quot;, &quot;zrHOss6z&quot;)]
+    public void Encode_ValidInput_ReturnsBase64EncodedString(string input, string expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.Encode();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null, &quot;&quot;)]
+    [InlineData(&quot;&quot;, &quot;&quot;)]
+    [InlineData(&quot;   &quot;, &quot;&quot;)]
+    public void Decode_WithNullOrEmptyOrWhitespace_ReturnsEmptyString(string input, string expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.Decode();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;SGVsbG8=&quot;, &quot;Hello&quot;)]
+    [InlineData(&quot;V29ybGQ=&quot;, &quot;World&quot;)]
+    [InlineData(&quot;SGVsbG8sIFdvcmxkIQ==&quot;, &quot;Hello, World!&quot;)]
+    [InlineData(&quot;MTIzNDU=&quot;, &quot;12345&quot;)]
+    [InlineData(&quot;zrHOss6z&quot;, &quot;αβγ&quot;)]
+    public void Decode_ValidBase64Input_ReturnsDecodedString(string input, string expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.Decode();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;InvalidBase64!@#$&quot;)]
+    [InlineData(&quot;SGVsbG8sIFdvcmxkIQ&quot;)] // Missing padding
+    public void Decode_WithInvalidBase64Input_ThrowsFormatException(string input)
+    {
+        // Arrange
+
+        // Act &amp; Assert
+        Assert.Throws&lt;FormatException&gt;(() =&gt; input.Decode());
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,5,12,6,1],[16,9,16,37,1],[19,9,19,40,1],[20,5,20,6,1],[29,5,29,6,1],[33,9,33,37,1],[36,9,36,40,1],[37,5,37,6,1],[44,5,44,6,1],[48,9,48,37,1],[51,9,51,40,1],[52,5,52,6,1],[61,5,61,6,1],[65,9,65,37,1],[68,9,68,40,1],[69,5,69,6,1],[75,5,75,6,1],[79,9,79,46,1],[79,46,79,60,1],[79,60,79,62,1],[80,5,80,6,1]]);
+    </script>
+  </body>
+</html>

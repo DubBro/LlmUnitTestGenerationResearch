@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample17Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample17;
+
+namespace Glm45AirUnitTests;
+
+public class VectorExtensionsTests
+{
+    [Fact]
+    public void Copy_PassingNullVector_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] vector = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; vector.Copy());
+
+        // Assert
+        Assert.Equal(&quot;vector&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void Copy_PassingValidVector_ReturnsCopy()
+    {
+        // Arrange
+        var vector = new double[] { 1.0, 2.0, 3.0 };
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.NotSame(vector, result);
+        Assert.Equal(vector, result);
+    }
+
+    [Fact]
+    public void OuterProduct_PassingNullLhs_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] lhs = null;
+        var rhs = new double[] { 1.0 };
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; lhs.OuterProduct(rhs));
+
+        // Assert
+        Assert.Equal(&quot;lhs&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void OuterProduct_PassingNullRhs_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var lhs = new double[] { 1.0 };
+        double[] rhs = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; lhs.OuterProduct(rhs));
+
+        // Assert
+        Assert.Equal(&quot;rhs&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void OuterProduct_PassingValidVectors_ReturnsCorrectMatrix()
+    {
+        // Arrange
+        var lhs = new double[] { 1.0, 2.0 };
+        var rhs = new double[] { 3.0, 4.0 };
+
+        // Act
+        var result = lhs.OuterProduct(rhs);
+
+        // Assert
+        Assert.Equal(2, result.GetLength(0));
+        Assert.Equal(2, result.GetLength(1));
+        Assert.Equal(3.0, result[0, 0]);
+        Assert.Equal(4.0, result[0, 1]);
+        Assert.Equal(6.0, result[1, 0]);
+        Assert.Equal(8.0, result[1, 1]);
+    }
+
+    [Fact]
+    public void Dot_PassingNullLhs_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] lhs = null;
+        var rhs = new double[] { 1.0 };
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; lhs.Dot(rhs));
+
+        // Assert
+        Assert.Equal(&quot;lhs&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void Dot_PassingNullRhs_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var lhs = new double[] { 1.0 };
+        double[] rhs = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; lhs.Dot(rhs));
+
+        // Assert
+        Assert.Equal(&quot;rhs&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void Dot_PassingVectorsOfDifferentLengths_ThrowsArgumentException()
+    {
+        // Arrange
+        var lhs = new double[] { 1.0, 2.0 };
+        var rhs = new double[] { 3.0 };
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentException&gt;(() =&gt; lhs.Dot(rhs));
+
+        // Assert
+        Assert.Equal(&quot;Arguments must have same dimension.&quot;, exception.Message);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 1.0, 2.0, 3.0 }, new double[] { 4.0, 5.0, 6.0 }, 32.0)]
+    [InlineData(new double[] { -1.0, -2.0, -3.0 }, new double[] { 4.0, 5.0, 6.0 }, -32.0)]
+    [InlineData(new double[] { 0.0, 0.0, 0.0 }, new double[] { 4.0, 5.0, 6.0 }, 0.0)]
+    [InlineData(new double[] { 1.0, 1.0 }, new double[] { 1.0, 1.0 }, 2.0)]
+    public void Dot_PassingValidVectors_ReturnsCorrectDotProduct(double[] lhs, double[] rhs, double expected)
+    {
+        // Arrange
+        // Already arranged by InlineData
+
+        // Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Magnitude_PassingNullVector_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] vector = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; vector.Magnitude());
+
+        // Assert
+        Assert.Equal(&quot;vector&quot;, exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 3.0, 4.0 }, 5.0)]
+    [InlineData(new double[] { 2.0, 4.0, 4.0 }, 6.0)]
+    [InlineData(new double[] { 0.0, 0.0 }, 0.0)]
+    [InlineData(new double[] { -3.0, -4.0 }, 5.0)]
+    public void Magnitude_PassingValidVector_ReturnsCorrectMagnitude(double[] vector, double expected)
+    {
+        // Arrange
+        // Already arranged by InlineData
+
+        // Act
+        var result = vector.Magnitude();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Scale_PassingNullVector_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] vector = null;
+        var factor = 2.0;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; vector.Scale(factor));
+
+        // Assert
+        Assert.Equal(&quot;vector&quot;, exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 1.0, 2.0, 3.0 }, 2.0, new double[] { 2.0, 4.0, 6.0 })]
+    [InlineData(new double[] { 1.0, 2.0, 3.0 }, 0.5, new double[] { 0.5, 1.0, 1.5 })]
+    [InlineData(new double[] { 1.0, 2.0, 3.0 }, 0.0, new double[] { 0.0, 0.0, 0.0 })]
+    [InlineData(new double[] { -1.0, -2.0 }, -2.0, new double[] { 2.0, 4.0 })]
+    public void Scale_PassingValidVectorAndFactor_ReturnsCorrectScaledVector(double[] vector, double factor, double[] expected)
+    {
+        // Arrange
+        // Already arranged by InlineData
+
+        // Act
+        var result = vector.Scale(factor);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToColumnVector_PassingNullSource_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] source = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; source.ToColumnVector());
+
+        // Assert
+        Assert.Equal(&quot;source&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void ToColumnVector_PassingValidVector_ReturnsCorrectColumnVector()
+    {
+        // Arrange
+        var source = new double[] { 1.0, 2.0, 3.0 };
+
+        // Act
+        var result = source.ToColumnVector();
+
+        // Assert
+        Assert.Equal(3, result.GetLength(0));
+        Assert.Equal(1, result.GetLength(1));
+        Assert.Equal(1.0, result[0, 0]);
+        Assert.Equal(2.0, result[1, 0]);
+        Assert.Equal(3.0, result[2, 0]);
+    }
+
+    [Fact]
+    public void ToRowVector_PassingNullSource_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[,] source = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; source.ToRowVector());
+
+        // Assert
+        Assert.Equal(&quot;source&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void ToRowVector_PassingMatrixWithWidthNotEqualTo1_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var source = new double[,] { { 1.0, 2.0 } };
+
+        // Act
+        var exception = Assert.Throws&lt;InvalidOperationException&gt;(() =&gt; source.ToRowVector());
+
+        // Assert
+        Assert.Equal(&quot;The column vector must have only 1 element in width.&quot;, exception.Message);
+    }
+
+    [Fact]
+    public void ToRowVector_PassingValidColumnVector_ReturnsCorrectRowVector()
+    {
+        // Arrange
+        var source = new double[,] { { 1.0 }, { 2.0 }, { 3.0 } };
+
+        // Act
+        var result = source.ToRowVector();
+
+        // Assert
+        Assert.Equal(3, result.Length);
+        Assert.Equal(1.0, result[0]);
+        Assert.Equal(2.0, result[1]);
+        Assert.Equal(3.0, result[2]);
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_PassingNullVector_ThrowsArgumentNullException()
+    {
+        // Arrange
+        double[] vector = null;
+
+        // Act
+        var exception = Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; vector.ToDiagonalMatrix());
+
+        // Assert
+        Assert.Equal(&quot;vector&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_PassingValidVector_ReturnsCorrectDiagonalMatrix()
+    {
+        // Arrange
+        var vector = new double[] { 1.0, 2.0, 3.0 };
+
+        // Act
+        var result = vector.ToDiagonalMatrix();
+
+        // Assert
+        Assert.Equal(3, result.GetLength(0));
+        Assert.Equal(3, result.GetLength(1));
+        Assert.Equal(1.0, result[0, 0]);
+        Assert.Equal(0.0, result[0, 1]);
+        Assert.Equal(0.0, result[0, 2]);
+        Assert.Equal(0.0, result[1, 0]);
+        Assert.Equal(2.0, result[1, 1]);
+        Assert.Equal(0.0, result[1, 2]);
+        Assert.Equal(0.0, result[2, 0]);
+        Assert.Equal(0.0, result[2, 1]);
+        Assert.Equal(3.0, result[2, 2]);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,32,1],[14,9,14,68,1],[14,68,14,81,1],[14,81,14,83,1],[17,9,17,53,0],[18,5,18,6,0],[22,5,22,6,1],[24,9,24,53,1],[27,9,27,36,1],[30,9,30,40,1],[31,9,31,38,1],[32,5,32,6,1],[36,5,36,6,1],[38,9,38,29,1],[39,9,39,40,1],[42,9,42,68,1],[42,68,42,89,1],[42,89,42,91,1],[45,9,45,50,0],[46,5,46,6,0],[50,5,50,6,1],[52,9,52,40,1],[53,9,53,29,1],[56,9,56,68,1],[56,68,56,89,1],[56,89,56,91,1],[59,9,59,50,0],[60,5,60,6,0],[64,5,64,6,1],[66,9,66,45,1],[67,9,67,45,1],[70,9,70,44,1],[73,9,73,46,1],[74,9,74,46,1],[75,9,75,41,1],[76,9,76,41,1],[77,9,77,41,1],[78,9,78,41,1],[79,5,79,6,1],[83,5,83,6,1],[85,9,85,29,1],[86,9,86,40,1],[89,9,89,68,1],[89,68,89,80,1],[89,80,89,82,1],[92,9,92,50,0],[93,5,93,6,0],[97,5,97,6,1],[99,9,99,40,1],[100,9,100,29,1],[103,9,103,68,1],[103,68,103,80,1],[103,80,103,82,1],[106,9,106,50,0],[107,5,107,6,0],[111,5,111,6,1],[113,9,113,45,1],[114,9,114,40,1],[117,9,117,64,1],[117,64,117,76,1],[117,76,117,78,1],[120,9,120,80,1],[121,5,121,6,1],[129,5,129,6,1],[134,9,134,35,1],[137,9,137,40,1],[138,5,138,6,1],[142,5,142,6,1],[144,9,144,32,1],[147,9,147,68,1],[147,68,147,86,1],[147,86,147,88,1],[150,9,150,53,0],[151,5,151,6,0],[159,5,159,6,1],[164,9,164,41,1],[167,9,167,40,1],[168,5,168,6,1],[172,5,172,6,1],[174,9,174,32,1],[175,9,175,26,1],[178,9,178,68,1],[178,68,178,88,1],[178,88,178,90,1],[181,9,181,53,0],[182,5,182,6,0],[190,5,190,6,1],[195,9,195,43,1],[198,9,198,40,1],[199,5,199,6,1],[203,5,203,6,1],[205,9,205,32,1],[208,9,208,68,1],[208,68,208,91,1],[208,91,208,93,1],[211,9,211,53,0],[212,5,212,6,0],[216,5,216,6,1],[218,9,218,53,1],[221,9,221,46,1],[224,9,224,46,1],[225,9,225,46,1],[226,9,226,41,1],[227,9,227,41,1],[228,9,228,41,1],[229,5,229,6,1],[233,5,233,6,1],[235,9,235,33,1],[238,9,238,68,1],[238,68,238,88,1],[238,88,238,90,1],[241,9,241,53,0],[242,5,242,6,0],[246,5,246,6,1],[248,9,248,53,1],[251,9,251,72,1],[251,72,251,92,1],[251,92,251,94,1],[254,9,254,97,1],[255,5,255,6,1],[259,5,259,6,1],[261,9,261,66,1],[264,9,264,43,1],[267,9,267,40,1],[268,9,268,38,1],[269,9,269,38,1],[270,9,270,38,1],[271,5,271,6,1],[275,5,275,6,1],[277,9,277,32,1],[280,9,280,68,1],[280,68,280,93,1],[280,93,280,95,1],[283,9,283,53,0],[284,5,284,6,0],[288,5,288,6,1],[290,9,290,53,1],[293,9,293,48,1],[296,9,296,46,1],[297,9,297,46,1],[298,9,298,41,1],[299,9,299,41,1],[300,9,300,41,1],[301,9,301,41,1],[302,9,302,41,1],[303,9,303,41,1],[304,9,304,41,1],[305,9,305,41,1],[306,9,306,41,1],[307,5,307,6,1]]);
+    </script>
+  </body>
+</html>

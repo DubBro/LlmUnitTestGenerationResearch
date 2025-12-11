@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323159-9nVpma4fkDC74RVR7ldg
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name `FolderServiceTests` clearly follows the `ClassUnderTestTests` convention and matches the SUT.",
+    "Test method names consistently follow `MethodUnderTest_Scenario_ExpectedResult`, making intent very clear.",
+    "All tests follow the AAA pattern with explicit `// Arrange`, `// Act`, `// Assert` (or `// Act & Assert`) comments, making structure easy to scan.",
+    "Async tests correctly use `async Task` signatures, matching xUnit best practices and avoiding confusion.",
+    "Variable and field names (`repo`, `service`, `rootEntities`, `dto`, etc.) are concise yet descriptive, aiding quick comprehension.",
+    "Use of `[Theory]` with `[InlineData]` for multiple invalid input cases reduces duplication and improves maintainability.",
+    "Assertions are focused, logically grouped, and use expressive predicates (e.g., `Assert.Contains(..., d => ...)`), keeping expectations explicit.",
+    "No unnecessary nested classes or helpers; each test is self-contained and reads linearly from setup to verification.",
+    "Some repeated mock/service setup could be centralized (e.g., test fixture or helper methods) to reduce boilerplate and slightly improve maintainability.",
+    "Use of `Task.FromResult` and one extremely long inline string literal adds minor visual noise and could be simplified (e.g., helper or `new string('a', ...)`) for better scan-ability."
+  ]
+}

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample2Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample2;
+using NSubstitute;
+
+namespace DeepSeekR10528UnitTests;
+
+public class EmployeeServiceTests
+{
+    private readonly IEmployeeRepository _employeeRepositorySubstitute;
+    private readonly EmployeeService _employeeService;
+
+    public EmployeeServiceTests()
+    {
+        _employeeRepositorySubstitute = Substitute.For&lt;IEmployeeRepository&gt;();
+        _employeeService = new EmployeeService(_employeeRepositorySubstitute);
+    }
+
+    [Fact]
+    public async Task GetAsync_ExistingId_ReturnsMappedEmployeeModel()
+    {
+        // Arrange
+        var id = 1;
+        var employeeEntity = new EmployeeEntity
+        {
+            Id = id,
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            Country = &quot;USA&quot;,
+            City = &quot;New York&quot;,
+            Address = &quot;123 Main St&quot;,
+            Phone = &quot;+1234567890&quot;,
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            Department = &quot;IT&quot;,
+            PositionId = 1,
+            Position = &quot;Developer&quot;
+        };
+        _employeeRepositorySubstitute.GetAsync(id).Returns(employeeEntity);
+
+        // Act
+        var result = await _employeeService.GetAsync(id);
+
+        // Assert
+        Assert.Equal(employeeEntity.Id, result.Id);
+        Assert.Equal(employeeEntity.FirstName, result.FirstName);
+        Assert.Equal(employeeEntity.LastName, result.LastName);
+        Assert.Equal(employeeEntity.MiddleName, result.MiddleName);
+        Assert.Equal(employeeEntity.BirthDate, result.BirthDate);
+        Assert.Equal(employeeEntity.Country, result.Country);
+        Assert.Equal(employeeEntity.City, result.City);
+        Assert.Equal(employeeEntity.Address, result.Address);
+        Assert.Equal(employeeEntity.Phone, result.Phone);
+        Assert.Equal(employeeEntity.HireDate, result.HireDate);
+        Assert.Equal(employeeEntity.Salary, result.Salary);
+        Assert.Equal(employeeEntity.DepartmentId, result.DepartmentId);
+        Assert.Equal(employeeEntity.Department, result.Department);
+        Assert.Equal(employeeEntity.PositionId, result.PositionId);
+        Assert.Equal(employeeEntity.Position, result.Position);
+    }
+
+    [Fact]
+    public async Task GetAsync_RepositoryReturnsNull_ThrowsNullReferenceException()
+    {
+        // Arrange
+        var id = 1;
+        _employeeRepositorySubstitute.GetAsync(id).Returns((EmployeeEntity)null);
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NullReferenceException&gt;(() =&gt; _employeeService.GetAsync(id));
+    }
+
+    [Fact]
+    public async Task ListAsync_WhenCalled_ReturnsMappedEmployeeModels()
+    {
+        // Arrange
+        var employeeEntities = new List&lt;EmployeeEntity&gt;
+        {
+            new EmployeeEntity { Id = 1, FirstName = &quot;John&quot; },
+            new EmployeeEntity { Id = 2, FirstName = &quot;Jane&quot; }
+        };
+        _employeeRepositorySubstitute.ListAsync().Returns(employeeEntities);
+
+        // Act
+        var result = await _employeeService.ListAsync();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Equal(&quot;John&quot;, result.First().FirstName);
+        Assert.Equal(&quot;Jane&quot;, result.Last().FirstName);
+    }
+
+    [Fact]
+    public async Task ListFilteredAsync_AllFiltersDefault_CallsListAsync()
+    {
+        // Arrange
+        var employeeEntities = new List&lt;EmployeeEntity&gt;
+        {
+            new EmployeeEntity { Id = 1, FirstName = &quot;John&quot; }
+        };
+        _employeeRepositorySubstitute.ListAsync().Returns(employeeEntities);
+
+        // Act
+        var result = await _employeeService.ListFilteredAsync(
+            &quot;&quot;, &quot;&quot;, &quot;&quot;, 0, 0, 0, 0);
+
+        // Assert
+        await _employeeRepositorySubstitute.Received(1).ListAsync();
+        await _employeeRepositorySubstitute.DidNotReceive().ListFilteredAsync(Arg.Any&lt;string&gt;(), Arg.Any&lt;string&gt;(), Arg.Any&lt;string&gt;(), Arg.Any&lt;decimal&gt;(), Arg.Any&lt;decimal&gt;(), Arg.Any&lt;int&gt;(), Arg.Any&lt;int&gt;());
+        Assert.Single(result);
+    }
+
+    [Fact]
+    public async Task ListFilteredAsync_SomeFiltersProvided_CallsRepositoryListFilteredAsync()
+    {
+        // Arrange
+        var employeeEntities = new List&lt;EmployeeEntity&gt;
+        {
+            new EmployeeEntity { Id = 1, FirstName = &quot;John&quot; }
+        };
+        _employeeRepositorySubstitute.ListFilteredAsync(
+            &quot;John&quot;, &quot;USA&quot;, &quot;NY&quot;, 50000, 100000, 1, 1).Returns(employeeEntities);
+
+        // Act
+        var result = await _employeeService.ListFilteredAsync(
+            &quot;John&quot;, &quot;USA&quot;, &quot;NY&quot;, 50000, 100000, 1, 1);
+
+        // Assert
+        await _employeeRepositorySubstitute.Received(1).ListFilteredAsync(
+            &quot;John&quot;, &quot;USA&quot;, &quot;NY&quot;, 50000, 100000, 1, 1);
+        Assert.Single(result);
+    }
+
+    [Fact]
+    public async Task AddAsync_ValidModel_ReturnsIdAfterValidationAndMapping()
+    {
+        // Arrange
+        var validModel = new EmployeeModel
+        {
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+        _employeeRepositorySubstitute.AddAsync(Arg.Any&lt;EmployeeEntity&gt;()).Returns(5);
+
+        // Act
+        var result = await _employeeService.AddAsync(validModel);
+
+        // Assert
+        Assert.Equal(5, result);
+    }
+
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData(&quot;&quot;, null, null)]
+    [InlineData(&quot;   &quot;, null, null)]
+    [InlineData(&quot;John123&quot;, null, nameof(EmployeeModel.FirstName))]
+    [InlineData(&quot;VeryLongNameVeryLongNameVeryLongNameVeryLongNameVeryLongNameVeryLong&quot;, null, nameof(EmployeeModel.FirstName))]
+    public async Task AddAsync_InvalidFirstName_ThrowsArgumentException(string firstName, string dummy, string expectedParamName)
+    {
+        // Arrange
+        var invalidModel = new EmployeeModel
+        {
+            FirstName = firstName,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act &amp; Assert
+        var exception = await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _employeeService.AddAsync(invalidModel));
+        Assert.Equal(expectedParamName ?? nameof(EmployeeModel.FirstName), exception.ParamName);
+    }
+
+    [Fact]
+    public async Task AddAsync_InvalidCountry_ThrowsArgumentException()
+    {
+        // Arrange
+        var invalidModel = new EmployeeModel
+        {
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            Country = &quot;123Invalid&quot;,
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act &amp; Assert
+        var exception = await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _employeeService.AddAsync(invalidModel));
+        Assert.Equal(nameof(EmployeeModel.Country), exception.ParamName);
+    }
+
+    [Fact]
+    public async Task AddAsync_InvalidAddress_ThrowsArgumentExceptionWithCityParamName()
+    {
+        // Arrange
+        var invalidModel = new EmployeeModel
+        {
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            Address = new string(&#39;a&#39;, 51),
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act &amp; Assert
+        var exception = await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _employeeService.AddAsync(invalidModel));
+        Assert.Equal(&quot;City&quot;, exception.ParamName);
+    }
+
+    [Theory]
+    [InlineData(&quot;abc&quot;, nameof(EmployeeModel.Phone))]
+    [InlineData(&quot;+12345&quot;, nameof(EmployeeModel.Phone))]
+    [InlineData(&quot;+012345678901234&quot;, nameof(EmployeeModel.Phone))]
+    public async Task AddAsync_InvalidPhone_ThrowsArgumentException(string phone, string expectedParamName)
+    {
+        // Arrange
+        var invalidModel = new EmployeeModel
+        {
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            Phone = phone,
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act &amp; Assert
+        var exception = await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _employeeService.AddAsync(invalidModel));
+        Assert.Equal(expectedParamName, exception.ParamName);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ValidModel_ReturnsId()
+    {
+        // Arrange
+        var validModel = new EmployeeModel
+        {
+            Id = 1,
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+        _employeeRepositorySubstitute.UpdateAsync(Arg.Any&lt;EmployeeEntity&gt;()).Returns(1);
+
+        // Act
+        var result = await _employeeService.UpdateAsync(validModel);
+
+        // Assert
+        Assert.Equal(1, result);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ZeroId_ThrowsArgumentException()
+    {
+        // Arrange
+        var invalidModel = new EmployeeModel
+        {
+            Id = 0,
+            FirstName = &quot;John&quot;,
+            LastName = &quot;Doe&quot;,
+            MiddleName = &quot;M&quot;,
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2020, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act &amp; Assert
+        var exception = await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _employeeService.UpdateAsync(invalidModel));
+        Assert.Equal(&quot;Id&quot;, exception.ParamName);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_NullModel_ThrowsArgumentNullException()
+    {
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;ArgumentNullException&gt;(() =&gt; _employeeService.UpdateAsync(null));
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ExistingId_ReturnsId()
+    {
+        // Arrange
+        var id = 1;
+        _employeeRepositorySubstitute.DeleteAsync(id).Returns(1);
+
+        // Act
+        var result = await _employeeService.DeleteAsync(id);
+
+        // Assert
+        Assert.Equal(1, result);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,5,11,34,1],[12,5,12,6,1],[13,9,13,79,1],[14,9,14,79,1],[15,5,15,6,1],[19,5,19,6,1],[21,9,21,20,1],[22,9,39,11,1],[40,9,40,76,1],[43,9,43,58,1],[46,9,46,52,1],[47,9,47,66,1],[48,9,48,64,1],[49,9,49,68,1],[50,9,50,66,1],[51,9,51,62,1],[52,9,52,56,1],[53,9,53,62,1],[54,9,54,58,1],[55,9,55,64,1],[56,9,56,60,1],[57,9,57,72,1],[58,9,58,68,1],[59,9,59,68,1],[60,9,60,64,1],[61,5,61,6,1],[65,5,65,6,1],[67,9,67,20,1],[68,9,68,82,1],[71,9,71,64,1],[71,64,71,93,1],[71,93,71,95,1],[72,5,72,6,1],[76,5,76,6,1],[78,9,82,11,1],[83,9,83,77,1],[86,9,86,57,1],[89,9,89,39,1],[90,9,90,56,1],[91,9,91,55,1],[92,5,92,6,1],[96,5,96,6,1],[98,9,101,11,1],[102,9,102,77,1],[105,9,106,37,1],[109,9,109,69,1],[110,9,110,208,1],[111,9,111,31,1],[112,5,112,6,1],[116,5,116,6,1],[118,9,121,11,1],[122,9,123,81,1],[126,9,127,55,1],[130,9,131,55,1],[132,9,132,31,1],[133,5,133,6,1],[137,5,137,6,1],[139,9,149,11,1],[150,9,150,86,1],[153,9,153,66,1],[156,9,156,33,1],[157,5,157,6,1],[166,5,166,6,1],[168,9,178,11,1],[181,9,181,75,1],[181,75,181,114,1],[181,114,181,116,1],[182,9,182,97,1],[183,5,183,6,0],[187,5,187,6,1],[189,9,200,11,1],[203,9,203,75,1],[203,75,203,114,1],[203,114,203,116,1],[204,9,204,74,1],[205,5,205,6,0],[209,5,209,6,1],[211,9,222,11,1],[225,9,225,75,1],[225,75,225,114,1],[225,114,225,116,1],[226,9,226,51,1],[227,5,227,6,0],[234,5,234,6,1],[236,9,247,11,1],[250,9,250,75,1],[250,75,250,114,1],[250,114,250,116,1],[251,9,251,62,1],[252,5,252,6,0],[256,5,256,6,1],[258,9,269,11,1],[270,9,270,89,1],[273,9,273,69,1],[276,9,276,33,1],[277,5,277,6,1],[281,5,281,6,1],[283,9,294,11,1],[297,9,297,75,1],[297,75,297,117,1],[297,117,297,119,1],[298,9,298,49,1],[299,5,299,6,0],[303,5,303,6,1],[305,9,305,99,1],[306,5,306,6,1],[310,5,310,6,1],[312,9,312,20,1],[313,9,313,66,1],[316,9,316,61,1],[319,9,319,33,1],[320,5,320,6,1]]);
+    </script>
+  </body>
+</html>

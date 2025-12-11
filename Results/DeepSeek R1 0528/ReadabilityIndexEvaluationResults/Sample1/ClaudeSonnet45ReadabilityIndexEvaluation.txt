@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765315375-nG6icdGkwUjG9Lo0ov7f
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"All async tests correctly use 'async Task' signature instead of 'async void'",
+		"AAA pattern is clearly followed with comment separators in most tests",
+		"Consistent and meaningful naming for variables (_repositorySubstitute, _sut, testId, mockEntity)",
+		"No unnecessary comments beyond AAA separators, keeping the code clean",
+		"Good use of constructor for test setup, reducing duplication across tests",
+		"Minor improvement opportunity: 'GetAsync_WhenRepositoryReturnsNull_ThrowsNullReferenceException' combines Act & Assert, deviating slightly from strict AAA separation",
+		"Minor improvement opportunity: Loop-based assertions in 'ListAsync_WhenRepositoryReturnsNonEmptyList_ReturnsMappedCollection' could be replaced with individual assertions or collection assertion helpers for better readability",
+		"Overall structure is logical, well-formatted, and easy to maintain with only minor deviations from the ideal"
+	]
+}
+```

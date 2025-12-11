@@ -1,0 +1,229 @@
+using Dataset.Sample12;
+
+namespace DeepSeekR10528UnitTests
+{
+    public class LUPDecompositionTests
+    {
+        private void AssertMatricesEqual(double[,] expected, double[,] actual, int precision = 5)
+        {
+            int rowExpected = expected.GetLength(0);
+            int colExpected = expected.GetLength(1);
+            int rowActual = actual.GetLength(0);
+            int colActual = actual.GetLength(1);
+            Assert.Equal(rowExpected, rowActual);
+            Assert.Equal(colExpected, colActual);
+
+            for (int i = 0; i < rowExpected; i++)
+            {
+                for (int j = 0; j < colExpected; j++)
+                {
+                    Assert.Equal(expected[i, j], actual[i, j], precision);
+                }
+            }
+        }
+
+        private double[,] ApplyPermutation(double[,] matrix, int[] p)
+        {
+            int n = matrix.GetLength(0);
+            int m = matrix.GetLength(1);
+            double[,] result = new double[n, m];
+            for (int i = 0; i < n; i++)
+            {
+                int originalRow = p[i];
+                for (int j = 0; j < m; j++)
+                {
+                    result[i, j] = matrix[originalRow, j];
+                }
+            }
+            return result;
+        }
+
+        private double[,] MultiplyMatrices(double[,] a, double[,] b)
+        {
+            int aRows = a.GetLength(0);
+            int aCols = a.GetLength(1);
+            int bRows = b.GetLength(0);
+            int bCols = b.GetLength(1);
+            if (aCols != bRows)
+                throw new ArgumentException("Invalid matrix dimensions for multiplication");
+
+            double[,] result = new double[aRows, bCols];
+            for (int i = 0; i < aRows; i++)
+            {
+                for (int j = 0; j < bCols; j++)
+                {
+                    double sum = 0;
+                    for (int k = 0; k < aCols; k++)
+                    {
+                        sum += a[i, k] * b[k, j];
+                    }
+                    result[i, j] = sum;
+                }
+            }
+            return result;
+        }
+
+        [Fact]
+        public void Decompose_1x1NonSingular_ReturnsCorrectLU()
+        {
+            // Arrange
+            double[,] original = { { 5 } };
+            double[,] input = (double[,])original.Clone();
+            double[,] L, U;
+            int[] P;
+
+            // Act
+            LUPDecomposition.Decompose(input, out L, out U, out P);
+
+            // Assert
+            double[,] expectedL = { { 1 } };
+            double[,] expectedU = { { 5 } };
+            int[] expectedP = { 0 };
+
+            AssertMatricesEqual(expectedL, L);
+            AssertMatricesEqual(expectedU, U);
+            Assert.Equal(expectedP, P);
+        }
+
+        [Fact]
+        public void Decompose_3x3NonSingular_ReturnsExpectedLandUAndP()
+        {
+            // Arrange
+            double[,] original = {
+                { 2, 1, 1 },
+                { 4, 3, 3 },
+                { 8, 7, 9 }
+            };
+            double[,] input = (double[,])original.Clone();
+            double[,] L, U;
+            int[] P;
+
+            // Act
+            LUPDecomposition.Decompose(input, out L, out U, out P);
+
+            // Assert
+            double[,] expectedL = {
+                { 1, 0, 0 },
+                { 0.5, 1, 0 },
+                { 0.25, 1.5, 1 }
+            };
+            double[,] expectedU = {
+                { 8, 7, 9 },
+                { 0, -0.5, -1.5 },
+                { 0, 0, 1 }
+            };
+            int[] expectedP = { 2, 1, 0 };
+
+            AssertMatricesEqual(expectedL, L, 5);
+            AssertMatricesEqual(expectedU, U, 5);
+            Assert.Equal(expectedP, P);
+
+            double[,] A_permuted = ApplyPermutation(original, P);
+            double[,] LU = MultiplyMatrices(L, U);
+            AssertMatricesEqual(A_permuted, LU, 5);
+        }
+
+        [Fact]
+        public void Decompose_SingularMatrix_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 1, 2 },
+                { 2, 4 }
+            };
+
+            // Act & Assert
+            double[,] L, U;
+            int[] P;
+            Assert.Throws<InvalidOperationException>(() => LUPDecomposition.Decompose(matrix, out L, out U, out P));
+        }
+
+        [Fact]
+        public void Decompose_ZeroMatrix_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 0, 0 },
+                { 0, 0 }
+            };
+
+            // Act & Assert
+            double[,] L, U;
+            int[] P;
+            Assert.Throws<InvalidOperationException>(() => LUPDecomposition.Decompose(matrix, out L, out U, out P));
+        }
+
+        [Fact]
+        public void GetMatrix_1x1Matrix_ReturnsFormattedString()
+        {
+            // Arrange
+            double[,] matrix = { { 5 } };
+            string expected = "5\t\n";
+
+            // Act
+            string result = LUPDecomposition.GetMatrix(matrix);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetMatrix_2x2Matrix_ReturnsFormattedString()
+        {
+            // Arrange
+            double[,] matrix = {
+                { 1, 2 },
+                { 3, 4 }
+            };
+            string expected = "1\t2\t\n3\t4\t\n";
+
+            // Act
+            string result = LUPDecomposition.GetMatrix(matrix);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetPermutationMatrix_Permutation210_ReturnsFormattedString()
+        {
+            // Arrange
+            int[] P = { 2, 1, 0 };
+            string expected = "0\t0\t1\t\n0\t1\t0\t\n1\t0\t0\t\n";
+
+            // Act
+            string result = LUPDecomposition.GetPermutationMatrix(P);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetPermutationMatrix_Permutation021_ReturnsFormattedString()
+        {
+            // Arrange
+            int[] P = { 0, 2, 1 };
+            string expected = "1\t0\t0\t\n0\t0\t1\t\n0\t1\t0\t\n";
+
+            // Act
+            string result = LUPDecomposition.GetPermutationMatrix(P);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetPermutationMatrix_SingleElement_ReturnsFormattedString()
+        {
+            // Arrange
+            int[] P = { 0 };
+            string expected = "1\t\n";
+
+            // Act
+            string result = LUPDecomposition.GetPermutationMatrix(P);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+    }
+}

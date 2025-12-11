@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765317752-ZttolSlujVUzfRTwMfI9
+
+Content:
+```json
+{
+	"readabilityIndex": 94,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"All async tests use async Task signatures.",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and empty line separation.",
+		"No unnecessary comments; only AAA markers used.",
+		"Constructor provides clear, shared mock setup reducing duplication.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] for variations.",
+		"Clear, meaningful naming for variables, mocks, and entities.",
+		"Adheres to C#/.NET naming conventions and standard formatting.",
+		"Minor density in some Arg.Is lambdas for verifications, but remains readable."
+	]
+}
+```

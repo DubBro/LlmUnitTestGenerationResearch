@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316889-eEwgtAcSlG4Xr3hygBZC
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows the recommended pattern: Base64HelpersTests",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern clearly",
+		"Tests follow AAA pattern with clear Arrange, Act, Assert comments and separation",
+		"Uses [Theory] with [InlineData] appropriately to avoid code duplication",
+		"Meaningful test names that describe scenarios and expected outcomes",
+		"Clean formatting with proper indentation and line spacing",
+		"Method names clearly indicate what is being tested (Encode, Decode)",
+		"No unnecessary comments or code clutter",
+		"Each test has a single, clear responsibility",
+		"Exception testing follows standard xUnit patterns"
+	]
+}

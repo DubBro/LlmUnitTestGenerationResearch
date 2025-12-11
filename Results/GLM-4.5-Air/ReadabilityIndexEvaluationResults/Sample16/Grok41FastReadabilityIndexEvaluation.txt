@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765322283-azVzTyJWzhrJIAjHSWGC
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class and method names follow the recommended patterns (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult).",
+		"All tests adhere strictly to the AAA pattern with clear // Arrange, // Act, // Assert comments and proper separation.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] for variations, reducing duplication.",
+		"Clear, meaningful variable names reflecting purpose.",
+		"No extraneous comments or code outside the ideal structure.",
+		"Consistent formatting and adherence to C# naming conventions.",
+		"Nested classes logically group tests by method, aiding navigation despite deviation from flat structure ideal.",
+		"Minimal duplication across similar edge-case tests, with distinct scenarios clearly named."
+	]
+}

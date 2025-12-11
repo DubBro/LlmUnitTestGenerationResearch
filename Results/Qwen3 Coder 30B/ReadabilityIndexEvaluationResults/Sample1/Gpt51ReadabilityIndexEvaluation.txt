@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765324956-5WzzI0i2ViidzS2qwpOz
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class and method names are clear, descriptive, and follow the recommended ClassUnderTestTests and Method_Scenario_Result patterns.",
+    "AAA structure is explicitly followed and clearly separated with Arrange/Act/Assert comments, improving scanability.",
+    "Async tests correctly use async Task signatures, matching best practices for asynchronous test methods.",
+    "Dependencies (repository, service) are created locally in each test, making each test self-contained and easy to understand in isolation.",
+    "Assertions are straightforward and explicit, clearly verifying the key properties of the returned models.",
+    "Code style and naming follow standard C# conventions, with no unnecessary comments or nested classes.",
+    "Minor readability issues such as repeated ElementAt calls instead of indexers and repeated Arrange setup slightly reduce optimal clarity and maintainability."
+  ]
+}

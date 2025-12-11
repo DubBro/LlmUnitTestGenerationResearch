@@ -1,0 +1,14 @@
+GenerationId:
+gen-1765320972-3wxic1O2qGfwUUDojBAR
+
+Content:
+ {
+	"readabilityIndex": 70,
+	"reasons": [
+		"Unnecessary nested classes violate guidelines and reduce test discoverability",
+		"Significant code duplication across six nearly identical IMEI validation tests",
+		"Should use [Theory] with [InlineData] for testing multiple invalid IMEI formats",
+		"Test naming pattern (Given_When_Then) deviates from recommended MethodUnderTest_Scenario_ExpectedResult",
+		"Exception tests combine Act and Assert blocks, deviating from strict AAA pattern"
+	]
+}

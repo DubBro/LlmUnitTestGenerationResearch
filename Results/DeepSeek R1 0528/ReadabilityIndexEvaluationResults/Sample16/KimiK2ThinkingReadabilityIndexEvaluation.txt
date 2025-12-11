@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765317027-VL1u7z81GzZuDHw9ExR3
+
+Content:
+ {
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern.",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Effective use of [Theory] and [InlineData] to test multiple scenarios without code duplication.",
+		"Clear and descriptive variable names (input, replacement, expected, result) reflect their purpose.",
+		"Act and Assert blocks are explicitly marked with comments following AAA pattern.",
+		"Tests are concise, focused, and contain no unnecessary code or comments.",
+		"Missing explicit Arrange block comment and empty line separation reduces AAA visual clarity.",
+		"Namespace name is generic and not descriptive of the tested component."
+	]
+}

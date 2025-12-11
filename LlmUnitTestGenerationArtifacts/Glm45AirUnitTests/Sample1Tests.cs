@@ -1,0 +1,131 @@
+using Dataset.Sample1;
+using NSubstitute;
+
+namespace Glm45AirUnitTests;
+
+public class DepartmentServiceTests
+{
+    private readonly IDepartmentRepository _departmentRepositorySubstitute;
+    private readonly DepartmentService _departmentService;
+
+    public DepartmentServiceTests()
+    {
+        _departmentRepositorySubstitute = Substitute.For<IDepartmentRepository>();
+        _departmentService = new DepartmentService(_departmentRepositorySubstitute);
+    }
+
+    [Fact]
+    public async Task GetAsync_PassingValidId_ReturnsDepartmentModel()
+    {
+        // Arrange
+        const int departmentId = 1;
+        var expectedDepartmentEntity = new DepartmentEntity
+        {
+            Id = departmentId,
+            Name = "HR",
+            Description = "Human Resources"
+        };
+        var expectedDepartmentModel = new DepartmentModel
+        {
+            Id = departmentId,
+            Name = "HR",
+            Description = "Human Resources"
+        };
+        _departmentRepositorySubstitute.GetAsync(departmentId).Returns(Task.FromResult(expectedDepartmentEntity));
+
+        // Act
+        var actualResult = await _departmentService.GetAsync(departmentId);
+
+        // Assert
+        Assert.Equal(expectedDepartmentModel.Id, actualResult.Id);
+        Assert.Equal(expectedDepartmentModel.Name, actualResult.Name);
+        Assert.Equal(expectedDepartmentModel.Description, actualResult.Description);
+    }
+
+    [Fact]
+    public async Task GetAsync_RepositoryReturnsNull_ReturnsDepartmentModelWithDefaultValues()
+    {
+        // Arrange
+        const int departmentId = 1;
+        DepartmentEntity? expectedDepartmentEntity = null;
+        var expectedDepartmentModel = new DepartmentModel
+        {
+            Id = departmentId,
+            Name = null!,
+            Description = null
+        };
+        _departmentRepositorySubstitute.GetAsync(departmentId).Returns(Task.FromResult<DepartmentEntity?>(expectedDepartmentEntity));
+
+        // Act
+        var actualResult = await _departmentService.GetAsync(departmentId);
+
+        // Assert
+        Assert.Equal(expectedDepartmentModel.Id, actualResult.Id);
+        Assert.Equal(expectedDepartmentModel.Name, actualResult.Name);
+        Assert.Equal(expectedDepartmentModel.Description, actualResult.Description);
+    }
+
+    [Fact]
+    public async Task ListAsync_RepositoryReturnsEntities_ReturnsDepartmentModels()
+    {
+        // Arrange
+        var expectedDepartmentEntities = new List<DepartmentEntity>
+        {
+            new DepartmentEntity
+            {
+                Id = 1,
+                Name = "HR",
+                Description = "Human Resources"
+            },
+            new DepartmentEntity
+            {
+                Id = 2,
+                Name = "IT",
+                Description = "Information Technology"
+            }
+        };
+        var expectedDepartmentModels = new List<DepartmentModel>
+        {
+            new DepartmentModel
+            {
+                Id = 1,
+                Name = "HR",
+                Description = "Human Resources"
+            },
+            new DepartmentModel
+            {
+                Id = 2,
+                Name = "IT",
+                Description = "Information Technology"
+            }
+        };
+        _departmentRepositorySubstitute.ListAsync().Returns(Task.FromResult((ICollection<DepartmentEntity>)expectedDepartmentEntities));
+
+        // Act
+        var actualResult = await _departmentService.ListAsync();
+
+        // Assert
+        Assert.Equal(expectedDepartmentModels.Count, actualResult.Count);
+        for (int i = 0; i < expectedDepartmentModels.Count; i++)
+        {
+            Assert.Equal(expectedDepartmentModels[i].Id, actualResult.ElementAt(i).Id);
+            Assert.Equal(expectedDepartmentModels[i].Name, actualResult.ElementAt(i).Name);
+            Assert.Equal(expectedDepartmentModels[i].Description, actualResult.ElementAt(i).Description);
+        }
+    }
+
+    [Fact]
+    public async Task ListAsync_RepositoryReturnsEmptyList_ReturnsEmptyList()
+    {
+        // Arrange
+        var expectedDepartmentEntities = new List<DepartmentEntity>();
+        var expectedDepartmentModels = new List<DepartmentModel>();
+        _departmentRepositorySubstitute.ListAsync().Returns(Task.FromResult((ICollection<DepartmentEntity>)expectedDepartmentEntities));
+
+        // Act
+        var actualResult = await _departmentService.ListAsync();
+
+        // Assert
+        Assert.Equal(expectedDepartmentModels.Count, actualResult.Count);
+    }
+}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample18Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample18;
+
+namespace Gemini3ProUnitTests;
+
+public class CaesarEncoderTests
+{
+    [Fact]
+    public void Encode_WhenTextIsNull_ThrowsNullReferenceException()
+    {
+        // Arrange
+        string text = null!;
+        int key = 3;
+
+        // Act
+        Action act = () =&gt; CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Throws&lt;NullReferenceException&gt;(act);
+    }
+
+    [Fact]
+    public void Decode_WhenTextIsNull_ThrowsNullReferenceException()
+    {
+        // Arrange
+        string text = null!;
+        int key = 3;
+
+        // Act
+        Action act = () =&gt; CaesarEncoder.Decode(text, key);
+
+        // Assert
+        Assert.Throws&lt;NullReferenceException&gt;(act);
+    }
+
+    [Fact]
+    public void Encode_WhenTextIsEmpty_ReturnsEmptyString()
+    {
+        // Arrange
+        string text = string.Empty;
+        int key = 5;
+
+        // Act
+        string result = CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;abc&quot;, 1, &quot;bcd&quot;)]
+    [InlineData(&quot;ABC&quot;, 1, &quot;BCD&quot;)]
+    [InlineData(&quot;z&quot;, 1, &quot;a&quot;)]
+    [InlineData(&quot;Z&quot;, 1, &quot;A&quot;)]
+    [InlineData(&quot;Hello&quot;, 13, &quot;Uryyb&quot;)] // Standard ROT13
+    public void Encode_WhenInputIsSimpleLetters_ReturnsShiftedString(string input, int key, string expected)
+    {
+        // Arrange &amp; Act
+        string result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;abc&quot;, 0, &quot;abc&quot;)]
+    [InlineData(&quot;XYZ&quot;, 26, &quot;XYZ&quot;)]
+    [InlineData(&quot;Testing&quot;, 52, &quot;Testing&quot;)] // Multiple full rotations
+    public void Encode_WhenKeyResultInZeroNetShift_ReturnsOriginalString(string input, int key, string expected)
+    {
+        // Arrange &amp; Act
+        string result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;y&quot;, 2, &quot;a&quot;)]
+    [InlineData(&quot;X&quot;, 3, &quot;A&quot;)]
+    [InlineData(&quot;abc&quot;, 27, &quot;bcd&quot;)] // Key larger than alphabet size
+    [InlineData(&quot;abc&quot;, 53, &quot;bcd&quot;)] // Key larger than 2x alphabet size
+    public void Encode_WhenKeyIsLargeOrCausesWrap_ReturnsCorrectlyWrappedString(string input, int key, string expected)
+    {
+        // Arrange &amp; Act
+        string result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;123&quot;, 5)]
+    [InlineData(&quot;!@#&quot;, 5)]
+    [InlineData(&quot;  &quot;, 5)]
+    [InlineData(&quot;A 1 b .&quot;, 1)] // Expected: &quot;B 1 c .&quot;
+    public void Encode_WhenTextContainsNonLetters_LeavesNonLettersUnchanged(string input, int key)
+    {
+        // Arrange
+        // Calculate expected manually for the mixed case to ensure clarity
+        string expected = input == &quot;A 1 b .&quot; ? &quot;B 1 c .&quot; : input;
+
+        // Act
+        string result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;b&quot;, -1, &quot;a&quot;)]
+    [InlineData(&quot;a&quot;, -1, &quot;z&quot;)] // Reverse wrap
+    [InlineData(&quot;A&quot;, -2, &quot;Y&quot;)]
+    [InlineData(&quot;a&quot;, -27, &quot;z&quot;)] // Large negative key
+    public void Encode_WhenKeyIsNegative_PerformsReverseShift(string input, int key, string expected)
+    {
+        // Arrange &amp; Act
+        string result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;bcd&quot;, 1, &quot;abc&quot;)]
+    [InlineData(&quot;BCD&quot;, 1, &quot;ABC&quot;)]
+    [InlineData(&quot;a&quot;, 1, &quot;z&quot;)] // Wrap backwards
+    [InlineData(&quot;A&quot;, 1, &quot;Z&quot;)]
+    public void Decode_WhenCalled_ReversesShiftLogic(string input, int key, string expected)
+    {
+        // Arrange &amp; Act
+        string result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;abc&quot;, 27, &quot;zab&quot;)] // Logic: Decode shifts by -27 == -1. &#39;a&#39; - 1 -&gt; &#39;z&#39;.
+    [InlineData(&quot;a&quot;, 53, &quot;z&quot;)] // 53 is 26*2 + 1. Decode shifts by -1.
+    public void Decode_WhenKeyIsLarge_ReturnsCorrectlyWrappedString(string input, int key, string expected)
+    {
+        // Arrange &amp; Act
+        string result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;The quick brown fox jumps over the lazy dog.&quot;, 5)]
+    [InlineData(&quot;C# is awesome!&quot;, 10)]
+    [InlineData(&quot;Edge case: z to a check.&quot;, 1)]
+    public void EncodeAndDecode_FromRoundTrip_ReturnsOriginalString(string original, int key)
+    {
+        // Arrange
+        // Act
+        string encoded = CaesarEncoder.Encode(original, key);
+        string decoded = CaesarEncoder.Decode(encoded, key);
+
+        // Assert
+        Assert.NotEqual(original, encoded); // Ensure transformation actually happened
+        Assert.Equal(original, decoded); // Ensure reversibility
+    }
+
+    [Fact]
+    public void Encode_WhenStringContainsMixedCaseAndSymbols_PreservesStructure()
+    {
+        // Arrange
+        string text = &quot;Hello, World! 123&quot;;
+        int key = 1;
+        string expected = &quot;Ifmmp, Xpsme! 123&quot;;
+
+        // Act
+        string result = CaesarEncoder.Encode(text, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,29,1],[12,9,12,21,1],[15,9,15,28,1],[15,28,15,59,1],[15,59,15,60,1],[18,9,18,52,1],[19,5,19,6,1],[23,5,23,6,1],[25,9,25,29,1],[26,9,26,21,1],[29,9,29,28,1],[29,28,29,59,1],[29,59,29,60,1],[32,9,32,52,1],[33,5,33,6,1],[37,5,37,6,1],[39,9,39,36,1],[40,9,40,21,1],[43,9,43,57,1],[46,9,46,44,1],[47,5,47,6,1],[56,5,56,6,1],[58,9,58,58,1],[61,9,61,40,1],[62,5,62,6,1],[69,5,69,6,1],[71,9,71,58,1],[74,9,74,40,1],[75,5,75,6,1],[83,5,83,6,1],[85,9,85,58,1],[88,9,88,40,1],[89,5,89,6,1],[97,5,97,6,1],[100,9,100,66,1],[103,9,103,58,1],[106,9,106,40,1],[107,5,107,6,1],[115,5,115,6,1],[117,9,117,58,1],[120,9,120,40,1],[121,5,121,6,1],[129,5,129,6,1],[131,9,131,58,1],[134,9,134,40,1],[135,5,135,6,1],[141,5,141,6,1],[143,9,143,58,1],[146,9,146,40,1],[147,5,147,6,1],[154,5,154,6,1],[157,9,157,62,1],[158,9,158,61,1],[161,9,161,44,1],[162,9,162,41,1],[163,5,163,6,1],[167,5,167,6,1],[169,9,169,43,1],[170,9,170,21,1],[171,9,171,47,1],[174,9,174,57,1],[177,9,177,40,1],[178,5,178,6,1]]);
+    </script>
+  </body>
+</html>

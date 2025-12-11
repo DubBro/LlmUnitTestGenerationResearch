@@ -1,0 +1,201 @@
+GenerationId:
+gen-1765217926-ofkojroZ5Y4CiKfNk8OU
+
+Content:
+```csharp
+using System;
+using Xunit;
+
+namespace Dataset.Sample8.UnitTests
+{
+    public class LuTests
+    {
+        [Fact]
+        public void Decompose_SquareMatrix_ReturnsLowerAndUpperWhichMultiplyToSource()
+        {
+            // Arrange
+            var lu = new Lu();
+            var source = new double[,]
+            {
+                { 2, 1, -1 },
+                { -3, -1, 2 },
+                { -2, 1, 2 }
+            };
+
+            // Act
+            var (L, U) = lu.Decompose(source);
+
+            // Assert
+            Assert.Equal(source.GetLength(0), L.GetLength(0));
+            Assert.Equal(source.GetLength(1), L.GetLength(1));
+            Assert.Equal(source.GetLength(0), U.GetLength(0));
+            Assert.Equal(source.GetLength(1), U.GetLength(1));
+
+            var product = MultiplyMatrices(L, U);
+            for (int i = 0; i < source.GetLength(0); i++)
+            {
+                for (int j = 0; j < source.GetLength(1); j++)
+                {
+                    Assert.Equal(source[i, j], product[i, j], 10);
+                }
+            }
+        }
+
+        [Fact]
+        public void Decompose_1x1Matrix_ReturnsLIdentityAndUEqualValue()
+        {
+            // Arrange
+            var lu = new Lu();
+            var source = new double[,]
+            {
+                { 5.0 }
+            };
+
+            // Act
+            var (L, U) = lu.Decompose(source);
+
+            // Assert
+            Assert.Equal(1, L.GetLength(0));
+            Assert.Equal(1, L.GetLength(1));
+            Assert.Equal(1, U.GetLength(0));
+            Assert.Equal(1, U.GetLength(1));
+            Assert.Equal(1.0, L[0, 0], 10);
+            Assert.Equal(5.0, U[0, 0], 10);
+        }
+
+        [Fact]
+        public void Decompose_NonSquare_ThrowsArgumentException()
+        {
+            // Arrange
+            var lu = new Lu();
+            var nonSquare = new double[,]
+            {
+                { 1.0, 2.0, 3.0 },
+                { 4.0, 5.0, 6.0 }
+            };
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => lu.Decompose(nonSquare));
+        }
+
+        [Fact]
+        public void Eliminate_SolvesLinearSystem_ReturnsSolution()
+        {
+            // Arrange
+            var lu = new Lu();
+            var matrix = new double[,]
+            {
+                { 2.0, 1.0, -1.0 },
+                { -3.0, -1.0, 2.0 },
+                { -2.0, 1.0, 2.0 }
+            };
+            var coefficients = new double[] { 8.0, -11.0, -3.0 }; // expected solution [2,3,-1]
+
+            // Act
+            var solution = lu.Eliminate(matrix, coefficients);
+
+            // Assert
+            Assert.Equal(3, solution.Length);
+            Assert.Equal(2.0, solution[0], 10);
+            Assert.Equal(3.0, solution[1], 10);
+            Assert.Equal(-1.0, solution[2], 10);
+        }
+
+        [Fact]
+        public void Eliminate_1x1Matrix_ReturnsSolution()
+        {
+            // Arrange
+            var lu = new Lu();
+            var matrix = new double[,] { { 5.0 } };
+            var coefficients = new double[] { 10.0 }; // 5 * x = 10 -> x = 2
+
+            // Act
+            var solution = lu.Eliminate(matrix, coefficients);
+
+            // Assert
+            Assert.Single(solution);
+            Assert.Equal(2.0, solution[0], 10);
+        }
+
+        [Fact]
+        public void Eliminate_NonSquare_ThrowsArgumentException()
+        {
+            // Arrange
+            var lu = new Lu();
+            var nonSquare = new double[,]
+            {
+                { 1.0, 2.0, 3.0 },
+                { 4.0, 5.0, 6.0 }
+            };
+            var coefficients = new double[] { 1.0, 2.0 };
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => lu.Eliminate(nonSquare, coefficients));
+        }
+
+        [Fact]
+        public void Eliminate_SingularMatrix_ReturnsNaNValues()
+        {
+            // Arrange
+            var lu = new Lu();
+            var zeroMatrix = new double[,]
+            {
+                { 0.0, 0.0 },
+                { 0.0, 0.0 }
+            };
+            var coefficients = new double[] { 0.0, 0.0 };
+
+            // Act
+            var solution = lu.Eliminate(zeroMatrix, coefficients);
+
+            // Assert
+            Assert.Equal(2, solution.Length);
+            Assert.True(double.IsNaN(solution[0]) || double.IsInfinity(solution[0]));
+            Assert.True(double.IsNaN(solution[1]) || double.IsInfinity(solution[1]));
+        }
+
+        private static double[,] MultiplyMatrices(double[,] a, double[,] b)
+        {
+            int aRows = a.GetLength(0);
+            int aCols = a.GetLength(1);
+            int bRows = b.GetLength(0);
+            int bCols = b.GetLength(1);
+
+            if (aCols != bRows) throw new ArgumentException("Incompatible matrices for multiplication.");
+
+            var result = new double[aRows, bCols];
+            for (int i = 0; i < aRows; i++)
+            {
+                for (int j = 0; j < bCols; j++)
+                {
+                    double sum = 0.0;
+                    for (int k = 0; k < aCols; k++)
+                    {
+                        sum += a[i, k] * b[k, j];
+                    }
+                    result[i, j] = sum;
+                }
+            }
+            return result;
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+42759,3385
+
+OpenRouterElapsedTimeMilliseconds:
+52779
+
+PromptTokens:
+1557
+
+CompletionTokens:
+3169
+
+TotalTokens:
+4726
+
+TotalCost:
+0,00672725

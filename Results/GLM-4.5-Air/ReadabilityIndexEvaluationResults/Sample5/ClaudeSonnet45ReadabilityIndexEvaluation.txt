@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765320450-uuLyBgVVtkS2tOryWMMa
+
+Content:
+```json
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Test class uses nested classes (GetFolderAsync, GetRootFoldersAsync, AddFolderAsync) which contradicts the recommendation against unnecessary nested classes and complicates navigation",
+		"Test names use Given_When_Then pattern instead of the recommended MethodUnderTest_Scenario_ExpectedResult pattern, though they remain clear and descriptive",
+		"AAA pattern is consistently followed with clear comment separators and proper spacing between blocks, enhancing readability",
+		"All async tests correctly use 'async Task' signature instead of 'async void'",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication for testing multiple input variations (invalid names, long names)",
+		"Variable and field naming is clear and follows C# conventions (_folderRepositorySubstitute, _folderService)",
+		"Test setup is well-organized in constructor, making dependencies and initialization explicit",
+		"Assertions are comprehensive and verify both return values and mock interactions using NSubstitute's Received() method",
+		"No unnecessary comments beyond AAA separators; code is self-documenting through descriptive variable names",
+		"Minor inconsistency: some tests combine Act & Assert blocks for exception testing, though this is acceptable practice"
+	]
+}
+```

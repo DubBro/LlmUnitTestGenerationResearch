@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample4Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample4;
+using NSubstitute;
+
+namespace Qwen3Coder30BUnitTests;
+
+public class CompanyServiceTests
+{
+    [Fact]
+    public async Task GetAsync_ValidId_ReturnsMappedCompanyModel()
+    {
+        // Arrange
+        var companyEntity = new CompanyEntity
+        {
+            Id = 1,
+            Name = &quot;Test Company&quot;,
+            Description = &quot;Test Description&quot;
+        };
+
+        var companyRepository = Substitute.For&lt;ICompanyRepository&gt;();
+        companyRepository.GetAsync(1).Returns(companyEntity);
+
+        var mapper = Substitute.For&lt;IMapper&gt;();
+        var expectedModel = new CompanyModel
+        {
+            Id = 1,
+            Name = &quot;Test Company&quot;,
+            Description = &quot;Test Description&quot;
+        };
+        mapper.Map&lt;CompanyModel&gt;(companyEntity).Returns(expectedModel);
+
+        var service = new CompanyService(companyRepository, mapper);
+
+        // Act
+        var result = await service.GetAsync(1);
+
+        // Assert
+        Assert.Equal(expectedModel.Id, result.Id);
+        Assert.Equal(expectedModel.Name, result.Name);
+        Assert.Equal(expectedModel.Description, result.Description);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(int.MinValue)]
+    public async Task GetAsync_InvalidId_ReturnsCompanyModelWithDefaultValues(int id)
+    {
+        // Arrange
+        var companyEntity = new CompanyEntity
+        {
+            Id = id,
+            Name = string.Empty,
+            Description = string.Empty
+        };
+
+        var companyRepository = Substitute.For&lt;ICompanyRepository&gt;();
+        companyRepository.GetAsync(id).Returns(companyEntity);
+
+        var mapper = Substitute.For&lt;IMapper&gt;();
+        var expectedModel = new CompanyModel
+        {
+            Id = id,
+            Name = string.Empty,
+            Description = string.Empty
+        };
+        mapper.Map&lt;CompanyModel&gt;(companyEntity).Returns(expectedModel);
+
+        var service = new CompanyService(companyRepository, mapper);
+
+        // Act
+        var result = await service.GetAsync(id);
+
+        // Assert
+        Assert.Equal(expectedModel.Id, result.Id);
+        Assert.Equal(expectedModel.Name, result.Name);
+        Assert.Equal(expectedModel.Description, result.Description);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,5,11,6,1],[13,9,18,11,1],[20,9,20,70,1],[21,9,21,62,1],[23,9,23,48,1],[24,9,29,11,1],[30,9,30,72,1],[32,9,32,69,1],[35,9,35,48,1],[38,9,38,51,1],[39,9,39,55,1],[40,9,40,69,1],[41,5,41,6,1],[48,5,48,6,1],[50,9,55,11,1],[57,9,57,70,1],[58,9,58,63,1],[60,9,60,48,1],[61,9,66,11,1],[67,9,67,72,1],[69,9,69,69,1],[72,9,72,49,1],[75,9,75,51,1],[76,9,76,55,1],[77,9,77,69,1],[78,5,78,6,1]]);
+    </script>
+  </body>
+</html>

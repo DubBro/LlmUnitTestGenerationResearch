@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317008-2GbC5tYh92dNDePGdCLF
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name `AsciiHelpersTests` clearly follows the ClassUnderTestTests pattern and communicates the subject under test.",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern and are descriptive enough to understand the intent of each test.",
+    "Use of `[Theory]` with `[InlineData]` is appropriate for multiple input variations and effectively avoids code duplication.",
+    "Parameter names (`input`, `replacement`, `expected`) are clear and self-explanatory, aiding quick comprehension of each test case.",
+    "AAA structure is present and explicitly separated by `// Act` and `// Assert` comments, making the flow of each test easy to follow.",
+    "Formatting and indentation are consistent, with no unnecessary whitespace or clutter, contributing to straightforward readability.",
+    "No extraneous comments or nested classes are present, keeping the tests focused and easy to scan.",
+    "All tests are synchronous methods returning `void` for non-async code, which is correct and keeps signatures simple.",
+    "Inline test data is well-chosen and small enough to be readable in-place, demonstrating diverse scenarios without becoming noisy.",
+    "Minor improvement area: the scenario part of method names is somewhat generic (e.g., `GivenVariousInputs`) and could be slightly more specific, but this does not significantly hurt readability."
+  ]
+}

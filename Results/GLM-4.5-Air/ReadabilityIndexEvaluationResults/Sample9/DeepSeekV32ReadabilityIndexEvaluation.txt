@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765321126-ijLYtlaKhxzKK0jerzzS
+
+Content:
+{
+	"readabilityIndex": 90,
+	"reasons": [
+		"Clear test class name following the ClassUnderTestTests pattern.",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Uses AAA pattern with clear comments for Arrange, Act, Assert blocks.",
+		"Proper separation of test cases: [Fact] for single scenarios, [Theory] with [InlineData] for parameterized tests.",
+		"Good variable naming that reflects purpose (e.g., minWords, maxWords).",
+		"No unnecessary nested classes or complex structures.",
+		"Logical organization with related tests grouped.",
+		"Minor improvement: Some tests could use more descriptive variable names (e.g., exactWordCount vs minWords).",
+		"All tests are synchronous (no async issues).",
+		"Good formatting and spacing, making code easy to scan."
+	]
+}

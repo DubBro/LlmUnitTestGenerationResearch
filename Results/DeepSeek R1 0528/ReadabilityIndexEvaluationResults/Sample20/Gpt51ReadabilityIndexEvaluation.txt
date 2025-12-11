@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317306-ktTUCBsw9S52exD580Aw
+
+Content:
+{
+  "readabilityIndex": 93,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test.",
+    "Individual test names follow the Method_Scenario_ExpectedResult style, making purpose and behavior easy to understand.",
+    "AAA pattern is consistently followed and visually separated with comments, improving quick scanning and comprehension.",
+    "Variable names (array, expected, original, shuffler) are clear and domain-appropriate, avoiding ambiguity.",
+    "Use of [Fact] vs [Theory] with [InlineData] is appropriate, reducing duplication and grouping related scenarios logically.",
+    "Test methods are short, focused on a single behavior, and free from unnecessary logic, which aids maintainability.",
+    "No extraneous comments beyond Arrange/Act/Assert and no nested test classes, keeping the structure clean.",
+    "Assertions are straightforward and placed at the end of tests, respecting the expected flow and aiding readability.",
+    "The combined Act & Assert in the exception test is slightly inconsistent with the AAA separation used elsewhere, marginally reducing uniformity.",
+    "InlineData arrays are somewhat verbose and dense in the attribute list, which can slightly hinder quick visual parsing."
+  ]
+}

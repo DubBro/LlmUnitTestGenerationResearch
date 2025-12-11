@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample7Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample7;
+using NSubstitute;
+
+namespace Gemini3ProUnitTests
+{
+    public class WalkServiceTests
+    {
+        private readonly IWalkRepository _walkRepositoryMock;
+        private readonly WalkService _walkService;
+
+        public WalkServiceTests()
+        {
+            _walkRepositoryMock = Substitute.For&lt;IWalkRepository&gt;();
+            _walkService = new WalkService(_walkRepositoryMock);
+        }
+
+        [Theory]
+        [InlineData(&quot;12345678901234&quot;)]   // 14 digits
+        [InlineData(&quot;1234567890123456&quot;)] // 16 digits
+        [InlineData(&quot;12345a789012345&quot;)]  // Non-digit char
+        [InlineData(&quot;&quot;)]                 // Empty
+        [InlineData(&quot;               &quot;)]  // Whitespace
+        public async Task Get10LongestWalksAsync_WhenImeiIsInvalid_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            // No setup needed for mock as exception occurs before call
+
+            // Act
+            Func&lt;Task&gt; act = () =&gt; _walkService.Get10LongestWalksAsync(invalidImei);
+
+            // Assert
+            await Assert.ThrowsAsync&lt;BusinessException&gt;(act);
+            await _walkRepositoryMock.DidNotReceive().Get10LongestWalksAsync(Arg.Any&lt;string&gt;());
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_WhenImeiIsValidAndDataExists_ReturnsRenumberedDtos()
+        {
+            // Arrange
+            var validImei = &quot;123456789012345&quot;;
+            var entities = new List&lt;WalkEntity&gt;
+            {
+                new WalkEntity { Distance = 100.5m, Duration = 60.0m },
+                new WalkEntity { Distance = 200.0m, Duration = 120.0m },
+                new WalkEntity { Distance = 150.0m, Duration = 90.0m }
+            };
+
+            _walkRepositoryMock.Get10LongestWalksAsync(validImei).Returns(entities);
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Collection(result,
+                item1 =&gt;
+                {
+                    Assert.Equal(1, item1.Number);
+                    Assert.Equal(100.5m, item1.Distance);
+                    Assert.Equal(60.0m, item1.Duration);
+                },
+                item2 =&gt;
+                {
+                    Assert.Equal(2, item2.Number);
+                    Assert.Equal(200.0m, item2.Distance);
+                    Assert.Equal(120.0m, item2.Duration);
+                },
+                item3 =&gt;
+                {
+                    Assert.Equal(3, item3.Number);
+                    Assert.Equal(150.0m, item3.Distance);
+                    Assert.Equal(90.0m, item3.Duration);
+                });
+
+            await _walkRepositoryMock.Received(1).Get10LongestWalksAsync(validImei);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_WhenImeiIsValidAndRepositoryReturnsEmpty_ReturnsEmptyList()
+        {
+            // Arrange
+            var validImei = &quot;123456789012345&quot;;
+            _walkRepositoryMock.Get10LongestWalksAsync(validImei).Returns(Enumerable.Empty&lt;WalkEntity&gt;());
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+            await _walkRepositoryMock.Received(1).Get10LongestWalksAsync(validImei);
+        }
+
+        [Theory]
+        [InlineData(&quot;123&quot;)]               // Too short
+        [InlineData(&quot;abcdefghijklmno&quot;)]  // Letters
+        [InlineData(&quot;!@#$%^&amp;*()12345&quot;)] // Special chars
+        public async Task GetWalksGeneralInfoAsync_WhenImeiIsInvalid_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            // No setup needed
+
+            // Act
+            Func&lt;Task&gt; act = () =&gt; _walkService.GetWalksGeneralInfoAsync(invalidImei);
+
+            // Assert
+            await Assert.ThrowsAsync&lt;BusinessException&gt;(act);
+            await _walkRepositoryMock.DidNotReceive().GetWalksGeneralInfoAsync(Arg.Any&lt;string&gt;());
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_WhenImeiIsValid_ReturnsMappedDto()
+        {
+            // Arrange
+            var validImei = &quot;987654321098765&quot;;
+            var entity = new WalksGeneralInfoEntity
+            {
+                TotalCount = 10,
+                TotalDistance = 500.5m,
+                TotalDuration = 1000.2m
+            };
+
+            _walkRepositoryMock.GetWalksGeneralInfoAsync(validImei).Returns(entity);
+
+            // Act
+            var result = await _walkService.GetWalksGeneralInfoAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(entity.TotalCount, result.TotalCount);
+            Assert.Equal(entity.TotalDistance, result.TotalDistance);
+            Assert.Equal(entity.TotalDuration, result.TotalDuration);
+
+            await _walkRepositoryMock.Received(1).GetWalksGeneralInfoAsync(validImei);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,9,11,34,1],[12,9,12,10,1],[13,13,13,69,1],[14,13,14,65,1],[15,9,15,10,1],[24,9,24,10,1],[29,13,29,36,1],[29,36,29,84,1],[29,84,29,85,1],[32,13,32,62,1],[33,13,33,97,1],[34,9,34,10,1],[38,9,38,10,1],[40,13,40,47,1],[41,13,46,15,1],[48,13,48,85,1],[51,13,51,79,1],[54,13,54,36,1],[55,13,57,17,1],[57,17,57,18,1],[57,18,58,21,1],[58,21,58,51,1],[58,51,59,21,1],[59,21,59,58,1],[59,58,60,21,1],[60,21,60,57,1],[60,57,61,17,1],[61,17,61,18,1],[61,18,63,17,1],[63,17,63,18,1],[63,18,64,21,1],[64,21,64,51,1],[64,51,65,21,1],[65,21,65,58,1],[65,58,66,21,1],[66,21,66,58,1],[66,58,67,17,1],[67,17,67,18,1],[67,18,69,17,1],[69,17,69,18,1],[69,18,70,21,1],[70,21,70,51,1],[70,51,71,21,1],[71,21,71,58,1],[71,58,72,21,1],[72,21,72,57,1],[72,57,73,17,1],[73,17,73,18,1],[73,18,73,20,1],[75,13,75,85,1],[76,9,76,10,1],[80,9,80,10,1],[82,13,82,47,1],[83,13,83,107,1],[86,13,86,79,1],[89,13,89,36,1],[90,13,90,34,1],[91,13,91,85,1],[92,9,92,10,1],[99,9,99,10,1],[104,13,104,36,1],[104,36,104,86,1],[104,86,104,87,1],[107,13,107,62,1],[108,13,108,99,1],[109,9,109,10,1],[113,9,113,10,1],[115,13,115,47,1],[116,13,121,15,1],[123,13,123,85,1],[126,13,126,81,1],[129,13,129,36,1],[130,13,130,64,1],[131,13,131,70,1],[132,13,132,70,1],[134,13,134,87,1],[135,9,135,10,1]]);
+    </script>
+  </body>
+</html>

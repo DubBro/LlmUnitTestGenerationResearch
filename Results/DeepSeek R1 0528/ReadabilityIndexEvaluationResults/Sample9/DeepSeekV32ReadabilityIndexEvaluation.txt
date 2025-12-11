@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765316351-fKlBPStK0Co1NgxGpLQv
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Clear test class naming following ClassUnderTestTests pattern.",
+		"Test methods follow MethodUnderTest_Scenario_ExpectedResult naming convention.",
+		"Consistent use of AAA pattern with Arrange, Act, Assert comments and proper separation.",
+		"No unnecessary nested classes present.",
+		"Good use of [Theory] with [InlineData] for parameterized testing.",
+		"Field naming is descriptive and relevant to test purposes.",
+		"Tests are well-structured with logical grouping of related functionality.",
+		"Good separation of concerns between string and HTML generation tests.",
+		"Some test duplication in setup code could be reduced with helper methods.",
+		"Exception test methods could benefit from more descriptive scenario names.",
+		"Clear variable names that explain their purpose in each test."
+	]
+}

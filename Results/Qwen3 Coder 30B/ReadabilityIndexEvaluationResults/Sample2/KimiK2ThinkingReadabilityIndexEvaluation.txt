@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765325102-wM1VHTO2Qfa0YhzLjGoJ
+
+Content:
+ {"readabilityIndex":52,"reasons":["Massive code duplication: EmployeeEntity and EmployeeModel objects are created manually in each test with identical verbose property assignments","No test data builders or helper methods: All test data is constructed inline, making maintenance difficult when models change","Overly verbose assertions: GetAsync test contains 14 separate Assert.Equal statements, making it hard to scan","Irrelevant test data noise: Validation tests populate all model properties when only one invalid property is relevant, obscuring test intent","Repetitive validation test structure: AddAsync validation tests share nearly identical code and could be streamlined","Inconsistent assertion depth: ListAsync test creates full entity but only asserts on two properties, reducing clarity","Test names are descriptive but long due to verbose scenario descriptions, slightly reducing readability","No use of Theory for related validation scenarios, leading to many similar test methods","Hardcoded test data magic values (e.g., dates, phone numbers) are repeated throughout tests"]}

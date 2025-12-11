@@ -1,0 +1,213 @@
+GenerationId:
+gen-1765212188-eIC3cQkfD8osmKpAvkLW
+
+Content:
+```csharp
+using Xunit;
+using Dataset.Sample18;
+
+namespace Dataset.Sample18.UnitTests;
+
+public class CaesarEncoderTests
+{
+    [Theory]
+    [InlineData("Hello, World!", 3, "Khoor, Zruog!")]
+    [InlineData("Hello, World!", 0, "Hello, World!")]
+    [InlineData("Hello, World!", 26, "Hello, World!")]
+    [InlineData("Hello, World!", 29, "Khoor, Zruog!")]
+    [InlineData("XYZ", 5, "CDE")]
+    [InlineData("abc", -1, "zab")]
+    [InlineData("aBc", 3, "dEf")]
+    [InlineData("123!@#", 10, "123!@#")]
+    public void Encode_ValidInputs_ExpectedEncoding(string input, int key, string expected)
+    {
+        // Arrange
+        // Inputs provided by InlineData
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("Khoor, Zruog!", 3, "Hello, World!")]
+    [InlineData("Hello, World!", 0, "Hello, World!")]
+    [InlineData("Hello, World!", 26, "Hello, World!")]
+    [InlineData("CDE", 5, "XYZ")]
+    [InlineData("zab", -1, "abc")]
+    [InlineData("dEf", 3, "aBc")]
+    public void Decode_ValidInputs_ExpectedDecoding(string input, int key, string expected)
+    {
+        // Arrange
+        // Inputs provided by InlineData
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void EncodeAndDecode_RoundTrip_ReturnsOriginalText()
+    {
+        // Arrange
+        var original = "The Quick Brown Fox Jumps Over The Lazy Dog! 123";
+        var key = 7;
+
+        // Act
+        var encoded = CaesarEncoder.Encode(original, key);
+        var decoded = CaesarEncoder.Decode(encoded, key);
+
+        // Assert
+        Assert.Equal(original, decoded);
+    }
+
+    [Fact]
+    public void Encode_WithNullText_ThrowsNullReferenceException()
+    {
+        // Arrange
+        string input = null;
+        int key = 5;
+
+        // Act & Assert
+        Assert.Throws<NullReferenceException>(() => CaesarEncoder.Encode(input, key));
+    }
+
+    [Fact]
+    public void Decode_WithNullText_ThrowsNullReferenceException()
+    {
+        // Arrange
+        string input = null;
+        int key = 5;
+
+        // Act & Assert
+        Assert.Throws<NullReferenceException>(() => CaesarEncoder.Decode(input, key));
+    }
+
+    [Fact]
+    public void Encode_WithNegativeBeyond26_WrapsCorrectly()
+    {
+        // Arrange
+        var input = "abc";
+        int key = -30; // Equivalent to -4 mod 26 → 22 (since 26 * 2 = 52, -30 mod 26 is 22: -30 + 26*2 = 22)
+        string expected = "wxy"; // a shifted back by 4 (a->z, y, x, w) → becomes w
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Encode_AllCharactersInAlphabet_Uppercase()
+    {
+        // Arrange
+        var input = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int key = 13;
+        string expected = "NOPQRSTUVWXYZABCDEFGHIJKLM";
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Encode_AllCharactersInAlphabet_Lowercase()
+    {
+        // Arrange
+        var input = "abcdefghijklmnopqrstuvwxyz";
+        int key = 13;
+        string expected = "nopqrstuvwxyzabcdefghijklm";
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Decode_AllCharactersInAlphabet_Uppercase()
+    {
+        // Arrange
+        var input = "NOPQRSTUVWXYZABCDEFGHIJKLM";
+        int key = 13;
+        string expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Decode_AllCharactersInAlphabet_Lowercase()
+    {
+        // Arrange
+        var input = "nopqrstuvwxyzabcdefghijklm";
+        int key = 13;
+        string expected = "abcdefghijklmnopqrstuvwxyz";
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Encode_WithKeyOver52_WrapsCorrectly()
+    {
+        // Arrange
+        var input = "abc";
+        int key = 55; // 52 % 26 = 3 → plus 55 % 26 = 3 (because 55 = 2*26 + 3 → key=3)
+        string expected = "def"; // shift by 3 → abc → def
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Decode_WithKeyOver52_WrapsCorrectly()
+    {
+        // Arrange
+        var input = "def";
+        int key = 55; // Same as 3 mod 26 → encoding shift was +3 → decoding with key 55 would decode as -3
+        string expected = "abc";
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+69562,7265
+
+OpenRouterElapsedTimeMilliseconds:
+69316
+
+PromptTokens:
+1383
+
+CompletionTokens:
+2032
+
+TotalTokens:
+3415
+
+TotalCost:
+0,0059832

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317904-DBvlkllchPM9ccLQAILs
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names precisely follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistent use of async Task for asynchronous tests.",
+	 "Strict adherence to AAA pattern with // Arrange, // Act, // Assert comments and separation.",
+		"Effective use of [Theory] and [InlineData] for parameterized tests to reduce duplication.",
+		"Clear, meaningful names for variables, mocks, and objects.",
+		"Constructor-based setup for shared mocks and service instance improves maintainability.",
+		"Minor deduction for extra explanatory comments beyond AAA separators.",
+		"Section header comments (// ---) provide grouping but violate 'no other comments' rule.",
+		"Exception tests occasionally combine Act & Assert without block comments, slightly reducing clarity."
+	]
+}

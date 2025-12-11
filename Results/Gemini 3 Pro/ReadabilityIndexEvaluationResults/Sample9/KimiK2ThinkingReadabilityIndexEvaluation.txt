@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765318271-2bvCIzzCZ0JwFka183Rp
+
+Content:
+ {"readabilityIndex":70,"reasons":["Excessive explanatory comments beyond AAA blocks violate the no-comments guideline","Inconsistent variable naming with abbreviations (e.g., 'paras', 'minW', 'maxW')","Test scenario name 'WhenCalled' is too vague and lacks specificity","Comments explaining SUT implementation details clutter test bodies","Minor parameter naming inconsistency between 'paragraphs' and 'numParagraphs'"]}

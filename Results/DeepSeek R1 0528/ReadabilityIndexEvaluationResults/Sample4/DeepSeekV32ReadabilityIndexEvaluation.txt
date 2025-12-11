@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765315574-xnyihCHivo5usefb84Wt
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class naming follows the correct pattern: CompanyServiceTests for testing CompanyService",
+		"Test method names follow the recommended pattern (MethodUnderTest_Scenario_ExpectedResult)",
+		"All tests are properly structured with AAA blocks and clear separator comments",
+		"Proper use of async Task return type for all asynchronous tests",
+		"Clear and meaningful variable and field names throughout the code",
+		"Good separation of concerns in test setup with proper dependency substitution",
+		"Effective use of Theory with InlineData for testing multiple input variations",
+		"The code follows standard C# naming conventions and formatting",
+		"No unnecessary comments or nested classes present"
+	]
+}

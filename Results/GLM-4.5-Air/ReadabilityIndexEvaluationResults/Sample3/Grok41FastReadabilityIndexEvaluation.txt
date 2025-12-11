@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319844-KLFiXeSFsZzaIBl7LLn2
+
+Content:
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Uses nested classes for grouping tests by method, which organizes code but violates recommendation against unnecessary nested classes",
+		"Test method names are descriptive using Given/When style but deviate slightly from strict MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Consistently follows AAA pattern with clear // Arrange, // Act, // Assert comments and empty line separation",
+		"Clear, meaningful naming for classes, methods, variables, and mocks",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to avoid duplication",
+		"Async tests correctly use async Task signatures",
+		"Verbose repetitive assertions in some tests reduce conciseness",
+		"Complex NSubstitute argument matchers (e.g., Arg.Is with Compile().Invoke) slightly hinder readability",
+		"Some tests combine // Act & Assert, blurring AAA separation",
+		"Shared mock setup in base constructor promotes maintainability"
+	]
+}

@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765327496-SdmSNtQ32dFn7LkSM7Jd
+
+Content:
+{"readabilityIndex": 85, "reasons": ["Test class name 'Base64HelpersTests' correctly follows the 'ClassUnderTestTests' pattern.", "Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern, making them clear and descriptive.", "Tests follow the AAA pattern with clear Arrange, Act, Assert blocks separated by comments and empty lines.", "Good use of [Theory] with [InlineData] to test multiple inputs, reducing code duplication.", "All tests use meaningful variable names like 'input', 'result', 'expected', enhancing readability.", "Code is well-structured and easy to follow, with no unnecessary complexity or nested classes."]}

@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765325737-NjWaEQnRTU1HJAtb6Beb
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern clearly",
+		"Proper use of async Task signatures for asynchronous test methods",
+		"Clear AAA pattern implementation with comment separators and empty lines between blocks",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication for multiple input scenarios",
+		"Variable names are meaningful and self-explanatory (companyEntity, companyRepository, expectedModel)",
+		"Consistent formatting and adherence to C# naming conventions throughout",
+		"Minor issue: assertions could be simplified using Assert.Equivalent or custom object comparison instead of field-by-field checks",
+		"Minor issue: some code duplication between the two tests in the Arrange block setup pattern",
+		"Overall structure is clean with no unnecessary nested classes or extraneous comments"
+	]
+}
+```

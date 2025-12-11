@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765318926-tFoUx2tLz3EujhPbBmcl
+
+Content:
+{
+  "readabilityIndex": 94,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern (AsciiHelpersTests), clearly indicating the subject under test.",
+    "Test method names consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern, making intent very easy to understand.",
+    "AAA structure is clearly present and visually separated in each test, improving scanability and maintenance.",
+    "Use of [Theory] with [InlineData] to cover multiple input variations avoids duplication and keeps tests concise and expressive.",
+    "Input and expected values in InlineData are small, concrete, and self-explanatory, which makes test behavior easy to infer.",
+    "Naming of parameters and local variables (input, expected, replacement, result) is clear and consistent with .NET conventions.",
+    "Minor readability drawbacks include superfluous non-AAA comments (e.g., 'Handled by InlineData') and the use of the null-forgiving operator (input!), which may slightly distract or confuse less experienced readers."
+  ]
+}

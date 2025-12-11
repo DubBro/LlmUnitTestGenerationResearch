@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315383-ukEwqfUoyXzWc6onL885
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names adhere to MethodUnderTest_Scenario_ExpectedResult convention.",
+		"Consistent AAA pattern with clear // Arrange, // Act, // Assert comments and separation.",
+		"Clear, meaningful naming for variables, fields (_sut, mockEntity, testId).",
+		"Constructor initializes substitutes, reducing duplication.",
+		"Async tests properly use async Task signatures.",
+		"[Fact] attributes used appropriately for single scenarios.",
+		"No unnecessary comments, nested classes, or deviations from conventions.",
+		"Manual for-loop in collection assertions is verbose but understandable.",
+		"Combined Act & Assert in exception test is concise and readable."
+	]
+}

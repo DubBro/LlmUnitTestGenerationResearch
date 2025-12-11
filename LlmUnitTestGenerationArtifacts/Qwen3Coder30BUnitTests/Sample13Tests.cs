@@ -1,0 +1,163 @@
+using Dataset.Sample13;
+using NSubstitute;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class OntologyHelperTests
+    {
+        [Fact]
+        public void ParseNode_NodeTypeUri_ReturnsExpectedResult()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns("http://example.org#MyNode");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal("MyNode", result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeLiteral_ReturnsExpectedResult()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns("SomeLiteral^http://www.w3.org/2001/XMLSchema#string");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal("SomeLiteral", result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeBlank_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Blank);
+            node.ToString().Returns("some value");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeGraphLiteral_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.GraphLiteral);
+            node.ToString().Returns("some value");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Theory]
+        [InlineData(NodeType.Variable)]
+        [InlineData(NodeType.Triple)]
+        public void ParseNode_NodeTypeUnknown_ReturnsEmptyString(NodeType nodeType)
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(nodeType);
+            node.ToString().Returns("some value");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NullNodeString_ReturnsExpectedResult()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns((string)null);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_WhenNoHashExists_ReturnsWholeString()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns("http://example.org/MyNode");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal("MyNode", result);
+        }
+
+        [Fact]
+        public void ParseNode_WhenNoCaretExists_ReturnsWholeString()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns("SomeLiteral");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal("SomeLiteral", result);
+        }
+
+        [Fact]
+        public void ParseNode_WhenHashAtEnd_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns("http://example.org#");
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Theory]
+        [InlineData("http://example.org#test", "test")]
+        [InlineData("http://example.org/#test", "test")]
+        [InlineData("http://example.org#test#other", "test")]
+        public void ParseNode_WhenMultipleHashes_ReturnsLastPartAfterHash(string uriString, string expected)
+        {
+            // Arrange
+            var node = Substitute.For<INode>();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(uriString);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+    }
+}

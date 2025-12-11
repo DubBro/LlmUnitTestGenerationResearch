@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316796-MHZlAExbfRHI7Pm26Nfq
+
+Content:
+ {"readabilityIndex":92,"reasons":["Test class name follows the ClassUnderTestTests pattern","All test methods follow the MethodUnderTest_Scenario_ExpectedResult naming convention","AAA pattern consistently applied with clear block separation and comments","Appropriate use of [Theory] with [InlineData] for comprehensive data-driven testing","Variable names are clear, meaningful, and reflect their purpose","No unnecessary comments beyond AAA block markers","Standard C# and .NET naming conventions are followed throughout","Tests are focused, concise, and each verifies a single scenario","Minimal code duplication in arrange sections across different test scenarios","Combined Act & Assert comment in exception test is idiomatic and acceptable"]}

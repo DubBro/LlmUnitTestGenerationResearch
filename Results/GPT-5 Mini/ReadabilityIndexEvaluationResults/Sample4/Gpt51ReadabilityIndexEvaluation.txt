@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765323073-VpdomfzQNPOZ4U95UosG
+
+Content:
+{
+  "readabilityIndex": 89,
+  "reasons": [
+    "Test class name `CompanyServiceTests` clearly follows the `ClassUnderTestTests` convention and indicates the subject under test.",
+    "Test method names are descriptive and follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, making intent very easy to understand.",
+    "All async tests correctly use `async Task` signatures, aligning with best practices for asynchronous unit tests.",
+    "AAA (Arrange-Act-Assert) structure is explicit, clearly separated with comments and blank lines, which improves scanability.",
+    "Variable names (`repository`, `mapper`, `entity`, `model`, `requestedId`, `service`, `result`) are meaningful and self-explanatory.",
+    "Use of NSubstitute is straightforward and consistent, with clear expectations (`Received(1)` and `Returns`) that are easy to read.",
+    "No unnecessary comments or nested classes; the file is compact and focused solely on the test scenarios.",
+    "Tests avoid over-complication; each test focuses on a single scenario, keeping logic linear and simple.",
+    "Slightly confusing usage of `Arg.Is<CompanyEntity>(e => e == null)` for a reference type that is not explicitly nullable may cause minor cognitive friction but does not heavily damage overall readability."
+  ]
+}

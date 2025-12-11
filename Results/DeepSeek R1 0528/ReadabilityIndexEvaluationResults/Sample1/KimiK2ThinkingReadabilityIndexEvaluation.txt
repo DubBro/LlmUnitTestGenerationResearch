@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765315390-6noVix1JfgdwQY9iCLPo
+
+Content:
+ {"readabilityIndex":96,"reasons":["Test class name follows ClassUnderTestTests pattern and test methods follow MethodUnderTest_Scenario_ExpectedResult pattern consistently","All asynchronous test methods properly use async Task signature","AAA pattern is correctly implemented with clear block separation using comments, though one test combines Act & Assert blocks","Field names (_repositorySubstitute, _sut) and variables are meaningful and follow C# naming conventions","No unnecessary nested classes or code duplication across tests","No extraneous comments beyond the standard AAA markers","Collection assertions use manual loop which is slightly verbose but still very clear and maintainable","Repository setup is consistent and readable across all test scenarios"]}

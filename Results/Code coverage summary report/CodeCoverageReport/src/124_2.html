@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample16Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample16;
+
+namespace Glm45AirUnitTests;
+
+public class AsciiHelpersTests
+{
+    public class ReplaceNonAsciiCharsWith
+    {
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_NullInput_ReturnsEmptyString()
+        {
+            // Arrange
+            string input = null;
+            char replacement = &#39; &#39;;
+
+            // Act
+            string result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_EmptyInput_ReturnsEmptyString()
+        {
+            // Arrange
+            string input = string.Empty;
+            char replacement = &#39; &#39;;
+
+            // Act
+            string result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_WhitespaceInput_ReturnsEmptyString()
+        {
+            // Arrange
+            string input = &quot;   &quot;;
+            char replacement = &#39; &#39;;
+
+            // Act
+            string result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_InputWithNoNonAsciiChars_ReturnsSameString()
+        {
+            // Arrange
+            string input = &quot;Hello World&quot;;
+            char replacement = &#39; &#39;;
+
+            // Act
+            string result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_InputWithNonAsciiChars_ReturnsStringWithReplacedChars()
+        {
+            // Arrange
+            string input = &quot;H&#233;llo W&#246;rld&quot;;
+            char replacement = &#39; &#39;;
+
+            // Act
+            string result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(&quot;H llo W rld&quot;, result);
+        }
+
+        [Theory]
+        [InlineData(&#39; &#39;)]
+        [InlineData(&#39;_&#39;)]
+        [InlineData(&#39;*&#39;)]
+        public void ReplaceNonAsciiCharsWith_DifferentReplacementChars_ReplacesCorrectly(char replacement)
+        {
+            // Arrange
+            string input = &quot;H&#233;llo W&#246;rld&quot;;
+
+            // Act
+            string result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            string expected = $&quot;H{replacement}llo W{replacement}rld&quot;;
+            Assert.Equal(expected, result);
+        }
+    }
+
+    public class RemoveNonAsciiChars
+    {
+        [Fact]
+        public void RemoveNonAsciiChars_NullInput_ReturnsEmptyString()
+        {
+            // Arrange
+            string input = null;
+
+            // Act
+            string result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_EmptyInput_ReturnsEmptyString()
+        {
+            // Arrange
+            string input = string.Empty;
+
+            // Act
+            string result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_WhitespaceInput_ReturnsEmptyString()
+        {
+            // Arrange
+            string input = &quot;   &quot;;
+
+            // Act
+            string result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_InputWithNoNonAsciiChars_ReturnsSameString()
+        {
+            // Arrange
+            string input = &quot;Hello World&quot;;
+
+            // Act
+            string result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_InputWithNonAsciiChars_ReturnsStringWithRemovedChars()
+        {
+            // Arrange
+            string input = &quot;H&#233;llo W&#246;rld&quot;;
+
+            // Act
+            string result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(&quot;Hllo Wrld&quot;, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,9,11,10,1],[13,13,13,33,1],[14,13,14,36,1],[17,13,17,73,1],[20,13,20,48,1],[21,9,21,10,1],[25,9,25,10,1],[27,13,27,41,1],[28,13,28,36,1],[31,13,31,73,1],[34,13,34,48,1],[35,9,35,10,1],[39,9,39,10,1],[41,13,41,34,1],[42,13,42,36,1],[45,13,45,73,1],[48,13,48,48,1],[49,9,49,10,1],[53,9,53,10,1],[55,13,55,42,1],[56,13,56,36,1],[59,13,59,73,1],[62,13,62,41,1],[63,9,63,10,1],[67,9,67,10,1],[69,13,69,42,1],[70,13,70,36,1],[73,13,73,73,1],[76,13,76,49,1],[77,9,77,10,1],[84,9,84,10,1],[86,13,86,42,1],[89,13,89,73,1],[92,13,92,70,1],[93,13,93,44,1],[94,9,94,10,1],[101,9,101,10,1],[103,13,103,33,1],[106,13,106,57,1],[109,13,109,48,1],[110,9,110,10,1],[114,9,114,10,1],[116,13,116,41,1],[119,13,119,57,1],[122,13,122,48,1],[123,9,123,10,1],[127,9,127,10,1],[129,13,129,34,1],[132,13,132,57,1],[135,13,135,48,1],[136,9,136,10,1],[140,9,140,10,1],[142,13,142,42,1],[145,13,145,57,1],[148,13,148,41,1],[149,9,149,10,1],[153,9,153,10,1],[155,13,155,42,1],[158,13,158,57,1],[161,13,161,47,1],[162,9,162,10,1]]);
+    </script>
+  </body>
+</html>

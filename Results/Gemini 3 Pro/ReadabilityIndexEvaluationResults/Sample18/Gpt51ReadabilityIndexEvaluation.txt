@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765319081-zlH0p4oryOFGnsFG6czb
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class and method names are clear, descriptive, and follow the ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult patterns closely.",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for parameterized scenarios is appropriate and avoids duplication.",
+    "AAA structure is consistently followed, with logical separation of Arrange, Act, and Assert; simple cases are clearly marked as Arrange & Act, which remains readable.",
+    "Formatting, spacing, and C# naming conventions are clean and consistent, making the tests easy to scan and navigate.",
+    "Test data in most theories is explicit (including expected values in InlineData), which makes behavior easy to understand at a glance.",
+    "Some tests compute expected values inside the test body (e.g., conditional expected string for non-letter handling), which slightly obscures intent compared to passing explicit expected values via InlineData.",
+    "Additional explanatory comments beyond // Arrange/Act/Assert (e.g., ROT13 notes, wrap logic) are mostly helpful but technically deviate from the described ideal of having only AAA comments, slightly lowering the score."
+  ]
+}

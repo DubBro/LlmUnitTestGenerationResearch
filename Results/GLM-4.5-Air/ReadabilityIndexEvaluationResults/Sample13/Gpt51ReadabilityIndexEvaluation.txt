@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765322022-o5XVT8klf9oxTtxvVlUx
+
+Content:
+{
+  "readabilityIndex": 94,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests convention (OntologyHelperTests), clearly indicating the subject under test.",
+    "Test method names consistently follow the MethodUnderTest_Scenario_ExpectedResult pattern, making intent very clear.",
+    "AAA structure is explicitly used and visually separated with // Arrange // Act // Assert comments and blank lines, aiding quick scanning.",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for input variations is appropriate and avoids unnecessary duplication for parameterized cases.",
+    "Naming of local variables (node, expected, actual, input) is clear and consistent with standard C# conventions.",
+    "Tests are short, focused, and avoid nested classes or unnecessary complexity, which improves readability.",
+    "No extraneous comments or noise in the code; only structural comments for AAA are present.",
+    "Some repeated Arrange boilerplate for creating and configuring INode mocks could be factored into helpers to slightly improve maintainability, but it does not significantly harm readability."
+  ]
+}

@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765318934-sMFV2x2XpqB8VKJeUAaU
+
+Content:
+```json
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the correct pattern (AsciiHelpersTests for AsciiHelpers)",
+		"Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern consistently",
+		"AAA pattern is properly implemented with clear comment separators in all tests",
+		"Excellent use of [Theory] with [InlineData] to avoid code duplication across similar scenarios",
+		"Variable and parameter names are clear and meaningful (input, expected, replacement, result)",
+		"Code follows standard C# and .NET naming conventions throughout",
+		"Good use of comments '// Handled by InlineData' to explain when Arrange block has no additional setup",
+		"Tests demonstrate both static method calls (AsciiHelpers.Method) and extension method calls (input.Method) appropriately",
+		"Consistent formatting and structure across all test methods makes the code easy to scan and understand",
+		"Minor issue: one comment explaining non-ASCII character usage in RemoveNonAsciiChars_WhenInputIsOnlyNonAsciiAndNotWhitespace_ReturnsEmptyString goes beyond AAA separators, though it adds value"
+	]
+}
+```

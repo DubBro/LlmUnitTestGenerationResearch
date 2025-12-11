@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316420-1qcwWfdGhSdaz7hnhKrq
+
+Content:
+ {"readabilityIndex":70,"reasons":["Half the tests (6 out of 12) don't follow the MethodUnderTest_Scenario_ExpectedResult naming pattern, missing the _ExpectedResult suffix","Significant code duplication in Arrange sections across 7+ tests with identical or similar parameters","Excellent AAA pattern implementation with clear comments and block separation","Appropriate use of [Theory] and [InlineData] for testing multiple input variations","Clear and meaningful naming for class, variables, and most test methods","Clean formatting and adherence to standard C# conventions","No unnecessary nested classes or comments"]}

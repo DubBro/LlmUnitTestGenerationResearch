@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample9Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample9;
+
+namespace Gemini3ProUnitTests;
+
+public class LoremIpsumGeneratorTests
+{
+    [Fact]
+    public void GenerateLoremIpsumString_WhenParagraphsIsZero_ReturnsEmptyString()
+    {
+        // Arrange
+        int minWords = 5;
+        int maxWords = 10;
+        int minSentences = 2;
+        int maxSentences = 5;
+        int numParagraphs = 0;
+
+        // Act
+        string result = LoremIpsumGenerator.GenerateLoremIpsumString(
+            minWords, maxWords, minSentences, maxSentences, numParagraphs);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GenerateLoremIpsumString_WhenCalledWithValidArgs_ReturnsStringWithCorrectStructure()
+    {
+        // Arrange
+        // By setting min and max equal, we force the Random logic to be deterministic regarding counts.
+        // Logic in SUT: count = Random(max - min) + min + 1.
+        // If min=1, max=1 -&gt; Random(0) + 1 + 1 = 2.
+        int wordParam = 1;      // Expecting 2 words per sentence
+        int sentenceParam = 1;  // Expecting 2 sentences per paragraph
+        int paragraphs = 2;     // Expecting 2 paragraphs
+
+        // Act
+        string result = LoremIpsumGenerator.GenerateLoremIpsumString(
+            wordParam, wordParam, sentenceParam, sentenceParam, paragraphs);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(string.IsNullOrWhiteSpace(result));
+
+        // Logic check:
+        // 2 paragraphs * 2 sentences = 4 total sentences.
+        // Sentences end with &quot;. &quot;, so we count the occurrences of &quot;. &quot;.
+        int sentenceEndingsCount = result.Split(new[] { &quot;. &quot; }, StringSplitOptions.RemoveEmptyEntries).Length;
+        // Due to split behavior, if the string ends with the delimiter, the last entry might be empty or behavior varies slightly.
+        // A manual count is safer for exact verification.
+        int dotSpaceCount = (result.Length - result.Replace(&quot;. &quot;, &quot;&quot;).Length) / 2;
+
+        Assert.Equal(4, dotSpaceCount);
+
+        // Word count check:
+        // 2 words per sentence * 4 sentences = 8 words total.
+        // The SUT appends a space after every word except the last one in a sentence?
+        // No, check code: (w &gt; 0) adds space. Ends with &quot;. &quot;.
+        // &quot;Words[i] Words[j]. &quot; -&gt; 2 words, 2 spaces (one internal, one trailing after dot).
+        // Total spaces in output = (para * sent * words).
+        // 2 * 2 * 2 = 8 spaces.
+        int spaceCount = result.Count(c =&gt; c == &#39; &#39;);
+        Assert.Equal(8, spaceCount);
+    }
+
+    [Theory]
+    [InlineData(10, 5, 2, 5)]  // minWords &gt; maxWords
+    [InlineData(5, 10, 5, 2)]  // minSentences &gt; maxSentences
+    public void GenerateLoremIpsumString_WhenMaxLessThanMin_ThrowsArgumentOutOfRangeException(
+        int minWords, int maxWords, int minSentences, int maxSentences)
+    {
+        // Arrange
+        int numParagraphs = 1;
+
+        // Act &amp; Assert
+        // The Random.Next(int maxValue) throws if maxValue is negative.
+        // SUT calls Next(max - min). If max &lt; min, arg is negative.
+        Assert.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt;
+            LoremIpsumGenerator.GenerateLoremIpsumString(
+                minWords, maxWords, minSentences, maxSentences, numParagraphs));
+    }
+
+    [Fact]
+    public void GenerateLoremIpsumHtmlSafe_WhenParagraphsIsZero_ReturnsEmptyString()
+    {
+        // Arrange
+        int minWords = 5;
+        int maxWords = 10;
+        int minSentences = 2;
+        int maxSentences = 5;
+        int numParagraphs = 0;
+
+        // Act
+        string result = LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+            minWords, maxWords, minSentences, maxSentences, numParagraphs);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GenerateLoremIpsumHtmlSafe_WhenCalledWithValidArgs_ReturnsWrappedHtmlParagraphs()
+    {
+        // Arrange
+        int wordParam = 1;
+        int sentenceParam = 1;
+        int paragraphs = 3;
+
+        // Act
+        string result = LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+            wordParam, wordParam, sentenceParam, sentenceParam, paragraphs);
+
+        // Assert
+        Assert.NotNull(result);
+
+        // Verify HTML tags
+        int openTagCount = (result.Length - result.Replace(&quot;&lt;p&gt;&quot;, &quot;&quot;).Length) / 3;
+        int closeTagCount = (result.Length - result.Replace(&quot;&lt;/p&gt;&quot;, &quot;&quot;).Length) / 4;
+
+        Assert.Equal(paragraphs, openTagCount);
+        Assert.Equal(paragraphs, closeTagCount);
+
+        // Verify logical structure
+        Assert.StartsWith(&quot;&lt;p&gt;&quot;, result);
+        Assert.EndsWith(&quot;&lt;/p&gt;&quot;, result);
+    }
+
+    [Fact]
+    public void GenerateLoremIpsumHtmlSafe_WhenMaxLessThanMin_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        int minWords = 10;
+        int maxWords = 5; // Invalid
+        int minSentences = 2;
+        int maxSentences = 5;
+        int numParagraphs = 1;
+
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt;
+            LoremIpsumGenerator.GenerateLoremIpsumHtmlSafe(
+                minWords, maxWords, minSentences, maxSentences, numParagraphs));
+    }
+
+    [Fact]
+    public void GenerateLoremIpsumString_WhenCalled_ContentContainsOnlyExpectedCharacters()
+    {
+        // Arrange
+        // We verify that the SUT only uses the predefined dictionary words, spaces, and dots.
+        // It should not generate numbers or special symbols other than correct punctuation.
+        int minW = 1, maxW = 5, minS = 1, maxS = 2, paras = 1;
+
+        // Act
+        string result = LoremIpsumGenerator.GenerateLoremIpsumString(minW, maxW, minS, maxS, paras);
+
+        // Assert
+        // Allow a-z (case insensitive due to dictionary), space, dot.
+        // Dictionary is lowercase, but standard checking ensures no weird ascii garbage.
+        bool allCharsValid = result.All(c =&gt; char.IsLetter(c) || c == &#39; &#39; || c == &#39;.&#39;);
+        Assert.True(allCharsValid, &quot;Output contained unexpected characters.&quot;);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,26,1],[12,9,12,27,1],[13,9,13,30,1],[14,9,14,30,1],[15,9,15,31,1],[18,9,19,76,1],[22,9,22,44,1],[23,5,23,6,1],[27,5,27,6,1],[32,9,32,27,1],[33,9,33,31,1],[34,9,34,28,1],[37,9,38,77,1],[41,9,41,32,1],[42,9,42,57,1],[47,9,47,111,1],[50,9,50,83,1],[52,9,52,40,1],[61,9,61,44,1],[61,44,61,52,1],[61,52,61,54,1],[62,9,62,37,1],[63,5,63,6,1],[70,5,70,6,1],[72,9,72,31,1],[77,9,78,13,1],[78,13,79,79,1],[79,79,79,81,1],[80,5,80,6,1],[84,5,84,6,1],[86,9,86,26,1],[87,9,87,27,1],[88,9,88,30,1],[89,9,89,30,1],[90,9,90,31,1],[93,9,94,76,1],[97,9,97,44,1],[98,5,98,6,1],[102,5,102,6,1],[104,9,104,27,1],[105,9,105,31,1],[106,9,106,28,1],[109,9,110,77,1],[113,9,113,32,1],[116,9,116,83,1],[117,9,117,85,1],[119,9,119,48,1],[120,9,120,49,1],[123,9,123,42,1],[124,9,124,41,1],[125,5,125,6,1],[129,5,129,6,1],[131,9,131,27,1],[132,9,132,26,1],[133,9,133,30,1],[134,9,134,30,1],[135,9,135,31,1],[138,9,139,13,1],[139,13,140,79,1],[140,79,140,81,1],[141,5,141,6,1],[145,5,145,6,1],[149,9,149,21,1],[149,23,149,31,1],[149,33,149,41,1],[149,43,149,51,1],[149,53,149,62,1],[152,9,152,101,1],[157,9,157,46,1],[157,46,157,86,1],[157,86,157,88,1],[158,9,158,79,1],[159,5,159,6,1]]);
+    </script>
+  </body>
+</html>

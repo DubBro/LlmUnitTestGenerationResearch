@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765325745-E69fbaIM749EWCzphwwj
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows `ClassUnderTestTests` pattern perfectly.",
+		"Test method names adhere to `MethodUnderTest_Scenario_ExpectedResult` convention.",
+		"Strict adherence to AAA pattern with `// Arrange`, `// Act`, `// Assert` comments and empty line separation.",
+		"Appropriate use of `[Fact]` for single scenario and `[Theory]` with `[InlineData]` for multiple invalid cases, avoiding duplication.",
+		"Clear, meaningful variable names (e.g., `companyEntity`, `expectedModel`, `result`).",
+		"Async tests correctly declared as `async Task`.",
+		"No unnecessary comments, nested classes, or deviations from standard C# naming conventions.",
+		"Well-structured mocks with NSubstitute, enhancing clarity."
+	]
+}

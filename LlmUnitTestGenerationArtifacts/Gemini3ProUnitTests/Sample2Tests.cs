@@ -1,0 +1,402 @@
+using Dataset.Sample2;
+using NSubstitute;
+
+namespace Gemini3ProUnitTests;
+
+public class EmployeeServiceTests
+{
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly EmployeeService _sut;
+
+    public EmployeeServiceTests()
+    {
+        _employeeRepository = Substitute.For<IEmployeeRepository>();
+        _sut = new EmployeeService(_employeeRepository);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenEmployeeExists_ReturnsMappedModel()
+    {
+        // Arrange
+        var entity = new EmployeeEntity
+        {
+            Id = 1,
+            FirstName = "John",
+            LastName = "Doe",
+            Department = "IT",
+            Position = "Dev"
+        };
+        _employeeRepository.GetAsync(1).Returns(entity);
+
+        // Act
+        var result = await _sut.GetAsync(1);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(entity.Id, result.Id);
+        Assert.Equal(entity.FirstName, result.FirstName);
+        Assert.Equal(entity.LastName, result.LastName);
+        await _employeeRepository.Received(1).GetAsync(1);
+    }
+
+    [Fact]
+    public async Task ListAsync_WhenCalled_ReturnsMappedCollection()
+    {
+        // Arrange
+        var entities = new List<EmployeeEntity>
+        {
+            new() { Id = 1, FirstName = "A", LastName = "B", Department = "D", Position = "P" },
+            new() { Id = 2, FirstName = "C", LastName = "D", Department = "D", Position = "P" }
+        };
+        _employeeRepository.ListAsync().Returns(entities);
+
+        // Act
+        var result = await _sut.ListAsync();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Equal(1, result.First().Id);
+        await _employeeRepository.Received(1).ListAsync();
+    }
+
+    [Fact]
+    public async Task ListFilteredAsync_WhenFiltersAreEmptyOrZero_CallsListAsync()
+    {
+        // Arrange
+        var entities = new List<EmployeeEntity>();
+        _employeeRepository.ListAsync().Returns(entities);
+
+        // Act
+        await _sut.ListFilteredAsync(null!, "", null!, 0, 0, 0, 0);
+
+        // Assert
+        await _employeeRepository.Received(1).ListAsync();
+        await _employeeRepository.DidNotReceiveWithAnyArgs().ListFilteredAsync(default, default, default, default, default, default, default);
+    }
+
+    [Fact]
+    public async Task ListFilteredAsync_WhenFiltersAreProvided_CallsListFilteredAsync()
+    {
+        // Arrange
+        var entities = new List<EmployeeEntity>();
+        string name = "John";
+        decimal minSalary = 1000;
+
+        _employeeRepository.ListFilteredAsync(
+            Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            Arg.Any<decimal>(), Arg.Any<decimal>(),
+            Arg.Any<int>(), Arg.Any<int>())
+            .Returns(entities);
+
+        // Act
+        await _sut.ListFilteredAsync(name, null!, null!, minSalary, 0, 0, 0);
+
+        // Assert
+        await _employeeRepository.DidNotReceive().ListAsync();
+        await _employeeRepository.Received(1).ListFilteredAsync(name, null!, null!, minSalary, 0, 0, 0);
+    }
+
+    [Fact]
+    public async Task AddAsync_WithValidModel_TrimsStringsAddsPhonePrefixAndCallsRepo()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.FirstName = " John "; // Should trim
+        model.Phone = "1234567890"; // Should add +
+
+        _employeeRepository.AddAsync(Arg.Any<EmployeeEntity>()).Returns(10);
+
+        // Act
+        var result = await _sut.AddAsync(model);
+
+        // Assert
+        Assert.Equal(10, result);
+        Assert.Equal("John", model.FirstName); // Side effect verification
+        Assert.Equal("+1234567890", model.Phone);
+
+        await _employeeRepository.Received(1).AddAsync(Arg.Is<EmployeeEntity>(x =>
+            x.FirstName == "John" &&
+            x.Phone == "+1234567890" &&
+            x.DepartmentId == model.DepartmentId
+        ));
+    }
+
+    [Fact]
+    public async Task AddAsync_WithRunOfPaperValidInputs_Succeeds()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        // Edge cases for validation regex/pattern
+        model.FirstName = "Jean-Luc"; // Hyphen allowed
+        model.LastName = "O Connor"; // Space allowed
+
+        _employeeRepository.AddAsync(Arg.Any<EmployeeEntity>()).Returns(1);
+
+        // Act
+        var result = await _sut.AddAsync(model);
+
+        // Assert
+        Assert.Equal(1, result);
+    }
+
+    [Fact]
+    public async Task AddAsync_WithNullModel_ThrowsArgumentNullException()
+    {
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.AddAsync(null!));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("John1")] // Invalid regex (digits)
+    [InlineData("John!")] // Invalid regex (special chars)
+    public async Task AddAsync_InvalidFirstName_ThrowsArgumentException(string invalidName)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.FirstName = invalidName;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_FirstNameTooLong_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.FirstName = new string('a', 51);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("Doe1")]
+    public async Task AddAsync_InvalidLastName_ThrowsArgumentException(string invalidName)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.LastName = invalidName;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("M.")] // Dot not allowed by regex
+    public async Task AddAsync_InvalidMiddleName_ThrowsArgumentException(string invalidName)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.MiddleName = invalidName;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData(1950, 1, 1)] // Lower bound strict (<= check)
+    [InlineData(1949, 12, 31)]
+    [InlineData(2010, 1, 1)] // Upper bound strict (>= check)
+    [InlineData(2011, 1, 1)]
+    public async Task AddAsync_InvalidBirthDate_ThrowsArgumentException(int year, int month, int day)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.BirthDate = new DateTime(year, month, day);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_InvalidCountry_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.Country = "US1"; // Regex failure
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_CityTooLong_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.City = new string('a', 51);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_AddressTooLong_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.Address = new string('a', 51);
+
+        // Act & Assert
+        // Note: The source code throws ArgumentException with param name "City" for Address validation.
+        // We just verify the type.
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData("+123")] // Too short
+    [InlineData("+1234567890123")] // Too long (>12 digits + sign)
+    [InlineData("abc")] // Invalid chars
+    public async Task AddAsync_InvalidPhone_ThrowsArgumentException(string invalidPhone)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.Phone = invalidPhone;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_HireDateBeforeBirth_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.BirthDate = new DateTime(1990, 1, 1);
+        model.HireDate = new DateTime(1989, 12, 31);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_HireDateBefore1960_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.BirthDate = new DateTime(1955, 1, 1);
+        model.HireDate = new DateTime(1959, 12, 31); // <= 1960 logic check
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_HireDateInFuture_ThrowsArgumentException()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.HireDate = DateTime.Now.AddDays(1); // Future
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-100)]
+    public async Task AddAsync_InvalidSalary_ThrowsArgumentException(decimal salary)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.Salary = salary;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddAsync_InvalidDepartmentId_ThrowsArgumentException(int depId)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.DepartmentId = depId;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddAsync_InvalidPositionId_ThrowsArgumentException(int posId)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.PositionId = posId;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WithValidModelAndId_CallsRepo()
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.Id = 5;
+        _employeeRepository.UpdateAsync(Arg.Any<EmployeeEntity>()).Returns(1);
+
+        // Act
+        var result = await _sut.UpdateAsync(model);
+
+        // Assert
+        Assert.Equal(1, result);
+        await _employeeRepository.Received(1).UpdateAsync(Arg.Is<EmployeeEntity>(e => e.Id == 5));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task UpdateAsync_InvalidId_ThrowsArgumentException(int id)
+    {
+        // Arrange
+        var model = CreateValidModel();
+        model.Id = id;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.UpdateAsync(model));
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WhenCalled_ReturnsRepoResult()
+    {
+        // Arrange
+        _employeeRepository.DeleteAsync(10).Returns(1);
+
+        // Act
+        var result = await _sut.DeleteAsync(10);
+
+        // Assert
+        Assert.Equal(1, result);
+        await _employeeRepository.Received(1).DeleteAsync(10);
+    }
+
+    private static EmployeeModel CreateValidModel()
+    {
+        return new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Quincy",
+            BirthDate = new DateTime(1980, 1, 1),
+            Country = "USA",
+            City = "New York",
+            Address = "123 Wall St",
+            Phone = "+15555555555",
+            HireDate = DateTime.Now.Date, // Use Today to avoid future check failure
+            Salary = 50000m,
+            DepartmentId = 1,
+            Department = "IT",
+            PositionId = 1,
+            Position = "Developer"
+        };
+    }
+}

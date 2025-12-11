@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765326013-W7uHXgViL5Uzo2R6k76A
+
+Content:
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Class and method names follow recommended patterns (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult)",
+		"Consistent AAA structure with // Arrange, // Act, // Assert comments (or Act & Assert for simple cases)",
+		"Constructor handles shared setup of substitutes, avoiding repetition",
+		"Clear, meaningful variable names and proper use of const/var",
+		"No unnecessary comments, nested classes, or deviations from naming conventions",
+		"Significant code duplication in validation tests (e.g., multiple AddLot/UpdateLot invalid cases), reducing maintainability",
+		"Lack of [Theory] with [InlineData] for similar scenarios leads to repetitive code"
+	]
+}

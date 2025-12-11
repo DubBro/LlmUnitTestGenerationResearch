@@ -1,0 +1,356 @@
+GenerationId:
+gen-1765209186-hH7xlCfcTPbJ3s5bIkS4
+
+Content:
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Dataset.Sample3;
+using NSubstitute;
+using Xunit;
+
+namespace Dataset.Sample3.UnitTests
+{
+    public class NoteServiceTests
+    {
+        private readonly IUnitOfWork _unitOfWorkSub;
+        private readonly IRepository<NoteEntity> _notesRepositorySub;
+        private readonly IDbContextTransaction _transactionSub;
+        private readonly INoteService _service;
+
+        public NoteServiceTests()
+        {
+            _unitOfWorkSub = Substitute.For<IUnitOfWork>();
+            _notesRepositorySub = Substitute.For<IRepository<NoteEntity>>();
+            _transactionSub = Substitute.For<IDbContextTransaction>();
+
+            _unitOfWorkSub.GetRepository<NoteEntity>().Returns(_notesRepositorySub);
+            _unitOfWorkSub.BeginTransactionAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult(_transactionSub));
+
+            _service = new NoteService(_unitOfWorkSub);
+        }
+
+        [Fact]
+        public async Task GetAllByUserIdAsync_WithValidUserId_ReturnsNotes()
+        {
+            // Arrange
+            int userId = 1;
+            var noteEntities = new List<NoteEntity>
+            {
+                new NoteEntity { Id = 1, Title = "Note 1", Content = "Content 1", UserId = userId },
+                new NoteEntity { Id = 2, Title = "Note 2", Content = "Content 2", UserId = userId }
+            };
+
+            _notesRepositorySub.GetAllAsync(Arg.Any<Expression<Func<NoteEntity, bool>>>())
+                .Returns(Task.FromResult<ICollection<NoteEntity>>(noteEntities));
+
+            // Act
+            var result = await _service.GetAllByUserIdAsync(userId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, n => n.Id == 1 && n.Title == "Note 1");
+            Assert.Contains(result, n => n.Id == 2 && n.Title == "Note 2");
+        }
+
+        [Fact]
+        public async Task GetAllByUserIdAsync_WithNoNotes_ReturnsEmptyList()
+        {
+            // Arrange
+            int userId = 1;
+            _notesRepositorySub.GetAllAsync(Arg.Any<Expression<Func<NoteEntity, bool>>>())
+                .Returns(Task.FromResult<ICollection<NoteEntity>>(new List<NoteEntity>()));
+
+            // Act
+            var result = await _service.GetAllByUserIdAsync(userId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ExistingId_ReturnsNote()
+        {
+            // Arrange
+            int id = 1;
+            var noteEntity = new NoteEntity { Id = id, Title = "Note 1", Content = "Content 1", UserId = 1 };
+            _notesRepositorySub.GetByIdAsync(id).Returns(Task.FromResult<NoteEntity?>(noteEntity));
+
+            // Act
+            var result = await _service.GetByIdAsync(id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(noteEntity.Id, result.Id);
+            Assert.Equal(noteEntity.Title, result.Title);
+            Assert.Equal(noteEntity.Content, result.Content);
+            Assert.Equal(noteEntity.UserId, result.UserId);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_NonExistingId_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            int id = 999;
+            _notesRepositorySub.GetByIdAsync(id).Returns(Task.FromResult<NoteEntity?>(null));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.GetByIdAsync(id));
+        }
+
+        [Fact]
+        public async Task AddAsync_ValidNote_ReturnsIdAndSetsProperties()
+        {
+            // Arrange
+            var noteModel = new NoteModel { Id = 5, Title = "  Title  ", Content = "Content", UserId = 1 };
+
+            _notesRepositorySub.AddAsync(Arg.Do<NoteEntity>(e =>
+            {
+                e.Id = 100;
+            })).Returns(ci => Task.FromResult(ci.Arg<NoteEntity>()));
+
+            // Act
+            var result = await _service.AddAsync(noteModel);
+
+            // Assert
+            await _notesRepositorySub.Received().AddAsync(Arg.Is<NoteEntity>(e =>
+                e.Id == 0 &&
+                e.Title == "Title" &&
+                e.Content == "Content" &&
+                e.UserId == 1 &&
+                e.CreatedAt != default &&
+                e.ModifiedAt != default &&
+                e.CreatedAt == e.ModifiedAt
+            ));
+
+            Assert.Equal(100, result);
+            Assert.Equal(0, noteModel.Id);
+            await _unitOfWorkSub.Received().SaveAsync(Arg.Any<CancellationToken>());
+            await _transactionSub.Received().CommitAsync(Arg.Any<CancellationToken>());
+            _ = _transactionSub.Received().DisposeAsync();
+        }
+
+        [Fact]
+        public async Task AddAsync_NullNote_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            NoteModel? noteModel = null;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.AddAsync(noteModel));
+        }
+
+        [Fact]
+        public async Task AddAsync_NoteWithNullContent_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            var noteModel = new NoteModel { Title = "Title", Content = null, UserId = 1 };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.AddAsync(noteModel));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public async Task AddAsync_InvalidUserId_ThrowsUserNotFoundException(int userId)
+        {
+            // Arrange
+            var noteModel = new NoteModel { Title = "Title", Content = "Content", UserId = userId };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<UserNotFoundException>(() => _service.AddAsync(noteModel));
+        }
+
+        [Fact]
+        public async Task AddAsync_WhenSaveFails_ThrowsAndRollsBack()
+        {
+            // Arrange
+            var noteModel = new NoteModel { Title = "Title", Content = "Content", UserId = 1 };
+            var exception = new Exception("Save failed");
+
+            _unitOfWorkSub.SaveAsync(Arg.Any<CancellationToken>()).Returns(Task.FromException(exception));
+
+            // Act
+            var ex = await Assert.ThrowsAsync<Exception>(() => _service.AddAsync(noteModel));
+
+            // Assert
+            Assert.Equal("Save failed", ex.Message);
+            await _transactionSub.Received().RollbackAsync(Arg.Any<CancellationToken>());
+            await _transactionSub.DidNotReceive().CommitAsync(Arg.Any<CancellationToken>());
+            _ = _transactionSub.Received().DisposeAsync();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ValidUpdate_ReturnsIdAndSetsProperties()
+        {
+            // Arrange
+            var existingNoteEntity = new NoteEntity { Id = 1, Title = "Old", Content = "OldContent", CreatedAt = new DateTime(2020, 1, 1), ModifiedAt = new DateTime(2020, 1, 1), UserId = 1 };
+            var noteModel = new NoteModel { Id = 1, Title = "  New Title  ", Content = "NewContent", UserId = 1 };
+
+            _notesRepositorySub.FirstOrDefaultAsNoTrackingAsync(Arg.Any<Expression<Func<NoteEntity, bool>>>())
+                .Returns(Task.FromResult<NoteEntity?>(existingNoteEntity));
+
+            // Act
+            var result = await _service.UpdateAsync(noteModel);
+
+            // Assert
+            _notesRepositorySub.Received().Update(Arg.Is<NoteEntity>(e =>
+                e.Id == 1 &&
+                e.Title == "New Title" &&
+                e.Content == "NewContent" &&
+                e.CreatedAt == new DateTime(2020, 1, 1) &&
+                e.ModifiedAt > new DateTime(2020, 1, 1) &&
+                e.UserId == 1
+            ));
+
+            Assert.Equal(1, result);
+            await _unitOfWorkSub.Received().SaveAsync(Arg.Any<CancellationToken>());
+            await _transactionSub.Received().CommitAsync(Arg.Any<CancellationToken>());
+            _ = _transactionSub.Received().DisposeAsync();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_NoteModelNull_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            NoteModel? noteModel = null;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.UpdateAsync(noteModel));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ContentNull_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            var noteModel = new NoteModel { Id = 1, Title = "Title", Content = null, UserId = 1 };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.UpdateAsync(noteModel));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_NoteNotFound_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            var noteModel = new NoteModel { Id = 1, Title = "Title", Content = "Content", UserId = 1 };
+            _notesRepositorySub.FirstOrDefaultAsNoTrackingAsync(Arg.Any<Expression<Func<NoteEntity, bool>>>())
+                .Returns(Task.FromResult<NoteEntity?>(null));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.UpdateAsync(noteModel));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_UserIdMismatch_ThrowsUserNotFoundException()
+        {
+            // Arrange
+            var existingNoteEntity = new NoteEntity { Id = 1, UserId = 1 };
+            var noteModel = new NoteModel { Id = 1, UserId = 2, Content = "Content" };
+
+            _notesRepositorySub.FirstOrDefaultAsNoTrackingAsync(Arg.Any<Expression<Func<NoteEntity, bool>>>())
+                .Returns(Task.FromResult<NoteEntity?>(existingNoteEntity));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<UserNotFoundException>(() => _service.UpdateAsync(noteModel));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WhenSaveFails_ThrowsAndRollsBack()
+        {
+            // Arrange
+            var existingNoteEntity = new NoteEntity { Id = 1, Title = "Old", Content = "OldContent", CreatedAt = new DateTime(2020, 1, 1), ModifiedAt = new DateTime(2020, 1, 1), UserId = 1 };
+            var noteModel = new NoteModel { Id = 1, Title = "Title", Content = "Content", UserId = 1 };
+            var exception = new Exception("Save failed");
+
+            _notesRepositorySub.FirstOrDefaultAsNoTrackingAsync(Arg.Any<Expression<Func<NoteEntity, bool>>>())
+                .Returns(Task.FromResult<NoteEntity?>(existingNoteEntity));
+            _unitOfWorkSub.SaveAsync(Arg.Any<CancellationToken>()).Returns(Task.FromException(exception));
+
+            // Act
+            var ex = await Assert.ThrowsAsync<Exception>(() => _service.UpdateAsync(noteModel));
+
+            // Assert
+            Assert.Equal("Save failed", ex.Message);
+            await _transactionSub.Received().RollbackAsync(Arg.Any<CancellationToken>());
+            await _transactionSub.DidNotReceive().CommitAsync(Arg.Any<CancellationToken>());
+            _ = _transactionSub.Received().DisposeAsync();
+        }
+
+        [Fact]
+        public async Task DeleteByIdAsync_ExistingId_ReturnsIdAndDeletes()
+        {
+            // Arrange
+            int id = 1;
+            var existingNote = new NoteEntity { Id = id, UserId = 1 };
+            _notesRepositorySub.GetByIdAsync(id).Returns(Task.FromResult<NoteEntity?>(existingNote));
+
+            // Act
+            var result = await _service.DeleteByIdAsync(id);
+
+            // Assert
+            Assert.Equal(id, result);
+            _notesRepositorySub.Received().Delete(existingNote);
+            await _unitOfWorkSub.Received().SaveAsync(Arg.Any<CancellationToken>());
+            await _transactionSub.Received().CommitAsync(Arg.Any<CancellationToken>());
+            _ = _transactionSub.Received().DisposeAsync();
+        }
+
+        [Fact]
+        public async Task DeleteByIdAsync_NonExistingId_ThrowsNoteNotFoundException()
+        {
+            // Arrange
+            int id = 999;
+            _notesRepositorySub.GetByIdAsync(id).Returns(Task.FromResult<NoteEntity?>(null));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NoteNotFoundException>(() => _service.DeleteByIdAsync(id));
+        }
+
+        [Fact]
+        public async Task DeleteByIdAsync_WhenSaveFails_ThrowsAndRollsBack()
+        {
+            // Arrange
+            int id = 1;
+            var existingNote = new NoteEntity { Id = id, UserId = 1 };
+            var exception = new Exception("Save failed");
+
+            _notesRepositorySub.GetByIdAsync(id).Returns(Task.FromResult<NoteEntity?>(existingNote));
+            _unitOfWorkSub.SaveAsync(Arg.Any<CancellationToken>()).Returns(Task.FromException(exception));
+
+            // Act
+            var ex = await Assert.ThrowsAsync<Exception>(() => _service.DeleteByIdAsync(id));
+
+            // Assert
+            Assert.Equal("Save failed", ex.Message);
+            _notesRepositorySub.Received().Delete(existingNote);
+            await _transactionSub.Received().RollbackAsync(Arg.Any<CancellationToken>());
+            await _transactionSub.DidNotReceive().CommitAsync(Arg.Any<CancellationToken>());
+            _ = _transactionSub.Received().DisposeAsync();
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+556405,6125
+
+OpenRouterElapsedTimeMilliseconds:
+555768
+
+PromptTokens:
+2819
+
+CompletionTokens:
+13223
+
+TotalTokens:
+16042
+
+TotalCost:
+0,0339904

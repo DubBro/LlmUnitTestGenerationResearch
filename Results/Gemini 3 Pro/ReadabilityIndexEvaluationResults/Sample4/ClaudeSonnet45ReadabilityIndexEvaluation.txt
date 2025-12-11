@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765317802-sFYKnuT9djxdTS5luLg0
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"All test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is clearly implemented with proper comments and blank line separation in all tests",
+		"Appropriate use of [Theory] with [InlineData] to avoid duplication for testing multiple IDs",
+		"Asynchronous tests correctly use 'async Task' signatures instead of 'async void'",
+		"Variable and field names are clear, meaningful, and follow C# naming conventions",
+		"No unnecessary comments beyond AAA separators, keeping the code clean",
+		"Constructor-based test setup with readonly fields promotes consistency and maintainability",
+		"Tests are well-structured, easy to understand, and cover various scenarios systematically",
+		"Minor: Some tests could use more descriptive variable names (e.g., 'id' could be 'companyId'), but overall readability remains very high"
+	]
+}
+```

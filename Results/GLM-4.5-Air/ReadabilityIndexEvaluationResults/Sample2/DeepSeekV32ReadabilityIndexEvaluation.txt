@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765319668-7ryzRU27Vfa8lWTIESYW
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the recommended pattern (EmployeeServiceTests)",
+		"Test method names use the MethodUnderTest_Scenario_ExpectedResult pattern and are clear",
+		"Tests follow the AAA pattern with clear Arrange/Act/Assert sections separated by comments and empty lines",
+		"Code uses [Theory] with [InlineData] appropriately for parameterized tests to avoid duplication",
+		"Test structure is consistent and logical across all tests",
+		"Variable and field names are meaningful and descriptive",
+		"No unnecessary nested classes or complex test structures",
+		"Proper use of async Task signatures for asynchronous tests",
+		"Good separation of concerns in test setup with constructor injection of mocks",
+		"Minimal but sufficient assertions with clear verification of expected outcomes"
+	]
+}
+```

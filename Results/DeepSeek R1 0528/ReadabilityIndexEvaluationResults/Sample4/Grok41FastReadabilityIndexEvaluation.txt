@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765315647-VPxPr1625o0V3BOujgIu
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistently applies AAA pattern with // Arrange, // Act, // Assert comments.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] to avoid duplication.",
+		"Clear, meaningful naming for variables, mocks (_sut, _companyRepository, _mapper).",
+		"Clean constructor setup for mocks and SUT, ensuring test isolation.",
+		"Adheres to C# naming conventions and standard formatting.",
+		"No unnecessary comments, nested classes, or code duplication.",
+		"Async tests correctly use async Task signatures."
+	]
+}

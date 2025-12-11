@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample1Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample1;
+using NSubstitute;
+
+namespace Glm45AirUnitTests;
+
+public class DepartmentServiceTests
+{
+    private readonly IDepartmentRepository _departmentRepositorySubstitute;
+    private readonly DepartmentService _departmentService;
+
+    public DepartmentServiceTests()
+    {
+        _departmentRepositorySubstitute = Substitute.For&lt;IDepartmentRepository&gt;();
+        _departmentService = new DepartmentService(_departmentRepositorySubstitute);
+    }
+
+    [Fact]
+    public async Task GetAsync_PassingValidId_ReturnsDepartmentModel()
+    {
+        // Arrange
+        const int departmentId = 1;
+        var expectedDepartmentEntity = new DepartmentEntity
+        {
+            Id = departmentId,
+            Name = &quot;HR&quot;,
+            Description = &quot;Human Resources&quot;
+        };
+        var expectedDepartmentModel = new DepartmentModel
+        {
+            Id = departmentId,
+            Name = &quot;HR&quot;,
+            Description = &quot;Human Resources&quot;
+        };
+        _departmentRepositorySubstitute.GetAsync(departmentId).Returns(Task.FromResult(expectedDepartmentEntity));
+
+        // Act
+        var actualResult = await _departmentService.GetAsync(departmentId);
+
+        // Assert
+        Assert.Equal(expectedDepartmentModel.Id, actualResult.Id);
+        Assert.Equal(expectedDepartmentModel.Name, actualResult.Name);
+        Assert.Equal(expectedDepartmentModel.Description, actualResult.Description);
+    }
+
+    [Fact]
+    public async Task GetAsync_RepositoryReturnsNull_ReturnsDepartmentModelWithDefaultValues()
+    {
+        // Arrange
+        const int departmentId = 1;
+        DepartmentEntity? expectedDepartmentEntity = null;
+        var expectedDepartmentModel = new DepartmentModel
+        {
+            Id = departmentId,
+            Name = null!,
+            Description = null
+        };
+        _departmentRepositorySubstitute.GetAsync(departmentId).Returns(Task.FromResult&lt;DepartmentEntity?&gt;(expectedDepartmentEntity));
+
+        // Act
+        var actualResult = await _departmentService.GetAsync(departmentId);
+
+        // Assert
+        Assert.Equal(expectedDepartmentModel.Id, actualResult.Id);
+        Assert.Equal(expectedDepartmentModel.Name, actualResult.Name);
+        Assert.Equal(expectedDepartmentModel.Description, actualResult.Description);
+    }
+
+    [Fact]
+    public async Task ListAsync_RepositoryReturnsEntities_ReturnsDepartmentModels()
+    {
+        // Arrange
+        var expectedDepartmentEntities = new List&lt;DepartmentEntity&gt;
+        {
+            new DepartmentEntity
+            {
+                Id = 1,
+                Name = &quot;HR&quot;,
+                Description = &quot;Human Resources&quot;
+            },
+            new DepartmentEntity
+            {
+                Id = 2,
+                Name = &quot;IT&quot;,
+                Description = &quot;Information Technology&quot;
+            }
+        };
+        var expectedDepartmentModels = new List&lt;DepartmentModel&gt;
+        {
+            new DepartmentModel
+            {
+                Id = 1,
+                Name = &quot;HR&quot;,
+                Description = &quot;Human Resources&quot;
+            },
+            new DepartmentModel
+            {
+                Id = 2,
+                Name = &quot;IT&quot;,
+                Description = &quot;Information Technology&quot;
+            }
+        };
+        _departmentRepositorySubstitute.ListAsync().Returns(Task.FromResult((ICollection&lt;DepartmentEntity&gt;)expectedDepartmentEntities));
+
+        // Act
+        var actualResult = await _departmentService.ListAsync();
+
+        // Assert
+        Assert.Equal(expectedDepartmentModels.Count, actualResult.Count);
+        for (int i = 0; i &lt; expectedDepartmentModels.Count; i++)
+        {
+            Assert.Equal(expectedDepartmentModels[i].Id, actualResult.ElementAt(i).Id);
+            Assert.Equal(expectedDepartmentModels[i].Name, actualResult.ElementAt(i).Name);
+            Assert.Equal(expectedDepartmentModels[i].Description, actualResult.ElementAt(i).Description);
+        }
+    }
+
+    [Fact]
+    public async Task ListAsync_RepositoryReturnsEmptyList_ReturnsEmptyList()
+    {
+        // Arrange
+        var expectedDepartmentEntities = new List&lt;DepartmentEntity&gt;();
+        var expectedDepartmentModels = new List&lt;DepartmentModel&gt;();
+        _departmentRepositorySubstitute.ListAsync().Returns(Task.FromResult((ICollection&lt;DepartmentEntity&gt;)expectedDepartmentEntities));
+
+        // Act
+        var actualResult = await _departmentService.ListAsync();
+
+        // Assert
+        Assert.Equal(expectedDepartmentModels.Count, actualResult.Count);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,5,11,36,1],[12,5,12,6,1],[13,9,13,83,1],[14,9,14,85,1],[15,5,15,6,1],[19,5,19,6,1],[22,9,27,11,1],[28,9,33,11,1],[34,9,34,115,1],[37,9,37,76,1],[40,9,40,67,1],[41,9,41,71,1],[42,9,42,85,1],[43,5,43,6,1],[47,5,47,6,1],[50,9,50,59,1],[51,9,56,11,1],[57,9,57,134,1],[60,9,60,76,1],[63,9,63,67,0],[64,9,64,71,0],[65,9,65,85,0],[66,5,66,6,0],[70,5,70,6,1],[72,9,86,11,1],[87,9,101,11,1],[102,9,102,137,1],[105,9,105,65,1],[108,9,108,74,1],[109,14,109,23,1],[109,25,109,59,1],[109,61,109,64,1],[110,9,110,10,1],[111,13,111,88,1],[112,13,112,92,1],[113,13,113,106,1],[114,9,114,10,1],[115,5,115,6,1],[119,5,119,6,1],[121,9,121,71,1],[122,9,122,68,1],[123,9,123,137,1],[126,9,126,65,1],[129,9,129,74,1],[130,5,130,6,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample10Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample10;
+using NSubstitute;
+
+namespace Glm45AirUnitTests;
+
+public class AuctionServiceTests
+{
+    private readonly IUnitOfWork _unitOfWorkMock;
+    private readonly IMapper _mapperMock;
+    private readonly AuctionService _auctionService;
+
+    public AuctionServiceTests()
+    {
+        _unitOfWorkMock = Substitute.For&lt;IUnitOfWork&gt;();
+        _mapperMock = Substitute.For&lt;IMapper&gt;();
+        _auctionService = new AuctionService(_unitOfWorkMock, _mapperMock);
+    }
+
+    public class BetMethod : AuctionServiceTests
+    {
+        [Fact]
+        public void Bet_PassingIdLessThanZero_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = -1;
+            string customerName = &quot;Test Customer&quot;;
+            int bid = 100;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingNullCustomerName_ThrowsInvalidNameException()
+        {
+            // Arrange
+            int id = 1;
+            string customerName = null;
+            int bid = 100;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidNameException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_PassingNonExistentAuctionId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = 1;
+            string customerName = &quot;Test Customer&quot;;
+            int bid = 100;
+            _unitOfWorkMock.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+        }
+
+        [Fact]
+        public void Bet_AuctionNotStarted_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = false };
+            int id = auction.ID;
+            string customerName = &quot;Test Customer&quot;;
+            int bid = 100;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+            Assert.Equal(&quot;ERROR: Auction has not started yet&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void Bet_AuctionEnded_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = true, Ended = true };
+            int id = auction.ID;
+            string customerName = &quot;Test Customer&quot;;
+            int bid = 100;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+            Assert.Equal(&quot;ERROR: Auction is over&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void BidLessThanOrEqualToCurrentBid_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = true, Ended = false, Bid = 100 };
+            int id = auction.ID;
+            string customerName = &quot;Test Customer&quot;;
+            int bid = 90;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.Bet(id, customerName, bid));
+            Assert.Equal(&quot;ERROR: Invalid bid&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void Bet_ValidParameters_UpdatesAuctionAndCommits()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = true, Ended = false, Bid = 90 };
+            int id = auction.ID;
+            string customerName = &quot;New Leader&quot;;
+            int bid = 100;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act
+            _auctionService.Bet(id, customerName, bid);
+
+            // Assert
+            Assert.Equal(bid, auction.Bid);
+            Assert.Equal(customerName, auction.Leader);
+            _unitOfWorkMock.Auctions.Received().Update(auction);
+            _unitOfWorkMock.Received().Commit();
+        }
+    }
+
+    public class CloseAuctionMethod : AuctionServiceTests
+    {
+        [Fact]
+        public void CloseAuction_PassingIdLessThanZero_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = -1;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.CloseAuction(id));
+        }
+
+        [Fact]
+        public void CloseAuction_PassingNonExistentAuctionId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = 1;
+            _unitOfWorkMock.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.CloseAuction(id));
+        }
+
+        [Fact]
+        public void CloseAuction_AuctionNotStarted_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = false };
+            int id = auction.ID;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.CloseAuction(id));
+            Assert.Equal(&quot;ERROR: Auction has not started yet&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void CloseAuction_AuctionAlreadyEnded_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = true, Ended = true };
+            int id = auction.ID;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.CloseAuction(id));
+            Assert.Equal(&quot;ERROR: Auction has already finished&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void CloseAuction_ValidParameters_SetsEndedToTrueAndCommits()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Started = true, Ended = false };
+            int id = auction.ID;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act
+            _auctionService.CloseAuction(id);
+
+            // Assert
+            Assert.True(auction.Ended);
+            _unitOfWorkMock.Auctions.Received().Update(auction);
+            _unitOfWorkMock.Received().Commit();
+        }
+    }
+
+    public class GetAuctionMethod : AuctionServiceTests
+    {
+        [Fact]
+        public void GetAuction_PassingIdLessThanZero_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = -1;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.GetAuction(id));
+        }
+
+        [Fact]
+        public void GetAuction_PassingNonExistentAuctionId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = 1;
+            _unitOfWorkMock.Auctions.Get(id).Returns((Auction)null);
+            _mapperMock.Map&lt;Auction, AuctionDTO&gt;(Arg.Any&lt;Auction&gt;()).Returns((AuctionDTO)null);
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.GetAuction(id));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(999)]
+        public void GetAuction_ValidId_ReturnsMappedAuction(int id)
+        {
+            // Arrange
+            var auction = new Auction { ID = id };
+            var expectedDto = new AuctionDTO { ID = id };
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+            _mapperMock.Map&lt;Auction, AuctionDTO&gt;(auction).Returns(expectedDto);
+
+            // Act
+            var result = _auctionService.GetAuction(id);
+
+            // Assert
+            Assert.Equal(expectedDto, result);
+            _unitOfWorkMock.Auctions.Received().Get(id);
+            _mapperMock.Received().Map&lt;Auction, AuctionDTO&gt;(auction);
+        }
+    }
+
+    public class GetAuctionsMethod : AuctionServiceTests
+    {
+        [Fact]
+        public void GetAuctions_WhenCalled_ReturnsMappedListOfAuctions()
+        {
+            // Arrange
+            var auctions = new List&lt;Auction&gt; { new Auction { ID = 1 }, new Auction { ID = 2 } };
+            var expectedDtos = new List&lt;AuctionDTO&gt; { new AuctionDTO { ID = 1 }, new AuctionDTO { ID = 2 } };
+            _unitOfWorkMock.Auctions.GetAll().Returns(auctions);
+            _mapperMock.Map&lt;IEnumerable&lt;Auction&gt;, IEnumerable&lt;AuctionDTO&gt;&gt;(auctions).Returns(expectedDtos);
+
+            // Act
+            var result = _auctionService.GetAuctions();
+
+            // Assert
+            Assert.Equal(expectedDtos, result);
+            _unitOfWorkMock.Auctions.Received().GetAll();
+            _mapperMock.Received().Map&lt;IEnumerable&lt;Auction&gt;, IEnumerable&lt;AuctionDTO&gt;&gt;(auctions);
+        }
+    }
+
+    public class OpenAuctionMethod : AuctionServiceTests
+    {
+        [Fact]
+        public void OpenAuction_PassingIdLessThanZero_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = -1;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.OpenAuction(id));
+        }
+
+        [Fact]
+        public void OpenAuction_PassingNonExistentAuctionId_ThrowsInvalidIdException()
+        {
+            // Arrange
+            int id = 1;
+            _unitOfWorkMock.Auctions.Get(id).Returns((Auction)null);
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidIdException&gt;(() =&gt; _auctionService.OpenAuction(id));
+        }
+
+        [Fact]
+        public void OpenAuction_AuctionAlreadyFinished_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Ended = true };
+            int id = auction.ID;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.OpenAuction(id));
+            Assert.Equal(&quot;ERROR: Auction has already finished&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void OpenAuction_AuctionAlreadyStarted_ThrowsInvalidAuctionExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Ended = false, Started = true };
+            int id = auction.ID;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act &amp; Assert
+            var exception = Assert.Throws&lt;InvalidAuctionException&gt;(() =&gt; _auctionService.OpenAuction(id));
+            Assert.Equal(&quot;ERROR: Auction has already started&quot;, exception.Message);
+        }
+
+        [Fact]
+        public void OpenAuction_ValidParameters_SetsStartedToTrueAndCommits()
+        {
+            // Arrange
+            var auction = new Auction { ID = 1, Ended = false, Started = false };
+            int id = auction.ID;
+            _unitOfWorkMock.Auctions.Get(id).Returns(auction);
+
+            // Act
+            _auctionService.OpenAuction(id);
+
+            // Assert
+            Assert.True(auction.Started);
+            _unitOfWorkMock.Auctions.Received().Update(auction);
+            _unitOfWorkMock.Received().Commit();
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,5,13,33,1],[14,5,14,6,1],[15,9,15,57,1],[16,9,16,49,1],[17,9,17,76,1],[18,5,18,6,1],[24,9,24,10,1],[26,13,26,25,1],[27,13,27,51,1],[28,13,28,27,1],[31,13,31,53,1],[31,53,31,95,1],[31,95,31,97,1],[32,9,32,10,1],[36,9,36,10,1],[38,13,38,24,1],[39,13,39,40,1],[40,13,40,27,1],[43,13,43,55,1],[43,55,43,97,1],[43,97,43,99,1],[44,9,44,10,1],[48,9,48,10,1],[50,13,50,24,1],[51,13,51,51,1],[52,13,52,27,1],[53,13,53,69,1],[56,13,56,53,1],[56,53,56,95,1],[56,95,56,97,1],[57,9,57,10,1],[61,9,61,10,1],[63,13,63,67,1],[64,13,64,33,1],[65,13,65,51,1],[66,13,66,27,1],[67,13,67,63,1],[70,13,70,74,1],[70,74,70,116,1],[70,116,70,118,1],[71,13,71,83,1],[72,9,72,10,1],[76,9,76,10,1],[78,13,78,80,1],[79,13,79,33,1],[80,13,80,51,1],[81,13,81,27,1],[82,13,82,63,1],[85,13,85,74,1],[85,74,85,116,1],[85,116,85,118,1],[86,13,86,71,1],[87,9,87,10,1],[91,9,91,10,1],[93,13,93,92,1],[94,13,94,33,1],[95,13,95,51,1],[96,13,96,26,1],[97,13,97,63,1],[100,13,100,74,1],[100,74,100,116,1],[100,116,100,118,1],[101,13,101,67,1],[102,9,102,10,1],[106,9,106,10,1],[108,13,108,91,1],[109,13,109,33,1],[110,13,110,48,1],[111,13,111,27,1],[112,13,112,63,1],[115,13,115,56,1],[118,13,118,44,1],[119,13,119,56,1],[120,13,120,65,1],[121,13,121,49,1],[122,9,122,10,1],[129,9,129,10,1],[131,13,131,25,1],[134,13,134,53,1],[134,53,134,85,1],[134,85,134,87,1],[135,9,135,10,1],[139,9,139,10,1],[141,13,141,24,1],[142,13,142,69,1],[145,13,145,53,1],[145,53,145,85,1],[145,85,145,87,1],[146,9,146,10,1],[150,9,150,10,1],[152,13,152,67,1],[153,13,153,33,1],[154,13,154,63,1],[157,13,157,74,1],[157,74,157,106,1],[157,106,157,108,1],[158,13,158,83,1],[159,9,159,10,1],[163,9,163,10,1],[165,13,165,80,1],[166,13,166,33,1],[167,13,167,63,1],[170,13,170,74,1],[170,74,170,106,1],[170,106,170,108,1],[171,13,171,84,1],[172,9,172,10,1],[176,9,176,10,1],[178,13,178,81,1],[179,13,179,33,1],[180,13,180,63,1],[183,13,183,46,1],[186,13,186,40,1],[187,13,187,65,1],[188,13,188,49,1],[189,9,189,10,1],[196,9,196,10,1],[198,13,198,25,1],[201,13,201,53,1],[201,53,201,83,1],[201,83,201,85,1],[202,9,202,10,1],[206,9,206,10,1],[208,13,208,24,1],[209,13,209,69,1],[210,13,210,96,1],[213,13,213,53,1],[213,53,213,83,1],[213,83,213,85,1],[214,9,214,10,1],[220,9,220,10,1],[222,13,222,51,1],[223,13,223,58,1],[224,13,224,63,1],[225,13,225,80,1],[228,13,228,57,1],[231,13,231,47,1],[232,13,232,57,1],[233,13,233,70,1],[234,9,234,10,1],[241,9,241,10,1],[243,13,243,97,1],[244,13,244,110,1],[245,13,245,65,1],[246,13,246,108,1],[249,13,249,56,1],[252,13,252,48,1],[253,13,253,58,1],[254,13,254,97,1],[255,9,255,10,1],[262,9,262,10,1],[264,13,264,25,1],[267,13,267,53,1],[267,53,267,84,1],[267,84,267,86,1],[268,9,268,10,1],[272,9,272,10,1],[274,13,274,24,1],[275,13,275,69,1],[278,13,278,53,1],[278,53,278,84,1],[278,84,278,86,1],[279,9,279,10,1],[283,9,283,10,1],[285,13,285,64,1],[286,13,286,33,1],[287,13,287,63,1],[290,13,290,74,1],[290,74,290,105,1],[290,105,290,107,1],[291,13,291,84,1],[292,9,292,10,1],[296,9,296,10,1],[298,13,298,81,1],[299,13,299,33,1],[300,13,300,63,1],[303,13,303,74,1],[303,74,303,105,1],[303,105,303,107,1],[304,13,304,83,1],[305,9,305,10,1],[309,9,309,10,1],[311,13,311,82,1],[312,13,312,33,1],[313,13,313,63,1],[316,13,316,45,1],[319,13,319,42,1],[320,13,320,65,1],[321,13,321,49,1],[322,9,322,10,1]]);
+    </script>
+  </body>
+</html>

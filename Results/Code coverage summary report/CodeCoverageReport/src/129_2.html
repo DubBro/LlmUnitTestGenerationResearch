@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample20Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample20;
+
+namespace Glm45AirUnitTests;
+
+public class FisherYatesShufflerTests
+{
+    [Fact]
+    public void Shuffle_WhenCalledAndSeedIsNull_ShufflesArray()
+    {
+        // Arrange
+        var shuffler = new FisherYatesShuffler&lt;int&gt;();
+        var array = new int[] { 1, 2, 3, 4, 5 };
+        var originalArray = (int[])array.Clone();
+
+        // Act
+        shuffler.Shuffle(array);
+
+        // Assert
+        Assert.NotEqual(originalArray, array);
+    }
+
+    [Fact]
+    public void Shuffle_WhenCalledAndSeedIsNotNull_ShufflesArrayDeterministically()
+    {
+        // Arrange
+        var shuffler = new FisherYatesShuffler&lt;int&gt;();
+        var array1 = new int[] { 1, 2, 3, 4, 5 };
+        var array2 = new int[] { 1, 2, 3, 4, 5 };
+        const int seed = 123;
+
+        // Act
+        shuffler.Shuffle(array1, seed);
+        shuffler.Shuffle(array2, seed);
+
+        // Assert
+        Assert.Equal(array1, array2);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void Shuffle_WhenCalledWithSingleElementArray_DoesNotChangeArray(int element)
+    {
+        // Arrange
+        var shuffler = new FisherYatesShuffler&lt;int&gt;();
+        var array = new int[] { element };
+
+        // Act
+        shuffler.Shuffle(array);
+
+        // Assert
+        Assert.Equal(new int[] { element }, array);
+    }
+
+    [Fact]
+    public void Shuffle_WhenCalledWithNullArray_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var shuffler = new FisherYatesShuffler&lt;int&gt;();
+        int[] array = null;
+
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; shuffler.Shuffle(array));
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,55,1],[12,9,12,49,1],[13,9,13,50,1],[16,9,16,33,1],[19,9,19,47,1],[20,5,20,6,1],[24,5,24,6,1],[26,9,26,55,1],[27,9,27,50,1],[28,9,28,50,1],[32,9,32,40,1],[33,9,33,40,1],[36,9,36,38,1],[37,5,37,6,1],[44,5,44,6,1],[46,9,46,55,1],[47,9,47,43,1],[50,9,50,33,1],[53,9,53,52,1],[54,5,54,6,1],[58,5,58,6,1],[60,9,60,55,1],[61,9,61,28,1],[64,9,64,52,1],[64,52,64,75,1],[64,75,64,77,1],[65,5,65,6,0]]);
+    </script>
+  </body>
+</html>

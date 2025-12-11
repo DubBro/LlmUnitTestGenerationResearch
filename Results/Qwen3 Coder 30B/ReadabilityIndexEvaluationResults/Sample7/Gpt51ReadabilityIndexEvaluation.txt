@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765326192-Qh8udn0dVjJkM9jq1cke
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult convention and describe intent well",
+    "All async tests correctly use async Task signatures, improving clarity and preventing hidden issues",
+    "AAA pattern is consistently applied and visually separated with comments and blank lines",
+    "Naming of variables and test data (imei, walkEntities, walkInfoEntity, result) is clear and domain-specific",
+    "Use of [Fact] for single scenarios and [Theory] with [InlineData] for input variations is appropriate and consistent",
+    "Assertions are straightforward, explicit, and ordered logically, making expected outcomes easy to understand",
+    "Setup with NSubstitute in the constructor is simple and avoids duplication of mock creation",
+    "No extraneous comments or dead code; the file is compact and focused on behavior under test",
+    "Minor duplication of invalid IMEI test cases across two methods could be reduced via shared data, but it does not significantly hinder readability"
+  ]
+}

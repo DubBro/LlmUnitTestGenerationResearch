@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765324134-ka6DAevLGMRcreBTcukh
+
+Content:
+{
+  "readabilityIndex": 93,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test (AsciiHelpersTests).",
+    "Test method names consistently follow MethodUnderTest_Scenario_ExpectedResult and are highly descriptive of intent.",
+    "AAA pattern is used in all tests with explicit // Arrange, // Act, // Assert comments and clear visual separation, making test flow easy to follow.",
+    "Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] for multiple input variations, minimizing duplication where it matters most.",
+    "No unnecessary nested classes or complex setup; each test is self-contained and straightforward to understand.",
+    "Parameter and variable names (input, expected, replacement, result) are clear and semantically meaningful, improving immediate comprehension.",
+    "Minor issues: a few inline explanatory comments beyond AAA and some small duplication between related tests slightly reduce strict adherence to the stated ideal, but do not significantly impact overall readability."
+  ]
+}

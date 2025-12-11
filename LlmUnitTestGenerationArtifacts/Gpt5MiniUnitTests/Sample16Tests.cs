@@ -1,0 +1,153 @@
+using Dataset.Sample16;
+
+namespace Gpt5MiniUnitTests
+{
+    public class AsciiHelpersTests
+    {
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        [InlineData("\r\n")]
+        public void ReplaceNonAsciiCharsWith_NullOrWhitespace_ReturnsEmptyString(string input)
+        {
+            // Arrange
+            char replacement = '*';
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        [InlineData("\r\n")]
+        public void RemoveNonAsciiChars_NullOrWhitespace_ReturnsEmptyString(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_AllAscii_ReturnsOriginalString()
+        {
+            // Arrange
+            string input = "Hello, World! 123 ~\u007F";
+            char replacement = '#';
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_AllAscii_ReturnsOriginalString()
+        {
+            // Arrange
+            string input = "ASCII: ~!@#$%^&*()_+[]{}|;:',.<>?/`1234567890\u007F";
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(input, result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_ReplacesNonAsciiCharacters_WithSpecifiedChar()
+        {
+            // Arrange
+            string input = "Café🚀"; // 'é' and emoji are non-ASCII
+            char replacement = '*';
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal("Caf**", result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_RemovesNonAsciiCharacters()
+        {
+            // Arrange
+            string input = "Café🚀"; // 'é' and emoji are non-ASCII
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal("Caf", result);
+        }
+
+        [Fact]
+        public void ReplaceNonAsciiCharsWith_ReplacesCombiningMarksOnly_LeavesBaseCharacters()
+        {
+            // Arrange
+            string input = "Cafe\u0301 Test"; // 'e' + combining acute accent (non-ASCII)
+            char replacement = '_';
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal("Cafe_ Test", result);
+        }
+
+        [Fact]
+        public void RemoveNonAsciiChars_RemovesCombiningMarksOnly_LeavesBaseCharacters()
+        {
+            // Arrange
+            string input = "Cafe\u0301 Test"; // 'e' + combining acute accent (non-ASCII)
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal("Cafe Test", result);
+        }
+
+        [Theory]
+        [InlineData("a©b£c", "abc")]
+        [InlineData("日本語ABC", "ABC")]
+        [InlineData("👍thumbs_up👍", "thumbs_up")]
+        public void RemoveNonAsciiChars_RemovesVariousNonAsciiPatterns(string input, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = input.RemoveNonAsciiChars();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData("a©b£c", '*', "a*b*c")]
+        [InlineData("日本語ABC", '-', "---ABC")]
+        [InlineData("👍thumbs_up👍", 'X', "Xthumbs_upX")]
+        public void ReplaceNonAsciiCharsWith_ReplacesVariousNonAsciiPatterns(string input, char replacement, string expected)
+        {
+            // Arrange
+
+            // Act
+            var result = input.ReplaceNonAsciiCharsWith(replacement);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+    }
+}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316735-4ZuA6RyrSaYHe5Fu5Zo5
+
+Content:
+{
+	"readabilityIndex": 86,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern (OntologyHelperTests).",
+		"Test method names clearly describe the scenario and expected result using the MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"The code consistently follows the AAA pattern with clear Arrange, Act, Assert sections separated by comments.",
+		"Tests use [Theory] with [InlineData] appropriately to test multiple input variations, avoiding code duplication.",
+		"Clear and meaningful variable names (node, result, expected, input).",
+		"Proper use of mocking framework (NSubstitute) with readable setup.",
+		"Test methods are concise and focused on single scenarios.",
+		"No unnecessary nested classes or complex structures.",
+		"Good separation between different test cases for different node types.",
+		"Minor improvement: could add comments explaining edge cases for complex test scenarios."
+	]
+}

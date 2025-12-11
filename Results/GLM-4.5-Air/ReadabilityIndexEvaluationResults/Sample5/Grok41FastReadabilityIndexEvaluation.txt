@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765320461-nXF3rsWp6Um2I3tHO72h
+
+Content:
+```json
+{
+	"readabilityIndex": 82,
+	"reasons": [
+		"Consistent AAA pattern with clear // Arrange, // Act, // Assert comments and separation.",
+		"Descriptive test names following Given_When_Then pattern, close to recommended MethodUnderTest_Scenario_ExpectedResult.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to test variations without duplication.",
+		"All async tests correctly use async Task signatures.",
+		"Logical grouping of tests by method using nested classes enhances navigability.",
+		"Clear, meaningful naming for variables, mocks, and entities.",
+		"Unconventional inheritance of nested classes from base test class may confuse some developers.",
+		"Some test names are overly verbose due to full scenario descriptions.",
+		"Minor duplication in mock setups and assertions across similar tests.",
+		"Occasional combined // Act & Assert blocks for exceptions slightly deviates from strict AAA separation."
+	]
+}
+```

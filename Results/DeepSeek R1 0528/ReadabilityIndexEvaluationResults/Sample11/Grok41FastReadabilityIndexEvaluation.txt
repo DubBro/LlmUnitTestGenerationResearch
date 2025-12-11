@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316590-2f0hKCCUREc15G8D5RrE
+
+Content:
+{"readabilityIndex":95,"reasons":["Perfect adherence to AAA pattern with clear // Arrange, // Act, // Assert separators in every test.","Test class name follows ClassUnderTestTests convention.","Test method names are descriptive and closely follow MethodUnderTest_Scenario_ExpectedResult pattern.","No unnecessary comments, nested classes, or deviations from standard C# naming conventions.","Appropriate use of [Fact] attributes with no code duplication across tests.","Clear, meaningful variable names (p, n, s, i, j) standard for the algorithm context.","Well-structured assertions logically grouped.","Minor flaw: some test names embed specific expected values (e.g., 6000, 7500), potentially reducing flexibility.","Slight repetition in Arrange/Act sections of combined tests, though minimal and readable."]}

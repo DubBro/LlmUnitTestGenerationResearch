@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317020-8CpuzA62PFI7cN9vTsCF
+
+Content:
+{"readabilityIndex":95,"reasons":["Test class name follows the `ClassUnderTestTests` pattern.","Test method names follow the `MethodUnderTest_Scenario_ExpectedResult` pattern.","Effective use of `[Theory]` and `[InlineData]` to test multiple inputs concisely without duplication.","Adheres to AAA pattern with clear `// Act` and `// Assert` sections (no Arrange needed).","Clear, meaningful parameter names in `[InlineData]` matching method signatures.","No unnecessary comments, nested classes, or code, enhancing maintainability.","Follows standard C# naming conventions and formatting."]}

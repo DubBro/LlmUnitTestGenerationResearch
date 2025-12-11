@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765322275-ZWkkcDN5bqZNr1Y7HUo6
+
+Content:
+```json
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern (AsciiHelpersTests)",
+		"Test methods consistently follow the 'MethodUnderTest_Scenario_ExpectedResult' naming pattern",
+		"AAA pattern is clearly implemented with comment separators and blank lines between sections",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication for testing different replacement characters",
+		"Nested classes are used to group tests by method under test, which adds organization but deviates from the recommendation against unnecessary nesting",
+		"Variable naming is clear and meaningful (input, replacement, result, expected)",
+		"Code follows standard C# and .NET naming conventions consistently",
+		"No extraneous comments beyond AAA separators, maintaining clean code",
+		"The nested class structure creates an additional layer that could be simplified by incorporating method names directly into test names",
+		"Overall structure is logical and maintainable with good consistency across all test methods"
+	]
+}
+```

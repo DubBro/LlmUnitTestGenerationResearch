@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample13Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample13;
+using NSubstitute;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class OntologyHelperTests
+    {
+        [Fact]
+        public void ParseNode_NodeTypeUri_ReturnsExpectedResult()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(&quot;http://example.org#MyNode&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(&quot;MyNode&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeLiteral_ReturnsExpectedResult()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns(&quot;SomeLiteral^http://www.w3.org/2001/XMLSchema#string&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(&quot;SomeLiteral&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeBlank_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Blank);
+            node.ToString().Returns(&quot;some value&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NodeTypeGraphLiteral_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.GraphLiteral);
+            node.ToString().Returns(&quot;some value&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Theory]
+        [InlineData(NodeType.Variable)]
+        [InlineData(NodeType.Triple)]
+        public void ParseNode_NodeTypeUnknown_ReturnsEmptyString(NodeType nodeType)
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(nodeType);
+            node.ToString().Returns(&quot;some value&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_NullNodeString_ReturnsExpectedResult()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns((string)null);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void ParseNode_WhenNoHashExists_ReturnsWholeString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(&quot;http://example.org/MyNode&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(&quot;MyNode&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_WhenNoCaretExists_ReturnsWholeString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Literal);
+            node.ToString().Returns(&quot;SomeLiteral&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(&quot;SomeLiteral&quot;, result);
+        }
+
+        [Fact]
+        public void ParseNode_WhenHashAtEnd_ReturnsEmptyString()
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(&quot;http://example.org#&quot;);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Theory]
+        [InlineData(&quot;http://example.org#test&quot;, &quot;test&quot;)]
+        [InlineData(&quot;http://example.org/#test&quot;, &quot;test&quot;)]
+        [InlineData(&quot;http://example.org#test#other&quot;, &quot;test&quot;)]
+        public void ParseNode_WhenMultipleHashes_ReturnsLastPartAfterHash(string uriString, string expected)
+        {
+            // Arrange
+            var node = Substitute.For&lt;INode&gt;();
+            node.NodeType.Returns(NodeType.Uri);
+            node.ToString().Returns(uriString);
+
+            // Act
+            var result = OntologyHelper.ParseNode(node);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,9,10,10,1],[12,13,12,48,1],[13,13,13,49,1],[14,13,14,66,1],[17,13,17,57,1],[20,13,20,44,1],[21,9,21,10,1],[25,9,25,10,1],[27,13,27,48,1],[28,13,28,53,1],[29,13,29,92,1],[32,13,32,57,1],[35,13,35,49,1],[36,9,36,10,1],[40,9,40,10,1],[42,13,42,48,1],[43,13,43,51,1],[44,13,44,51,1],[47,13,47,57,1],[50,13,50,48,1],[51,9,51,10,1],[55,9,55,10,1],[57,13,57,48,1],[58,13,58,58,1],[59,13,59,51,1],[62,13,62,57,1],[65,13,65,48,1],[66,9,66,10,1],[72,9,72,10,1],[74,13,74,48,1],[75,13,75,45,1],[76,13,76,51,1],[79,13,79,57,1],[82,13,82,48,1],[83,9,83,10,1],[87,9,87,10,1],[89,13,89,48,1],[90,13,90,49,1],[91,13,91,51,1],[94,13,94,57,1],[97,13,97,48,1],[98,9,98,10,1],[102,9,102,10,1],[104,13,104,48,1],[105,13,105,49,1],[106,13,106,66,1],[109,13,109,57,1],[112,13,112,44,1],[113,9,113,10,0],[117,9,117,10,1],[119,13,119,48,1],[120,13,120,53,1],[121,13,121,52,1],[124,13,124,57,1],[127,13,127,49,0],[128,9,128,10,0],[132,9,132,10,1],[134,13,134,48,1],[135,13,135,49,1],[136,13,136,60,1],[139,13,139,57,1],[142,13,142,48,1],[143,9,143,10,1],[150,9,150,10,1],[152,13,152,48,1],[153,13,153,49,1],[154,13,154,48,1],[157,13,157,57,1],[160,13,160,44,1],[161,9,161,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Glm45AirUnitTests\Sample4Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample4;
+using NSubstitute;
+
+namespace Glm45AirUnitTests;
+
+public class CompanyServiceTests
+{
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IMapper _mapper;
+    private readonly CompanyService _companyService;
+
+    public CompanyServiceTests()
+    {
+        _companyRepository = Substitute.For&lt;ICompanyRepository&gt;();
+        _mapper = Substitute.For&lt;IMapper&gt;();
+        _companyService = new CompanyService(_companyRepository, _mapper);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryReturnsEntity_ReturnsMappedModel()
+    {
+        // Arrange
+        int id = 1;
+        var entity = new CompanyEntity { Id = id, Name = &quot;Test Company&quot;, Description = &quot;Test Description&quot; };
+        var model = new CompanyModel { Id = id, Name = &quot;Test Company&quot;, Description = &quot;Test Description&quot; };
+
+        _companyRepository.GetAsync(id).Returns(entity);
+        _mapper.Map&lt;CompanyModel&gt;(entity).Returns(model);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.Equal(model, result);
+        await _companyRepository.Received().GetAsync(id);
+        _mapper.Received().Map&lt;CompanyModel&gt;(entity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WithDefaultId_UsesDefaultId()
+    {
+        // Arrange
+        var entity = new CompanyEntity { Id = 1, Name = &quot;Default Company&quot;, Description = &quot;Default Description&quot; };
+        var model = new CompanyModel { Id = 1, Name = &quot;Default Company&quot;, Description = &quot;Default Description&quot; };
+
+        _companyRepository.GetAsync(Arg.Any&lt;int&gt;()).Returns(entity);
+        _mapper.Map&lt;CompanyModel&gt;(entity).Returns(model);
+
+        // Act
+        var result = await _companyService.GetAsync();
+
+        // Assert
+        Assert.Equal(model, result);
+        await _companyRepository.Received().GetAsync(1);
+        _mapper.Received().Map&lt;CompanyModel&gt;(entity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        int id = 2;
+        _companyRepository.GetAsync(id).Returns((CompanyEntity?)null);
+        _mapper.Map&lt;CompanyModel&gt;(Arg.Any&lt;CompanyEntity&gt;()).Returns((CompanyModel?)null);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.Null(result);
+        await _companyRepository.Received().GetAsync(id);
+        _mapper.DidNotReceive().Map&lt;CompanyModel&gt;(Arg.Any&lt;CompanyEntity&gt;());
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenCalledThroughInterface_ReturnsMappedModel()
+    {
+        // Arrange
+        int id = 1;
+        var entity = new CompanyEntity { Id = id, Name = &quot;Interface Test&quot;, Description = &quot;Interface Description&quot; };
+        var model = new CompanyModel { Id = id, Name = &quot;Interface Test&quot;, Description = &quot;Interface Description&quot; };
+
+        var repository = Substitute.For&lt;ICompanyRepository&gt;();
+        var mapper = Substitute.For&lt;IMapper&gt;();
+        repository.GetAsync(id).Returns(entity);
+        mapper.Map&lt;CompanyModel&gt;(entity).Returns(model);
+
+        ICompanyService service = new CompanyService(repository, mapper);
+
+        // Act
+        var result = await service.GetAsync(id);
+
+        // Assert
+        Assert.Equal(model, result);
+        await repository.Received().GetAsync(id);
+        mapper.Received().Map&lt;CompanyModel&gt;(entity);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,5,13,33,1],[14,5,14,6,1],[15,9,15,67,1],[16,9,16,45,1],[17,9,17,75,1],[18,5,18,6,1],[22,5,22,6,1],[24,9,24,20,1],[25,9,25,109,1],[26,9,26,107,1],[28,9,28,57,1],[29,9,29,58,1],[32,9,32,57,1],[35,9,35,37,1],[36,9,36,58,1],[37,9,37,54,1],[38,5,38,6,1],[42,5,42,6,1],[44,9,44,114,1],[45,9,45,112,1],[47,9,47,69,1],[48,9,48,58,1],[51,9,51,55,1],[54,9,54,37,1],[55,9,55,57,1],[56,9,56,54,1],[57,5,57,6,1],[61,5,61,6,1],[63,9,63,20,1],[64,9,64,71,1],[65,9,65,90,1],[68,9,68,57,1],[71,9,71,29,1],[72,9,72,58,1],[73,9,73,77,1],[74,5,74,6,0],[78,5,78,6,1],[80,9,80,20,1],[81,9,81,116,1],[82,9,82,114,1],[84,9,84,63,1],[85,9,85,48,1],[86,9,86,49,1],[87,9,87,57,1],[89,9,89,74,1],[92,9,92,49,1],[95,9,95,37,1],[96,9,96,50,1],[97,9,97,53,1],[98,5,98,6,1]]);
+    </script>
+  </body>
+</html>

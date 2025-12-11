@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317810-c52xqTWWOtlz3BfrLSdp
+
+Content:
+{"readabilityIndex":92,"reasons":["Excellent adherence to AAA pattern with clear // Arrange, // Act, // Assert comments and separation.","Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern precisely.","Proper use of [Theory] and [InlineData] for parameterized testing, avoiding duplication.","Class name follows ClassUnderTestTests convention.","Async tests correctly use async Task signatures.","Clear, meaningful names for most variables, fields, and mocks.","Standard C# naming conventions and no extraneous comments.","Minor issue: suboptimal variable names 'nullEntity' and 'nullModel' in one test.","Slight inconsistency in DidNotReceive verification using 'default' parameter."]}

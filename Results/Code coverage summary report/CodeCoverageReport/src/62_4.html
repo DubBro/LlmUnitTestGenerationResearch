@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample3Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Linq.Expressions;
+using Dataset.Sample3;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+
+namespace Gemini3ProUnitTests;
+
+public class NoteServiceTests
+{
+    private readonly IUnitOfWork _unitOfWorkSubstitute;
+    private readonly IRepository&lt;NoteEntity&gt; _repositorySubstitute;
+    private readonly INoteService _noteService;
+    private readonly IDbContextTransaction _transactionSubstitute;
+
+    public NoteServiceTests()
+    {
+        _unitOfWorkSubstitute = Substitute.For&lt;IUnitOfWork&gt;();
+        _repositorySubstitute = Substitute.For&lt;IRepository&lt;NoteEntity&gt;&gt;();
+        _transactionSubstitute = Substitute.For&lt;IDbContextTransaction&gt;();
+
+        _unitOfWorkSubstitute.GetRepository&lt;NoteEntity&gt;().Returns(_repositorySubstitute);
+        _unitOfWorkSubstitute.BeginTransactionAsync(Arg.Any&lt;CancellationToken&gt;())
+            .Returns(_transactionSubstitute);
+
+        _noteService = new NoteService(_unitOfWorkSubstitute);
+    }
+
+    [Fact]
+    public async Task GetAllByUserIdAsync_WhenCalled_ReturnsMappedNoteModels()
+    {
+        // Arrange
+        var userId = 10;
+        var entities = new List&lt;NoteEntity&gt;
+        {
+            new() { Id = 1, Title = &quot;T1&quot;, Content = &quot;C1&quot;, UserId = userId },
+            new() { Id = 2, Title = &quot;T2&quot;, Content = &quot;C2&quot;, UserId = userId }
+        };
+
+        _repositorySubstitute.GetAllAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;())
+            .Returns(entities);
+
+        // Act
+        var result = await _noteService.GetAllByUserIdAsync(userId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, r =&gt; r.Title == &quot;T1&quot;);
+        Assert.Contains(result, r =&gt; r.Title == &quot;T2&quot;);
+        await _repositorySubstitute.Received(1).GetAllAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;());
+    }
+
+    [Fact]
+    public async Task GetAllByUserIdAsync_WhenNoNotesFound_ReturnsEmptyCollection()
+    {
+        // Arrange
+        var userId = 99;
+        _repositorySubstitute.GetAllAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;())
+            .Returns(new List&lt;NoteEntity&gt;());
+
+        // Act
+        var result = await _noteService.GetAllByUserIdAsync(userId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_WhenNoteExists_ReturnsNoteModel()
+    {
+        // Arrange
+        var noteId = 1;
+        var entity = new NoteEntity { Id = noteId, Title = &quot;Test&quot;, Content = &quot;Content&quot;, UserId = 5 };
+
+        _repositorySubstitute.GetByIdAsync(noteId).Returns(entity);
+
+        // Act
+        var result = await _noteService.GetByIdAsync(noteId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(noteId, result.Id);
+        Assert.Equal(entity.Title, result.Title);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_WhenNoteDoesNotExist_ThrowsNoteNotFoundException()
+    {
+        // Arrange
+        var noteId = 99;
+        _repositorySubstitute.GetByIdAsync(noteId).Returns((NoteEntity?)null);
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NoteNotFoundException&gt;(() =&gt; _noteService.GetByIdAsync(noteId));
+    }
+
+    [Fact]
+    public async Task AddAsync_WhenModelIsNull_ThrowsNoteNotFoundException()
+    {
+        // Arrange
+        NoteModel? model = null;
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NoteNotFoundException&gt;(() =&gt; _noteService.AddAsync(model!));
+    }
+
+    [Fact]
+    public async Task AddAsync_WhenContentIsNull_ThrowsNoteNotFoundException()
+    {
+        // Arrange
+        var model = new NoteModel { Content = null!, UserId = 1 };
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NoteNotFoundException&gt;(() =&gt; _noteService.AddAsync(model));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddAsync_WhenUserIdIsInvalid_ThrowsUserNotFoundException(int userId)
+    {
+        // Arrange
+        var model = new NoteModel { Content = &quot;Content&quot;, UserId = userId };
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;UserNotFoundException&gt;(() =&gt; _noteService.AddAsync(model));
+    }
+
+    [Fact]
+    public async Task AddAsync_WhenValid_AddsEntityAndCommitsTransaction()
+    {
+        // Arrange
+        var model = new NoteModel
+        {
+            Id = 123, // Should be ignored/reset
+            Title = &quot; Title &quot;, // Should be trimmed
+            Content = &quot;Content&quot;,
+            UserId = 1
+        };
+
+        var expectedId = 55;
+        _repositorySubstitute.AddAsync(Arg.Any&lt;NoteEntity&gt;())
+            .Returns(x =&gt;
+            {
+                var input = x.Arg&lt;NoteEntity&gt;();
+                input.Id = expectedId; // Simulate Db generating ID
+                return input;
+            });
+
+        // Act
+        var result = await _noteService.AddAsync(model);
+
+        // Assert
+        Assert.Equal(expectedId, result);
+
+        await _repositorySubstitute.Received(1).AddAsync(Arg.Is&lt;NoteEntity&gt;(e =&gt;
+            e.Id == 0 &amp;&amp; // Verify ID was reset
+            e.Title == &quot;Title&quot; &amp;&amp; // Verify trim
+            e.UserId == model.UserId &amp;&amp;
+            e.CreatedAt &gt; DateTime.MinValue &amp;&amp;
+            e.ModifiedAt &gt; DateTime.MinValue
+        ));
+
+        await _unitOfWorkSubstitute.Received(1).SaveAsync();
+        await _transactionSubstitute.Received(1).CommitAsync();
+    }
+
+    [Fact]
+    public async Task AddAsync_WhenExceptionOccurs_RollsBackTransactionAndRethrows()
+    {
+        // Arrange
+        var model = new NoteModel { Content = &quot;Content&quot;, UserId = 1 };
+        _repositorySubstitute.AddAsync(Arg.Any&lt;NoteEntity&gt;()).Throws(new InvalidOperationException());
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;InvalidOperationException&gt;(() =&gt; _noteService.AddAsync(model));
+        await _transactionSubstitute.Received(1).RollbackAsync();
+        await _transactionSubstitute.DidNotReceive().CommitAsync();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WhenModelIsNull_ThrowsNoteNotFoundException()
+    {
+        // Arrange
+        NoteModel? model = null;
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NoteNotFoundException&gt;(() =&gt; _noteService.UpdateAsync(model!));
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WhenNoteDoesNotExist_ThrowsNoteNotFoundException()
+    {
+        // Arrange
+        var model = new NoteModel { Id = 1, Content = &quot;Content&quot; };
+        _repositorySubstitute.FirstOrDefaultAsNoTrackingAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;())
+            .Returns((NoteEntity?)null);
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NoteNotFoundException&gt;(() =&gt; _noteService.UpdateAsync(model));
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WhenUserIdDoesNotMatch_ThrowsUserNotFoundException()
+    {
+        // Arrange
+        var noteId = 1;
+        var model = new NoteModel { Id = noteId, Content = &quot;Content&quot;, UserId = 2 };
+        var existingEntity = new NoteEntity { Id = noteId, UserId = 1 }; // Different User
+
+        _repositorySubstitute.FirstOrDefaultAsNoTrackingAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;())
+            .Returns(existingEntity);
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;UserNotFoundException&gt;(() =&gt; _noteService.UpdateAsync(model));
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WhenValid_UpdatesEntityPreservesCreatedAtAndCommits()
+    {
+        // Arrange
+        var noteId = 1;
+        var userId = 5;
+        var originalDate = new DateTime(2023, 1, 1);
+
+        var model = new NoteModel
+        {
+            Id = noteId,
+            Title = &quot; New Title &quot;,
+            Content = &quot;New Content&quot;,
+            UserId = userId
+        };
+
+        var existingEntity = new NoteEntity
+        {
+            Id = noteId,
+            UserId = userId,
+            CreatedAt = originalDate,
+            ModifiedAt = originalDate
+        };
+
+        _repositorySubstitute.FirstOrDefaultAsNoTrackingAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;())
+            .Returns(existingEntity);
+
+        var updatedEntity = new NoteEntity { Id = noteId };
+        _repositorySubstitute.Update(Arg.Any&lt;NoteEntity&gt;()).Returns(updatedEntity);
+
+        // Act
+        var result = await _noteService.UpdateAsync(model);
+
+        // Assert
+        Assert.Equal(noteId, result);
+
+        _repositorySubstitute.Received(1).Update(Arg.Is&lt;NoteEntity&gt;(e =&gt;
+            e.Id == noteId &amp;&amp;
+            e.Title == &quot;New Title&quot; &amp;&amp; // Trimmed
+            e.CreatedAt == originalDate &amp;&amp; // Preserved
+            e.ModifiedAt &gt; originalDate // Updated
+        ));
+
+        await _unitOfWorkSubstitute.Received(1).SaveAsync();
+        await _transactionSubstitute.Received(1).CommitAsync();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WhenExceptionOccurs_RollsBackTransaction()
+    {
+        // Arrange
+        var noteId = 1;
+        var model = new NoteModel { Id = noteId, Content = &quot;Content&quot;, UserId = 1 };
+        var existingEntity = new NoteEntity { Id = noteId, UserId = 1 };
+
+        _repositorySubstitute.FirstOrDefaultAsNoTrackingAsync(Arg.Any&lt;Expression&lt;Func&lt;NoteEntity, bool&gt;&gt;&gt;())
+            .Returns(existingEntity);
+
+        _unitOfWorkSubstitute.When(x =&gt; x.SaveAsync()).Do(_ =&gt; throw new Exception(&quot;Db Error&quot;));
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;Exception&gt;(() =&gt; _noteService.UpdateAsync(model));
+        await _transactionSubstitute.Received(1).RollbackAsync();
+    }
+
+    [Fact]
+    public async Task DeleteByIdAsync_WhenNoteDoesNotExist_ThrowsNoteNotFoundException()
+    {
+        // Arrange
+        var noteId = 1;
+        _repositorySubstitute.GetByIdAsync(noteId).Returns((NoteEntity?)null);
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;NoteNotFoundException&gt;(() =&gt; _noteService.DeleteByIdAsync(noteId));
+    }
+
+    [Fact]
+    public async Task DeleteByIdAsync_WhenNoteExists_DeletesAndCommits()
+    {
+        // Arrange
+        var noteId = 1;
+        var entity = new NoteEntity { Id = noteId };
+
+        _repositorySubstitute.GetByIdAsync(noteId).Returns(entity);
+        _repositorySubstitute.Delete(entity).Returns(entity);
+
+        // Act
+        var result = await _noteService.DeleteByIdAsync(noteId);
+
+        // Assert
+        Assert.Equal(noteId, result);
+        _repositorySubstitute.Received(1).Delete(entity);
+        await _unitOfWorkSubstitute.Received(1).SaveAsync();
+        await _transactionSubstitute.Received(1).CommitAsync();
+    }
+
+    [Fact]
+    public async Task DeleteByIdAsync_WhenExceptionOccurs_RollsBackTransaction()
+    {
+        // Arrange
+        var noteId = 1;
+        var entity = new NoteEntity { Id = noteId };
+
+        _repositorySubstitute.GetByIdAsync(noteId).Returns(entity);
+        _repositorySubstitute.Delete(Arg.Any&lt;NoteEntity&gt;()).Throws(new Exception(&quot;Delete failed&quot;));
+
+        // Act &amp; Assert
+        await Assert.ThrowsAsync&lt;Exception&gt;(() =&gt; _noteService.DeleteByIdAsync(noteId));
+        await _transactionSubstitute.Received(1).RollbackAsync();
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[15,5,15,30,1],[16,5,16,6,1],[17,9,17,63,1],[18,9,18,75,1],[19,9,19,74,1],[21,9,21,90,1],[22,9,23,46,1],[25,9,25,63,1],[26,5,26,6,1],[30,5,30,6,1],[32,9,32,25,1],[33,9,37,11,1],[39,9,40,32,1],[43,9,43,69,1],[46,9,46,32,1],[47,9,47,39,1],[48,9,48,38,1],[48,38,48,53,1],[48,53,48,55,1],[49,9,49,38,1],[49,38,49,53,1],[49,53,49,55,1],[50,9,50,108,1],[51,5,51,6,1],[55,5,55,6,1],[57,9,57,25,1],[58,9,59,46,1],[62,9,62,69,1],[65,9,65,32,1],[66,9,66,30,1],[67,5,67,6,1],[71,5,71,6,1],[73,9,73,24,1],[74,9,74,102,1],[76,9,76,68,1],[79,9,79,62,1],[82,9,82,32,1],[83,9,83,41,1],[84,9,84,50,1],[85,5,85,6,1],[89,5,89,6,1],[91,9,91,25,1],[92,9,92,79,1],[95,9,95,63,1],[95,63,95,96,1],[95,96,95,98,1],[96,5,96,6,1],[100,5,100,6,1],[102,9,102,33,1],[105,9,105,63,1],[105,63,105,92,1],[105,92,105,94,1],[106,5,106,6,1],[110,5,110,6,1],[112,9,112,67,1],[115,9,115,63,1],[115,63,115,91,1],[115,91,115,93,1],[116,5,116,6,1],[122,5,122,6,1],[124,9,124,76,1],[127,9,127,63,1],[127,63,127,91,1],[127,91,127,93,1],[128,5,128,6,1],[132,5,132,6,1],[134,9,140,11,1],[142,9,142,29,1],[143,9,145,13,1],[145,13,145,14,1],[145,14,146,17,1],[146,17,146,49,1],[146,49,147,17,1],[147,17,147,39,1],[147,39,148,17,1],[148,17,148,30,1],[148,30,149,13,1],[149,13,149,14,1],[149,14,149,16,1],[152,9,152,57,1],[155,9,155,42,1],[157,9,163,12,1],[165,9,165,61,0],[166,9,166,64,0],[167,5,167,6,0],[171,5,171,6,1],[173,9,173,71,1],[174,9,174,103,1],[177,9,177,67,1],[177,67,177,95,1],[177,95,177,97,1],[178,9,178,66,1],[179,9,179,68,1],[180,5,180,6,1],[184,5,184,6,1],[186,9,186,33,1],[189,9,189,63,1],[189,63,189,95,1],[189,95,189,97,1],[190,5,190,6,1],[194,5,194,6,1],[196,9,196,67,1],[197,9,198,41,1],[201,9,201,63,1],[201,63,201,94,1],[201,94,201,96,1],[202,5,202,6,1],[206,5,206,6,1],[208,9,208,24,1],[209,9,209,84,1],[210,9,210,73,1],[212,9,213,38,1],[216,9,216,63,1],[216,63,216,94,1],[216,94,216,96,1],[217,5,217,6,1],[221,5,221,6,1],[223,9,223,24,1],[224,9,224,24,1],[225,9,225,53,1],[227,9,233,11,1],[235,9,241,11,1],[243,9,244,38,1],[246,9,246,60,1],[247,9,247,84,1],[250,9,250,60,1],[253,9,253,38,1],[255,9,260,12,1],[262,9,262,61,1],[263,9,263,64,1],[264,5,264,6,1],[268,5,268,6,1],[270,9,270,24,1],[271,9,271,84,1],[272,9,272,73,1],[274,9,275,38,1],[277,9,277,41,1],[277,41,277,54,1],[277,54,277,64,1],[277,64,277,95,1],[277,95,277,97,1],[280,9,280,51,1],[280,51,280,82,1],[280,82,280,84,1],[281,9,281,66,1],[282,5,282,6,1],[286,5,286,6,1],[288,9,288,24,1],[289,9,289,79,1],[292,9,292,63,1],[292,63,292,99,1],[292,99,292,101,1],[293,5,293,6,1],[297,5,297,6,1],[299,9,299,24,1],[300,9,300,53,1],[302,9,302,68,1],[303,9,303,62,1],[306,9,306,65,1],[309,9,309,38,1],[310,9,310,58,1],[311,9,311,61,1],[312,9,312,64,1],[313,5,313,6,1],[317,5,317,6,1],[319,9,319,24,1],[320,9,320,53,1],[322,9,322,68,1],[323,9,323,100,1],[326,9,326,51,1],[326,51,326,87,1],[326,87,326,89,1],[327,9,327,66,1],[328,5,328,6,1]]);
+    </script>
+  </body>
+</html>

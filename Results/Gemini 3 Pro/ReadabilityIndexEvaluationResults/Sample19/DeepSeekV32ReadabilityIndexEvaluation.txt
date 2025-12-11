@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319138-mDNzzWBjcvH5Xlreq2xa
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Excellent test naming convention following MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Clear AAA pattern with explicit Arrange/Act/Assert comments and separation",
+		"Logical organization with region directives grouping related tests",
+		"Appropriate use of Theory/InlineData for parameterized testing",
+		"Descriptive inline data values that clearly indicate test scenarios",
+		"Consistent formatting and spacing throughout all test methods",
+		"Good balance between using Theory for multiple inputs and Fact for specific cases",
+		"Variables have meaningful names and test structure is predictable",
+		"Comments are minimal and focused only on test structure",
+		"Test class name follows ClassUnderTestTests pattern"
+	]
+}

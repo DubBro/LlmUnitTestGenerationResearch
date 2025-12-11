@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765319855-ZU7t3DjgCT5G3Jium2MI
+
+Content:
+ {
+	"readabilityIndex": 67,
+	"reasons": [
+		"Nested test classes violate specified pattern and add unnecessary inheritance complexity",
+		"Test names use BDD style instead of required MethodUnderTest_Scenario_ExpectedResult format",
+		"Complex lambda with Compile().Invoke() in Received assertion is difficult to comprehend",
+		"Multiple repetitive Assert.Equal calls for property verification are overly verbose",
+		"Exception tests combine Act and Assert blocks, deviating from pure AAA pattern",
+		"Magic dates (new DateTime(2023, 1, 1)) lack explanation and reduce clarity",
+		"Base class constructor setup obscures per-test dependencies",
+		"Theory test names don't include method name, reducing test identification clarity"
+	]
+}

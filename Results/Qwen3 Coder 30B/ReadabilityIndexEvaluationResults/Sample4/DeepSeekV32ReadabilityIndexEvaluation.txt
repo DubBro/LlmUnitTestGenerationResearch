@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765325685-OuLfo5XyS223WbBo39y8
+
+Content:
+{"readabilityIndex": 83, "reasons": ["Test class name follows pattern ClassUnderTestTests: CompanyServiceTests", "Test method names follow MethodUnderTest_Scenario_ExpectedResult pattern", "Tests follow AAA pattern with clear Arrange, Act, Assert blocks separated by comments", "Async tests use async Task signature correctly", "[Fact] used for single scenario and [Theory] with [InlineData] for multiple test cases", "Variable names are clear and meaningful", "Test structure is well-organized and logical", "Test methods are focused on specific scenarios", "All tests have clear separation of concerns"]}

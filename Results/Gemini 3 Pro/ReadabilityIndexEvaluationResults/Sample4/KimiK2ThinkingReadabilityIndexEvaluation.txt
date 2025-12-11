@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317824-tPPIuHLUAVj1frII7XMm
+
+Content:
+ {
+	"readabilityIndex": 90,
+	"reasons": [
+		"All test methods consistently follow the MethodUnderTest_Scenario_ExpectedResult naming pattern",
+		"Test class name adheres to the ClassUnderTestTests convention",
+		"Proper AAA pattern implementation with clear comments and empty line separation throughout",
+		"Correct usage of async Task signatures for all asynchronous test methods",
+		"Appropriate use of [Theory] with [InlineData] for multiple inputs and [Fact] for single scenarios",
+		"Clear and meaningful variable names that reflect their purpose",
+		"No unnecessary comments, nested classes, or cluttered code structure",
+		"Minor verbosity in explicit null variable declarations in one test",
+		"Slight inconsistency in mock verification assertions between exception tests",
+		"Overall well-structured, self-contained tests that are easy to understand and maintain"
+	]
+}

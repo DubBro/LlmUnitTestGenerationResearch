@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765317656-BilnNZ8hDYClL0rALuzG
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the 'ClassUnderTestTests' pattern correctly",
+		"Test method names consistently follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern with clear, descriptive names",
+		"All async tests properly use 'async Task' signature instead of 'async void'",
+		"Consistent use of AAA pattern with clear comments separating Arrange, Act, and Assert blocks",
+		"Excellent use of [Theory] with [InlineData] to avoid code duplication for testing multiple input variations",
+		"Clear and meaningful variable names throughout (entity, model, result, invalidName, etc.)",
+		"Helper method 'CreateValidModel()' effectively reduces code duplication and improves maintainability",
+		"No unnecessary comments beyond AAA markers; code is self-documenting",
+		"Well-structured constructor setup with dependency injection using NSubstitute",
+		"Minor inconsistency: some inline comments explaining edge cases (e.g., '// Should trim', '// Hyphen allowed') could be removed as test names are descriptive enough"
+	]
+}
+```

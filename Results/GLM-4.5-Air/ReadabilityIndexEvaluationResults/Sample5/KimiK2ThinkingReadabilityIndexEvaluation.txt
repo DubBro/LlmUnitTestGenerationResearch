@@ -1,0 +1,14 @@
+GenerationId:
+gen-1765320667-zpJEUAZSklGhQl8ZtK92
+
+Content:
+ {
+	"readabilityIndex": 72,
+	"reasons": [
+		"Uses nested test classes (GetFolderAsync, GetRootFoldersAsync, AddFolderAsync) which violates the guideline against unnecessary nested classes and deviates from standard xUnit structure.",
+		"Test method names follow Given_When_Then pattern instead of the recommended MethodUnderTest_Scenario_ExpectedResult pattern, making it harder to immediately identify the method under test from the method name alone.",
+		"Some tests use combined // Act & Assert comments instead of separate // Act and // Assert blocks, slightly deviating from the recommended AAA pattern format.",
+		"Minor inconsistency in assertion style, mixing Assert.Single, Assert.Equal with counts, and different ways to access collection elements (First/ElementAt vs indexing).",
+		"In the test GivenVeryLongName_WhenCalled_ThenThrowsArgumentException, a statement appears before the // Arrange comment, which is a minor formatting inconsistency."
+	]
+}

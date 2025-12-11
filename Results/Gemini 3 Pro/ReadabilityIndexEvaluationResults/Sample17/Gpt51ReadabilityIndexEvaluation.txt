@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765318997-xdT35Wun2qaqgbi4ks4Q
+
+Content:
+{
+  "readabilityIndex": 95,
+  "reasons": [
+    "Test class name `VectorExtensionsTests` clearly follows the `ClassUnderTestTests` pattern and matches the subject under test.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, making each test’s intent immediately clear.",
+    "All tests follow a clean AAA (Arrange–Act–Assert) structure with explicit comments and blank lines separating the blocks.",
+    "Use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for multiple input variations is appropriate and avoids duplication.",
+    "Variable names inside tests (`vector`, `lhs`, `rhs`, `result`, `expected`, `source`) are generally meaningful and make the data roles easy to understand.",
+    "Assertions are straightforward, granular, and grouped logically, which helps trace failures to specific aspects of the behavior.",
+    "Formatting is consistent (indentation, spacing, brace style), with no superfluous comments or noise, contributing to quick scan-ability.",
+    "No unnecessary nested classes or complex setup code; tests remain short, focused, and easy to maintain.",
+    "Exception tests clearly separate action delegates (`Action act = ...`) and assertion of exception type and message, improving clarity.",
+    "Minor nitpick: use of abbreviated names like `lhs` and `rhs` is slightly less descriptive than fully spelled alternatives, but does not significantly hinder readability."
+  ]
+}

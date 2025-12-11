@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317674-G2pnc4RbAo5SPOs88PQY
+
+Content:
+ {"readabilityIndex":65,"reasons":["Multiple tests contain comments beyond AAA separators, violating a key readability principle","Test name 'AddAsync_WithRunOfPaperValidInputs_Succeeds' uses unclear terminology ('RunOfPaper')","Test name 'AddAsync_WithValidModel_TrimsStringsAddsPhonePrefixAndCallsRepo' is overly verbose and tests multiple concerns","Some expected results in test names are vague (e.g., 'CallsRepo', 'ReturnsRepoResult')","Several tests combine Act and Assert blocks without clear separation","Use of null-forgiving operator (null!) reduces clarity in test parameters","Helper method 'CreateValidModel' effectively reduces code duplication","Proper use of Theory/InlineData for testing multiple input variations","Test class and most method names follow established naming conventions","Overall structure is logical and easy to navigate"]}

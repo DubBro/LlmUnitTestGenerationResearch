@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample20Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample20;
+
+namespace Gpt5MiniUnitTests
+{
+    public class FisherYatesShufflerTests
+    {
+        // Arrange helper to compare multisets
+        private static void AssertSameMultiset&lt;T&gt;(T[] expected, T[] actual)
+        {
+            var expectedCounts = expected.GroupBy(x =&gt; x).ToDictionary(g =&gt; g.Key, g =&gt; g.Count());
+            var actualCounts = actual.GroupBy(x =&gt; x).ToDictionary(g =&gt; g.Key, g =&gt; g.Count());
+
+            Assert.Equal(expectedCounts.Count, actualCounts.Count);
+
+            foreach (var kv in expectedCounts)
+            {
+                Assert.True(actualCounts.TryGetValue(kv.Key, out var count), $&quot;Missing key {kv.Key}&quot;);
+                Assert.Equal(kv.Value, count);
+            }
+        }
+
+        [Fact]
+        public void Shuffle_NullArray_ThrowsNullReferenceException()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            int[]? array = null;
+
+            // Act &amp; Assert
+            Assert.Throws&lt;NullReferenceException&gt;(() =&gt; shuffler.Shuffle(array!));
+        }
+
+        [Fact]
+        public void Shuffle_EmptyArray_RemainsUnchanged()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var array = Array.Empty&lt;int&gt;();
+            var expected = array.ToArray();
+
+            // Act
+            shuffler.Shuffle(array);
+
+            // Assert
+            Assert.Equal(expected, array);
+        }
+
+        [Fact]
+        public void Shuffle_SingleElementArray_RemainsUnchanged()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;string&gt;();
+            var array = new[] { &quot;only&quot; };
+            var expected = array.ToArray();
+
+            // Act
+            shuffler.Shuffle(array);
+
+            // Assert
+            Assert.Equal(expected, array);
+        }
+
+        [Fact]
+        public void Shuffle_WithSeed_IsDeterministicAcrossInstances()
+        {
+            // Arrange
+            var shuffler1 = new FisherYatesShuffler&lt;int&gt;();
+            var shuffler2 = new FisherYatesShuffler&lt;int&gt;();
+            var seed = 12345;
+            var original = Enumerable.Range(0, 20).ToArray();
+            var array1 = original.ToArray();
+            var array2 = original.ToArray();
+
+            // Act
+            shuffler1.Shuffle(array1, seed);
+            shuffler2.Shuffle(array2, seed);
+
+            // Assert
+            Assert.Equal(array1, array2);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(5)]
+        [InlineData(10)]
+        public void Shuffle_WithoutSeed_PreservesElements(int size)
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var original = Enumerable.Range(0, size).ToArray();
+            var array = original.ToArray();
+
+            // Act
+            shuffler.Shuffle(array);
+
+            // Assert
+            Assert.Equal(original.Length, array.Length);
+            AssertSameMultiset(original, array);
+        }
+
+        [Fact]
+        public void Shuffle_WithSeed_ProducesExpectedPermutation()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var seed = 9876;
+            var original = Enumerable.Range(1, 15).ToArray();
+            var array = original.ToArray();
+
+            // Build expected result by replicating Fisher-Yates using Random(seed)
+            var expected = original.ToArray();
+            var rnd = new Random(seed);
+            for (var i = expected.Length - 1; i &gt; 0; i--)
+            {
+                var j = rnd.Next(0, i + 1);
+                (expected[i], expected[j]) = (expected[j], expected[i]);
+            }
+
+            // Act
+            shuffler.Shuffle(array, seed);
+
+            // Assert
+            Assert.Equal(expected, array);
+        }
+
+        [Fact]
+        public void Shuffle_WithDuplicates_PreservesCounts()
+        {
+            // Arrange
+            var shuffler = new FisherYatesShuffler&lt;int&gt;();
+            var original = new[] { 1, 2, 2, 3, 3, 3, 4, 4, 4, 4 };
+            var array = original.ToArray();
+
+            // Act
+            shuffler.Shuffle(array);
+
+            // Assert
+            AssertSameMultiset(original, array);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[10,13,10,56,1],[10,56,10,57,1],[10,57,10,77,1],[10,77,10,82,1],[10,82,10,89,1],[10,89,10,98,1],[10,98,10,100,1],[11,13,11,52,1],[11,52,11,53,1],[11,53,11,73,1],[11,73,11,78,1],[11,78,11,85,1],[11,85,11,94,1],[11,94,11,96,1],[13,13,13,68,1],[15,13,15,20,1],[15,22,15,28,1],[15,29,15,31,1],[15,32,15,46,1],[16,13,16,14,1],[17,17,17,103,1],[18,17,18,47,1],[19,13,19,14,1],[20,9,20,10,1],[24,9,24,10,1],[26,13,26,59,1],[27,13,27,33,1],[30,13,30,57,1],[30,57,30,81,1],[30,81,30,83,1],[31,9,31,10,1],[35,9,35,10,1],[37,13,37,59,1],[38,13,38,44,1],[39,13,39,44,1],[42,13,42,37,1],[45,13,45,43,1],[46,9,46,10,1],[50,9,50,10,1],[52,13,52,62,1],[53,13,53,42,1],[54,13,54,44,1],[57,13,57,37,1],[60,13,60,43,1],[61,9,61,10,1],[65,9,65,10,1],[67,13,67,60,1],[68,13,68,60,1],[69,13,69,30,1],[70,13,70,62,1],[71,13,71,45,1],[72,13,72,45,1],[75,13,75,45,1],[76,13,76,45,1],[79,13,79,42,1],[80,9,80,10,1],[89,9,89,10,1],[91,13,91,59,1],[92,13,92,64,1],[93,13,93,44,1],[96,13,96,37,1],[99,13,99,57,1],[100,13,100,49,1],[101,9,101,10,1],[105,9,105,10,1],[107,13,107,59,1],[108,13,108,29,1],[109,13,109,62,1],[110,13,110,44,1],[113,13,113,47,1],[114,13,114,40,1],[115,18,115,45,1],[115,47,115,52,1],[115,54,115,57,1],[116,13,116,14,1],[117,17,117,44,1],[118,17,118,73,1],[119,13,119,14,1],[122,13,122,43,1],[125,13,125,43,1],[126,9,126,10,1],[130,9,130,10,1],[132,13,132,59,1],[133,13,133,67,1],[134,13,134,44,1],[137,13,137,37,1],[140,13,140,49,1],[141,9,141,10,1]]);
+    </script>
+  </body>
+</html>

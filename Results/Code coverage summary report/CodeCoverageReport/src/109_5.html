@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample18Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample18;
+
+namespace DeepSeekR10528UnitTests;
+
+public class CaesarEncoderTests
+{
+    [Theory]
+    [InlineData(&quot;Hello, World!&quot;, 3, &quot;Khoor, Zruog!&quot;)]
+    [InlineData(&quot;Hello, World!&quot;, 0, &quot;Hello, World!&quot;)]
+    [InlineData(&quot;Hello, World!&quot;, 26, &quot;Hello, World!&quot;)]
+    [InlineData(&quot;Hello, World!&quot;, 29, &quot;Khoor, Zruog!&quot;)]
+    [InlineData(&quot;XYZ&quot;, 5, &quot;CDE&quot;)]
+    [InlineData(&quot;abc&quot;, -1, &quot;zab&quot;)]
+    [InlineData(&quot;aBc&quot;, 3, &quot;dEf&quot;)]
+    [InlineData(&quot;123!@#&quot;, 10, &quot;123!@#&quot;)]
+    public void Encode_ValidInputs_ExpectedEncoding(string input, int key, string expected)
+    {
+        // Arrange
+        // Inputs provided by InlineData
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;Khoor, Zruog!&quot;, 3, &quot;Hello, World!&quot;)]
+    [InlineData(&quot;Hello, World!&quot;, 0, &quot;Hello, World!&quot;)]
+    [InlineData(&quot;Hello, World!&quot;, 26, &quot;Hello, World!&quot;)]
+    [InlineData(&quot;CDE&quot;, 5, &quot;XYZ&quot;)]
+    [InlineData(&quot;zab&quot;, -1, &quot;abc&quot;)]
+    [InlineData(&quot;dEf&quot;, 3, &quot;aBc&quot;)]
+    public void Decode_ValidInputs_ExpectedDecoding(string input, int key, string expected)
+    {
+        // Arrange
+        // Inputs provided by InlineData
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void EncodeAndDecode_RoundTrip_ReturnsOriginalText()
+    {
+        // Arrange
+        var original = &quot;The Quick Brown Fox Jumps Over The Lazy Dog! 123&quot;;
+        var key = 7;
+
+        // Act
+        var encoded = CaesarEncoder.Encode(original, key);
+        var decoded = CaesarEncoder.Decode(encoded, key);
+
+        // Assert
+        Assert.Equal(original, decoded);
+    }
+
+    [Fact]
+    public void Encode_WithNullText_ThrowsNullReferenceException()
+    {
+        // Arrange
+        string input = null;
+        int key = 5;
+
+        // Act &amp; Assert
+        Assert.Throws&lt;NullReferenceException&gt;(() =&gt; CaesarEncoder.Encode(input, key));
+    }
+
+    [Fact]
+    public void Decode_WithNullText_ThrowsNullReferenceException()
+    {
+        // Arrange
+        string input = null;
+        int key = 5;
+
+        // Act &amp; Assert
+        Assert.Throws&lt;NullReferenceException&gt;(() =&gt; CaesarEncoder.Decode(input, key));
+    }
+
+    [Fact]
+    public void Encode_WithNegativeBeyond26_WrapsCorrectly()
+    {
+        // Arrange
+        var input = &quot;abc&quot;;
+        int key = -30; // Equivalent to -4 mod 26 → 22 (since 26 * 2 = 52, -30 mod 26 is 22: -30 + 26*2 = 22)
+        string expected = &quot;wxy&quot;; // a shifted back by 4 (a-&gt;z, y, x, w) → becomes w
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Encode_AllCharactersInAlphabet_Uppercase()
+    {
+        // Arrange
+        var input = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;
+        int key = 13;
+        string expected = &quot;NOPQRSTUVWXYZABCDEFGHIJKLM&quot;;
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Encode_AllCharactersInAlphabet_Lowercase()
+    {
+        // Arrange
+        var input = &quot;abcdefghijklmnopqrstuvwxyz&quot;;
+        int key = 13;
+        string expected = &quot;nopqrstuvwxyzabcdefghijklm&quot;;
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Decode_AllCharactersInAlphabet_Uppercase()
+    {
+        // Arrange
+        var input = &quot;NOPQRSTUVWXYZABCDEFGHIJKLM&quot;;
+        int key = 13;
+        string expected = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Decode_AllCharactersInAlphabet_Lowercase()
+    {
+        // Arrange
+        var input = &quot;nopqrstuvwxyzabcdefghijklm&quot;;
+        int key = 13;
+        string expected = &quot;abcdefghijklmnopqrstuvwxyz&quot;;
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Encode_WithKeyOver52_WrapsCorrectly()
+    {
+        // Arrange
+        var input = &quot;abc&quot;;
+        int key = 55; // 52 % 26 = 3 → plus 55 % 26 = 3 (because 55 = 2*26 + 3 → key=3)
+        string expected = &quot;def&quot;; // shift by 3 → abc → def
+
+        // Act
+        var result = CaesarEncoder.Encode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Decode_WithKeyOver52_WrapsCorrectly()
+    {
+        // Arrange
+        var input = &quot;def&quot;;
+        int key = 55; // Same as 3 mod 26 → encoding shift was +3 → decoding with key 55 would decode as -3
+        string expected = &quot;abc&quot;;
+
+        // Act
+        var result = CaesarEncoder.Decode(input, key);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,5,17,6,1],[22,9,22,55,1],[25,9,25,40,1],[26,5,26,6,1],[36,5,36,6,1],[41,9,41,55,1],[44,9,44,40,1],[45,5,45,6,1],[49,5,49,6,1],[51,9,51,75,1],[52,9,52,21,1],[55,9,55,59,1],[56,9,56,58,1],[59,9,59,41,1],[60,5,60,6,1],[64,5,64,6,1],[66,9,66,29,1],[67,9,67,21,1],[70,9,70,53,1],[70,53,70,85,1],[70,85,70,87,1],[71,5,71,6,1],[75,5,75,6,1],[77,9,77,29,1],[78,9,78,21,1],[81,9,81,53,1],[81,53,81,85,1],[81,85,81,87,1],[82,5,82,6,1],[86,5,86,6,1],[88,9,88,27,1],[89,9,89,23,1],[90,9,90,33,1],[93,9,93,55,1],[96,9,96,40,1],[97,5,97,6,1],[101,5,101,6,1],[103,9,103,50,1],[104,9,104,22,1],[105,9,105,56,1],[108,9,108,55,1],[111,9,111,40,1],[112,5,112,6,1],[116,5,116,6,1],[118,9,118,50,1],[119,9,119,22,1],[120,9,120,56,1],[123,9,123,55,1],[126,9,126,40,1],[127,5,127,6,1],[131,5,131,6,1],[133,9,133,50,1],[134,9,134,22,1],[135,9,135,56,1],[138,9,138,55,1],[141,9,141,40,1],[142,5,142,6,1],[146,5,146,6,1],[148,9,148,50,1],[149,9,149,22,1],[150,9,150,56,1],[153,9,153,55,1],[156,9,156,40,1],[157,5,157,6,1],[161,5,161,6,1],[163,9,163,27,1],[164,9,164,22,1],[165,9,165,33,1],[168,9,168,55,1],[171,9,171,40,1],[172,5,172,6,1],[176,5,176,6,1],[178,9,178,27,1],[179,9,179,22,1],[180,9,180,33,1],[183,9,183,55,1],[186,9,186,40,1],[187,5,187,6,1]]);
+    </script>
+  </body>
+</html>

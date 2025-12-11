@@ -1,0 +1,524 @@
+using Dataset.Sample2;
+using NSubstitute;
+
+namespace Glm45AirUnitTests;
+
+public class EmployeeServiceTests
+{
+    private readonly IEmployeeRepository _employeeRepositorySubstitute;
+    private readonly EmployeeService _employeeService;
+
+    public EmployeeServiceTests()
+    {
+        _employeeRepositorySubstitute = Substitute.For<IEmployeeRepository>();
+        _employeeService = new EmployeeService(_employeeRepositorySubstitute);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenEmployeeExists_ReturnsEmployeeModel()
+    {
+        // Arrange
+        var id = 1;
+        var expectedEntity = new EmployeeEntity
+        {
+            Id = id,
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1,
+            Department = "IT",
+            Position = "Developer"
+        };
+        _employeeRepositorySubstitute.GetAsync(id).Returns(expectedEntity);
+
+        // Act
+        var result = await _employeeService.GetAsync(id);
+
+        // Assert
+        Assert.Equal(expectedEntity.Id, result.Id);
+        Assert.Equal(expectedEntity.FirstName, result.FirstName);
+        Assert.Equal(expectedEntity.LastName, result.LastName);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenEmployeeDoesNotExist_ReturnsNull()
+    {
+        // Arrange
+        var id = 1;
+        _employeeRepositorySubstitute.GetAsync(id).Returns((EmployeeEntity?)null);
+
+        // Act
+        var result = await _employeeService.GetAsync(id);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task ListAsync_WhenCalled_ReturnsListOfEmployeeModels()
+    {
+        // Arrange
+        var expectedEntities = new List<EmployeeEntity>
+        {
+            new EmployeeEntity
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                MiddleName = "Middle",
+                BirthDate = new DateTime(1980, 1, 1),
+                HireDate = new DateTime(2010, 1, 1),
+                Salary = 50000,
+                DepartmentId = 1,
+                PositionId = 1,
+                Department = "IT",
+                Position = "Developer"
+            },
+            new EmployeeEntity
+            {
+                Id = 2,
+                FirstName = "Jane",
+                LastName = "Smith",
+                MiddleName = "Middle",
+                BirthDate = new DateTime(1985, 1, 1),
+                HireDate = new DateTime(2012, 1, 1),
+                Salary = 60000,
+                DepartmentId = 2,
+                PositionId = 2,
+                Department = "HR",
+                Position = "Manager"
+            }
+        };
+        _employeeRepositorySubstitute.ListAsync().Returns(expectedEntities);
+
+        // Act
+        var result = await _employeeService.ListAsync();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Equal(expectedEntities[0].Id, result.First().Id);
+        Assert.Equal(expectedEntities[1].Id, result.Last().Id);
+    }
+
+    [Fact]
+    public async Task ListFilteredAsync_WithAllFilterParametersEmptyOrZero_ReturnsAllEmployees()
+    {
+        // Arrange
+        var allEmployees = new List<EmployeeEntity>
+        {
+            new EmployeeEntity { Id = 1 },
+            new EmployeeEntity { Id = 2 }
+        };
+        _employeeRepositorySubstitute.ListAsync().Returns(allEmployees);
+        _employeeRepositorySubstitute.ListFilteredAsync(
+            Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<decimal>(), Arg.Any<decimal>(), Arg.Any<int>(), Arg.Any<int>())
+            .Returns(new List<EmployeeEntity>());
+
+        // Act
+        var result = await _employeeService.ListFilteredAsync(
+            string.Empty, string.Empty, string.Empty, 0, 0, 0, 0);
+
+        // Assert
+        await _employeeRepositorySubstitute.DidNotReceive().ListFilteredAsync(
+            Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<decimal>(), Arg.Any<decimal>(), Arg.Any<int>(), Arg.Any<int>());
+        Assert.Equal(2, result.Count);
+    }
+
+    [Fact]
+    public async Task ListFilteredAsync_WithValidFilters_ReturnsFilteredEmployees()
+    {
+        // Arrange
+        var filteredEntities = new List<EmployeeEntity>
+        {
+            new EmployeeEntity { Id = 1, FirstName = "John", DepartmentId = 1 }
+        };
+        _employeeRepositorySubstitute.ListFilteredAsync("John", null, null, 0, 0, 1, 0)
+            .Returns(filteredEntities);
+
+        // Act
+        var result = await _employeeService.ListFilteredAsync("John", null, null, 0, 0, 1, 0);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal(1, result.First().Id);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task AddAsync_WithInvalidEmployeeModel_ThrowsArgumentNullException(string firstName)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel { FirstName = firstName };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData("Invalid123!")]
+    [InlineData("NameWithTooManyCharactersExceedingTheFiftyCharacterLimit")]
+    [InlineData(" ")]
+    public async Task AddAsync_WithInvalidFirstName_ThrowsArgumentException(string firstName)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = firstName,
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData("Invalid123!")]
+    [InlineData("NameWithTooManyCharactersExceedingTheFiftyCharacterLimit")]
+    [InlineData(" ")]
+    public async Task AddAsync_WithInvalidLastName_ThrowsArgumentException(string lastName)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = lastName,
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData("Invalid123!")]
+    [InlineData("NameWithTooManyCharactersExceedingTheFiftyCharacterLimit")]
+    [InlineData(" ")]
+    public async Task AddAsync_WithInvalidMiddleName_ThrowsArgumentException(string middleName)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = middleName,
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData(1949, 12, 31)]
+    [InlineData(2010, 1, 1)]
+    public async Task AddAsync_WithInvalidBirthDate_ThrowsArgumentException(int birthYear, int birthMonth, int birthDay)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(birthYear, birthMonth, birthDay),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData("Invalid123!")]
+    [InlineData("NameWithTooManyCharactersExceedingTheFiftyCharacterLimit")]
+    public async Task AddAsync_WithInvalidCountry_ThrowsArgumentException(string country)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1,
+            Country = country
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData("Invalid123!")]
+    [InlineData("NameWithTooManyCharactersExceedingTheFiftyCharacterLimit")]
+    public async Task AddAsync_WithInvalidCity_ThrowsArgumentException(string city)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1,
+            City = city
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Fact]
+    public async Task AddAsync_WithAddressTooLong_ThrowsArgumentException()
+    {
+        // Arrange
+        var longAddress = new string('A', 51);
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1,
+            Address = longAddress
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData("1234567890")]
+    [InlineData("++1234567890")]
+    [InlineData("+12")]
+    [InlineData("++1234567890123")]
+    public async Task AddAsync_WithInvalidPhone_ThrowsArgumentException(string phone)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1,
+            Phone = phone
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData(1980, 1, 1)]
+    [InlineData(1960, 1, 1)]
+    [InlineData(2010, 1, 1)]
+    public async Task AddAsync_WithInvalidHireDate_ThrowsArgumentException(int birthYear, int birthMonth, int birthDay)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(birthYear, birthMonth, birthDay),
+            HireDate = new DateTime(birthYear, birthMonth, birthDay).AddDays(-1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddAsync_WithInvalidSalary_ThrowsArgumentException(decimal salary)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = salary,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddAsync_WithInvalidDepartmentId_ThrowsArgumentException(int departmentId)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = departmentId,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddAsync_WithInvalidPositionId_ThrowsArgumentException(int positionId)
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = positionId
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.AddAsync(employeeModel));
+    }
+
+    [Fact]
+    public async Task AddAsync_WithValidModel_ReturnsIdAndCallsRepository()
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+        var expectedId = 1;
+        _employeeRepositorySubstitute.AddAsync(Arg.Any<EmployeeEntity>()).Returns(expectedId);
+
+        // Act
+        var result = await _employeeService.AddAsync(employeeModel);
+
+        // Assert
+        Assert.Equal(expectedId, result);
+        await _employeeRepositorySubstitute.Received(1).AddAsync(Arg.Any<EmployeeEntity>());
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WithInvalidId_ThrowsArgumentException()
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            Id = 0,
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _employeeService.UpdateAsync(employeeModel));
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WithValidModel_ReturnsIdAndCallsRepository()
+    {
+        // Arrange
+        var employeeModel = new EmployeeModel
+        {
+            Id = 1,
+            FirstName = "John",
+            LastName = "Doe",
+            MiddleName = "Middle",
+            BirthDate = new DateTime(1980, 1, 1),
+            HireDate = new DateTime(2010, 1, 1),
+            Salary = 50000,
+            DepartmentId = 1,
+            PositionId = 1
+        };
+        var expectedId = 1;
+        _employeeRepositorySubstitute.UpdateAsync(Arg.Any<EmployeeEntity>()).Returns(expectedId);
+
+        // Act
+        var result = await _employeeService.UpdateAsync(employeeModel);
+
+        // Assert
+        Assert.Equal(expectedId, result);
+        await _employeeRepositorySubstitute.Received(1).UpdateAsync(Arg.Any<EmployeeEntity>());
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WhenCalled_CallsRepository()
+    {
+        // Arrange
+        var id = 1;
+        _employeeRepositorySubstitute.DeleteAsync(id).Returns(1);
+
+        // Act
+        var result = await _employeeService.DeleteAsync(id);
+
+        // Assert
+        Assert.Equal(1, result);
+        await _employeeRepositorySubstitute.Received(1).DeleteAsync(id);
+    }
+}

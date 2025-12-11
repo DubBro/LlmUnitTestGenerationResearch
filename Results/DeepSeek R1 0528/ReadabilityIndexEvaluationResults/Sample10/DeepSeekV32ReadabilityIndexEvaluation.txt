@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316438-pD45zHOU1H0eYlMPYlLW
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Clear test naming following MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Consistent AAA pattern with commented blocks and proper separation",
+		"Good class structure with meaningful dependencies in constructor",
+		"No unnecessary nested classes or complex hierarchies",
+		"Standard C#/.NET naming conventions followed throughout",
+		"Each test focuses on a single scenario with clear arrangement",
+		"Assertions are specific and meaningful",
+		"Slight room for improvement: Could use Theory attributes for repeated validation scenarios (e.g., invalid IDs)",
+		"Good use of mock setup with NSubstitute making dependencies clear",
+		"Tests are self-contained and easy to understand at a glance"
+	]
+}

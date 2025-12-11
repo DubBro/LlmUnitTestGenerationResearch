@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316172-xK4VoCAoVlaOj7FAtLgP
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Class name follows ClassUnderTestTests pattern",
+		"Test method names mostly follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] for parameterized tests",
+		"Clear, meaningful variable and field names",
+		"Efficient shared setup in constructor with substitutes",
+		"No unnecessary comments or nested classes",
+		"Minor repetition in similar validation tests for different fields",
+		"Some tests combine Act & Assert, slightly deviating from separate blocks",
+		"Occasional generic scenario descriptions like 'WhenCalled'"
+	]
+}

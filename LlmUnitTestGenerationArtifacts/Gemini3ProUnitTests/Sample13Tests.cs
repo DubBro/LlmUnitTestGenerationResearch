@@ -1,0 +1,161 @@
+using Dataset.Sample13;
+using NSubstitute;
+
+namespace Gemini3ProUnitTests;
+
+public class OntologyHelperTests
+{
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsUriAndContainsHash_ReturnsStringAfterHash()
+    {
+        // Arrange
+        var expectedResult = "MyResource";
+        var rawString = $"http://example.org/ontology#{expectedResult}";
+
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns(rawString);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsUriAndIsUrlEncoded_ReturnsUnescapedStringAfterHash()
+    {
+        // Arrange
+        var rawString = "http%3A%2F%2Fexample.org%2Fontology%23MyResource";
+        // Decoded: http://example.org/ontology#MyResource
+        var expectedResult = "MyResource";
+
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns(rawString);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsUriAndDoesNotContainHash_ReturnsFullString()
+    {
+        // Arrange
+        // Logic analysis: IndexOf returns -1. Substring(-1 + 1) = Substring(0).
+        var rawString = "http://example.org/ontology/MyResource";
+
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns(rawString);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(rawString, result);
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsUriAndToStringReturnsNull_ReturnsEmptyString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns((string?)null);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsLiteralAndContainsCaret_ReturnsStringBeforeCaret()
+    {
+        // Arrange
+        var expectedResult = "SomeValue";
+        var rawString = $"{expectedResult}^^xsd:string";
+
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns(rawString);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsLiteralAndIsUrlEncoded_ReturnsUnescapedStringBeforeCaret()
+    {
+        // Arrange
+        var rawString = "SomeValue%5Exsd%3Astring";
+        // Decoded: SomeValue^xsd:string
+        var expectedResult = "SomeValue";
+
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns(rawString);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsLiteralAndDoesNotContainCaret_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        // Logic analysis: IndexOf returns -1. Substring(0, -1) throws ArgumentOutOfRangeException.
+        var rawString = "JustValueHere";
+
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns(rawString);
+
+        // Act & Assert
+        Assert.Throws<ArgumentOutOfRangeException>(() => node.ParseNode());
+    }
+
+    [Fact]
+    public void ParseNode_WhenNodeTypeIsLiteralAndToStringReturnsNull_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        // Logic analysis: null -> string.Empty -> IndexOf returns -1 -> Substring(0, -1) throws.
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns((string?)null);
+
+        // Act & Assert
+        Assert.Throws<ArgumentOutOfRangeException>(() => node.ParseNode());
+    }
+
+    [Theory]
+    [InlineData(NodeType.Blank)]
+    [InlineData(NodeType.GraphLiteral)]
+    [InlineData(NodeType.Variable)]
+    [InlineData(NodeType.Triple)]
+    public void ParseNode_WhenNodeTypeIsNotUriOrLiteral_ReturnsEmptyString(NodeType nodeType)
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(nodeType);
+        node.ToString().Returns("SomeValue#Ignored");
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample13Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample13;
+using NSubstitute;
+
+namespace DeepSeekR10528UnitTests;
+
+public class OntologyHelperTests
+{
+    [Theory]
+    [InlineData(&quot;http://example.com#Resource&quot;, &quot;Resource&quot;)]
+    [InlineData(&quot;http%3a%2f%2fexample.com%23Resource&quot;, &quot;Resource&quot;)]
+    [InlineData(&quot;#OnlyFragment&quot;, &quot;OnlyFragment&quot;)]
+    [InlineData(&quot;http://example.com#&quot;, &quot;&quot;)]
+    [InlineData(&quot;abc#def#ghi&quot;, &quot;def#ghi&quot;)]
+    [InlineData(&quot;no#hash&quot;, &quot;no#hash&quot;)]
+    [InlineData(&quot;&quot;, &quot;&quot;)]
+    public void ParseNode_UriNode_ReturnsExpectedStringAfterUnEscaping(string input, string expected)
+    {
+        // Arrange
+        var node = Substitute.For&lt;INode&gt;();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns(input);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;value^type&quot;, &quot;value&quot;)]
+    [InlineData(&quot;value^^type&quot;, &quot;value&quot;)]
+    [InlineData(&quot;^type&quot;, &quot;&quot;)]
+    [InlineData(&quot;v^&quot;, &quot;v&quot;)]
+    [InlineData(&quot;abc^def^ghi&quot;, &quot;abc&quot;)]
+    [InlineData(&quot;hello%20world%5Erest&quot;, &quot;hello world&quot;)]
+    public void ParseNode_LiteralNode_WithCaret_ReturnsExpectedStringAfterUnEscaping(string input, string expected)
+    {
+        // Arrange
+        var node = Substitute.For&lt;INode&gt;();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns(input);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;no caret in string&quot;)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(null)]
+    public void ParseNode_LiteralNode_WithoutCaret_ThrowsArgumentOutOfRangeException(string input)
+    {
+        // Arrange
+        var node = Substitute.For&lt;INode&gt;();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns(input);
+
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt; node.ParseNode());
+    }
+
+    [Theory]
+    [InlineData(NodeType.Blank)]
+    [InlineData(NodeType.GraphLiteral)]
+    [InlineData(NodeType.Variable)]
+    [InlineData(NodeType.Triple)]
+    public void ParseNode_NodeTypeNotUriOrLiteral_ReturnsEmptyString(NodeType nodeType)
+    {
+        // Arrange
+        var node = Substitute.For&lt;INode&gt;();
+        node.NodeType.Returns(nodeType);
+        node.ToString().Returns(&quot;any string&quot;);
+
+        // Act
+        var result = node.ParseNode();
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,5,17,6,1],[19,9,19,44,1],[20,9,20,45,1],[21,9,21,40,1],[24,9,24,39,1],[27,9,27,40,1],[28,5,28,6,1],[38,5,38,6,1],[40,9,40,44,1],[41,9,41,49,1],[42,9,42,40,1],[45,9,45,39,1],[48,9,48,40,1],[49,5,49,6,1],[56,5,56,6,1],[58,9,58,44,1],[59,9,59,49,1],[60,9,60,40,1],[63,9,63,58,1],[63,58,63,74,1],[63,74,63,76,1],[64,5,64,6,1],[72,5,72,6,1],[74,9,74,44,1],[75,9,75,41,1],[76,9,76,47,1],[79,9,79,39,1],[82,9,82,44,1],[83,5,83,6,1]]);
+    </script>
+  </body>
+</html>

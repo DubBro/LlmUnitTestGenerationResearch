@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765326635-VZCH0CDWhQyZHcsEUUyC
+
+Content:
+ {"readabilityIndex":74,"reasons":["Test class name follows the ClassUnderTestTests pattern.","Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern.","Consistent use of AAA pattern with clear comments and separation.","Correct usage of [Fact] and [Theory] with [InlineData].","Clear and meaningful variable naming throughout.","Unused variable expectedParagraphCount in HTML paragraph count test creates confusion.","Test name GenerateLoremIpsumHtmlSafe_ValidInputs_ReturnsHtmlStringWithCorrectParagraphCount doesn't match actual assertions.","Unclear and overly complex assertion logic in HTML paragraph count test.","Some duplication in Act sections between similar tests.","No nested classes or unnecessary structural complexity."]}

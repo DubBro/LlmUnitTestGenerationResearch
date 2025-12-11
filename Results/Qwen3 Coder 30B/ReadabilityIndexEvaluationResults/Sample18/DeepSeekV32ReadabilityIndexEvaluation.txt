@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327887-PkdrL2iVxBJPxwj9xvIX
+
+Content:
+{
+    "readabilityIndex": 90,
+    "reasons": [
+        "Test class name follows the standard pattern ClassUnderTestTests (CaesarEncoderTests)",
+        "Test names follow MethodUnderTest_Scenario_ExpectedResult pattern consistently",
+        "Tests follow AAA pattern with clear Arrange, Act, Assert blocks and comments",
+        "Uses both [Fact] for single scenarios and [Theory] with [InlineData] for parameterized tests appropriately",
+        "Variables have clear, meaningful names that reflect their purpose",
+        "Good separation of concerns with specific tests for edge cases (empty string, non-alphabetic characters, negative keys, etc.)",
+        "Consistent formatting and indentation throughout the test file",
+        "No unnecessary nested classes or complexity",
+        "Clear separation of Encode and Decode test scenarios",
+        "Test data is clearly presented in InlineData attributes for parameterized tests"
+    ]
+}

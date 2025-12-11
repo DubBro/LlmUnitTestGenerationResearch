@@ -1,0 +1,147 @@
+GenerationId:
+gen-1765214765-hqqtbTwWQBsgY0ksnj62
+
+Content:
+```csharp
+using System;
+using System.Threading.Tasks;
+using AutoMapper;
+using Dataset.Sample4;
+using NSubstitute;
+using Xunit;
+
+namespace Dataset.Sample4.UnitTests;
+
+public class CompanyServiceTests
+{
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IMapper _mapper;
+    private readonly CompanyService _companyService;
+
+    public CompanyServiceTests()
+    {
+        _companyRepository = Substitute.For<ICompanyRepository>();
+        _mapper = Substitute.For<IMapper>();
+        _companyService = new CompanyService(_companyRepository, _mapper);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(100)]
+    public async Task GetAsync_WhenCalledWithSpecificId_ReturnsMappedModel(int id)
+    {
+        // Arrange
+        var entity = new CompanyEntity { Id = id, Name = "Test Company", Description = "Test Description" };
+        var expectedModel = new CompanyModel { Id = id, Name = "Test Company", Description = "Test Description" };
+
+        _companyRepository.GetAsync(id).Returns(entity);
+        _mapper.Map<CompanyModel>(entity).Returns(expectedModel);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedModel, result);
+        await _companyRepository.Received(1).GetAsync(id);
+        _mapper.Received(1).Map<CompanyModel>(entity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenCalledWithoutArguments_UsesDefaultIdAndReturnsModel()
+    {
+        // Arrange
+        const int defaultId = 1;
+        var entity = new CompanyEntity { Id = defaultId, Name = "Default Corp" };
+        var expectedModel = new CompanyModel { Id = defaultId, Name = "Default Corp" };
+
+        _companyRepository.GetAsync(defaultId).Returns(entity);
+        _mapper.Map<CompanyModel>(entity).Returns(expectedModel);
+
+        // Act
+        var result = await _companyService.GetAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedModel, result);
+        await _companyRepository.Received(1).GetAsync(defaultId);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        var id = 5;
+        CompanyEntity? nullEntity = null;
+        CompanyModel? nullModel = null;
+
+        _companyRepository.GetAsync(id).Returns(nullEntity);
+        _mapper.Map<CompanyModel>(nullEntity).Returns(nullModel);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.Null(result);
+        await _companyRepository.Received(1).GetAsync(id);
+        _mapper.Received(1).Map<CompanyModel>(nullEntity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryThrowsException_ThrowsSameException()
+    {
+        // Arrange
+        var id = 10;
+        var expectedException = new InvalidOperationException("Database connection error");
+
+        _companyRepository.GetAsync(id).Returns(Task.FromException<CompanyEntity>(expectedException));
+
+        // Act
+        var act = () => _companyService.GetAsync(id);
+
+        // Assert
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(act);
+        Assert.Equal(expectedException.Message, exception.Message);
+        await _companyRepository.Received(1).GetAsync(id);
+        _mapper.DidNotReceiveWithAnyArgs().Map<CompanyModel>(default);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenMapperThrowsException_ThrowsSameException()
+    {
+        // Arrange
+        var id = 20;
+        var entity = new CompanyEntity { Id = id };
+        var expectedException = new AutoMapperMappingException("Mapping configuration missing");
+
+        _companyRepository.GetAsync(id).Returns(entity);
+        _mapper.Map<CompanyModel>(entity).Returns(_ => throw expectedException);
+
+        // Act
+        var act = () => _companyService.GetAsync(id);
+
+        // Assert
+        var exception = await Assert.ThrowsAsync<AutoMapperMappingException>(act);
+        Assert.Equal(expectedException.Message, exception.Message);
+        await _companyRepository.Received(1).GetAsync(id);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+56566,9382
+
+OpenRouterElapsedTimeMilliseconds:
+59590
+
+PromptTokens:
+1314
+
+CompletionTokens:
+5983
+
+TotalTokens:
+7297
+
+TotalCost:
+0,074424

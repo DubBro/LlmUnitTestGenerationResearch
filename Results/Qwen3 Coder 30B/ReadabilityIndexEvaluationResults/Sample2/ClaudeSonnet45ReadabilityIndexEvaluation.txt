@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765325082-KEkYc4TY3Nmutf9JqJZb
+
+Content:
+```json
+{
+	"readabilityIndex": 58,
+	"reasons": [
+		"Test names follow the MethodUnderTest_Scenario_ExpectedResult pattern consistently, which is excellent",
+		"AAA pattern is clearly implemented with proper comments and blank line separation throughout all tests",
+		"Constructor-based dependency setup reduces duplication and follows good practices",
+		"Async test methods correctly use 'async Task' signature instead of 'async void'",
+		"Significant code duplication in EmployeeModel and EmployeeEntity object initialization across multiple tests (could use helper methods or object mother pattern)",
+		"Multiple validation tests for AddAsync method test similar scenarios with nearly identical arrange blocks - should use [Theory] with [InlineData] to reduce duplication",
+		"Excessive property assertions in GetAsync_WhenCalled_ReturnsEmployeeModel test (15 assertions) without clear grouping or explanation",
+		"Missing [Theory] usage for testing different validation scenarios which leads to repetitive test code",
+		"Named parameters in ListFilteredAsync calls improve clarity but the repeated null/0 default values add noise",
+		"Overall structure is understandable but maintainability suffers from high duplication - refactoring to use test data builders or fixture methods would significantly improve readability"
+	]
+}
+```

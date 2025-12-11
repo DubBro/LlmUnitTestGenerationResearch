@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765318669-cN8KW9SjorIPpJAuE6kn
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name `OntologyHelperTests` clearly follows the `ClassUnderTestTests` convention and matches the domain.",
+    "Test method names consistently follow the `Method_Scenario_ExpectedResult` pattern and make the intent immediately clear.",
+    "All tests follow a strict AAA structure with `// Arrange`, `// Act`, `// Assert` comments and blank line separation, which improves scanability.",
+    "Use of `[Theory]` with `[InlineData]` for the non-URI/non-literal node types avoids duplication and clarifies a shared scenario.",
+    "Variable names like `expectedResult`, `rawString`, `node`, and `result` are meaningful and self-explanatory.",
+    "Setup with NSubstitute is simple, uniform, and placed in the Arrange section, making the mocked behavior easy to understand.",
+    "No unnecessary nesting or helper classes inside the test class; structure is flat and straightforward.",
+    "Comments that explain internal logic (e.g., how `IndexOf` and `Substring` behave) go beyond AAA markers and slightly clutter the tests.",
+    "Several tests duplicate similar mock setup patterns for `INode`, which could be extracted into a small helper method to reduce repetition and ease future changes.",
+    "Some test method names are quite long, which, while descriptive, can reduce quick visual scanning when the test suite grows larger."
+  ]
+}

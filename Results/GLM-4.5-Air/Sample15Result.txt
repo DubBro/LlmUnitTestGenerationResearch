@@ -1,0 +1,147 @@
+GenerationId:
+gen-1765204344-1WqzZeEB0lLZen47CIsc
+
+Content:
+```csharp
+using Xunit;
+
+namespace Dataset.Sample15.UnitTests;
+
+public class Base64HelpersTests
+{
+    [Fact]
+    public void Encode_PassingNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string plainText = null;
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Encode_PassingEmptyString_ReturnsEmptyString()
+    {
+        // Arrange
+        string plainText = string.Empty;
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Encode_PassingWhitespaceString_ReturnsEmptyString()
+    {
+        // Arrange
+        string plainText = "   ";
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Encode_PassingValidText_ReturnsBase64EncodedString()
+    {
+        // Arrange
+        string plainText = "Hello World";
+
+        // Act
+        string result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal("SGVsbG8gV29ybGQ=", result);
+    }
+
+    [Fact]
+    public void Decode_PassingNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string base64EncodedData = null;
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Decode_PassingEmptyString_ReturnsEmptyString()
+    {
+        // Arrange
+        string base64EncodedData = string.Empty;
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Decode_PassingWhitespaceString_ReturnsEmptyString()
+    {
+        // Arrange
+        string base64EncodedData = "   ";
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void Decode_PassingValidBase64String_ReturnsDecodedString()
+    {
+        // Arrange
+        string base64EncodedData = "SGVsbG8gV29ybGQ=";
+
+        // Act
+        string result = Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Equal("Hello World", result);
+    }
+
+    [Fact]
+    public void Decode_PassingInvalidBase64String_ThrowsFormatException()
+    {
+        // Arrange
+        string base64EncodedData = "InvalidBase64String!@#";
+
+        // Act
+        Action action = () => Base64Helpers.Decode(base64EncodedData);
+
+        // Assert
+        Assert.Throws<FormatException>(action);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+7068,8239
+
+OpenRouterElapsedTimeMilliseconds:
+6968
+
+PromptTokens:
+1077
+
+CompletionTokens:
+622
+
+TotalTokens:
+1699
+
+TotalCost:
+0,000436792

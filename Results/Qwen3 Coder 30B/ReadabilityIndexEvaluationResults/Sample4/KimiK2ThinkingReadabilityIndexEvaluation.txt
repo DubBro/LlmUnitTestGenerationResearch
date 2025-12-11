@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765325753-RddKuSnEONCWD3N4OpAI
+
+Content:
+ {"readabilityIndex":75,"reasons":["Significant setup code duplication between tests requires parallel updates","Inline test data creation leads to repetitive boilerplate code","Common dependency initialization logic is repeated in each test"]}

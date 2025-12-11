@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327443-afXj38PFSAmbNkGPKKBx
+
+Content:
+{
+  "readabilityIndex": 88,
+  "reasons": [
+    "Test class name `RhombusGeneratorTests` clearly follows the ClassUnderTestTests pattern and matches the SUT.",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern and clearly communicate the behavior under test.",
+    "AAA pattern is consistently used and explicitly separated with `// Arrange`, `// Act`, `// Assert` comments, which aids quick scanning and understanding.",
+    "Use of `[Theory]` with `[InlineData]` for invalid inputs avoids duplication and makes input variations easy to see and extend.",
+    "Code adheres to C# naming conventions; variable names like `expectedSize`, `expectedRhombus`, and `result` are meaningful and self-explanatory.",
+    "Tests are short and focused on a single responsibility, with no unnecessary nesting or extra helpers that could obscure intent.",
+    "Loop-based assertions are straightforward and uniform across tests, making the verification logic easy to follow.",
+    "There is some duplication between the size 3 and size 5 tests (same size checks and nested loops) that could be refactored into a helper or a theory for better maintainability.",
+    "Large inline 2D arrays for expected values, while explicit, can be visually dense and slightly harder to parse, and might benefit from extracted builders or named helpers.",
+    "Exception assertion uses a very general `Exception` type; while readable, a more specific exception type or custom assertion helper could better communicate intent and improve long-term clarity."
+  ]
+}

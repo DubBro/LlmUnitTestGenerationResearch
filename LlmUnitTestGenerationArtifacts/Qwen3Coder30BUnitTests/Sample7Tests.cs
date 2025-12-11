@@ -1,0 +1,105 @@
+using Dataset.Sample7;
+using NSubstitute;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class WalkServiceTests
+    {
+        private readonly IWalkRepository _walkRepository;
+        private readonly IWalkService _walkService;
+
+        public WalkServiceTests()
+        {
+            _walkRepository = Substitute.For<IWalkRepository>();
+            _walkService = new WalkService(_walkRepository);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_WithValidImei_ReturnsExpectedWalks()
+        {
+            // Arrange
+            var imei = "123456789012345";
+            var walkEntities = new List<WalkEntity>
+            {
+                new WalkEntity { Distance = 10.5m, Duration = 30.0m },
+                new WalkEntity { Distance = 15.2m, Duration = 45.0m }
+            };
+
+            _walkRepository.Get10LongestWalksAsync(imei).Returns(walkEntities);
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(imei);
+
+            // Assert
+            Assert.NotNull(result);
+            var resultList = result.ToList();
+            Assert.Equal(2, resultList.Count);
+            Assert.Equal(1, resultList[0].Number);
+            Assert.Equal(10.5m, resultList[0].Distance);
+            Assert.Equal(30.0m, resultList[0].Duration);
+            Assert.Equal(2, resultList[1].Number);
+            Assert.Equal(15.2m, resultList[1].Distance);
+            Assert.Equal(45.0m, resultList[1].Duration);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("123")]
+        [InlineData("1234567890123456")]
+        [InlineData("abcde1234567890")]
+        public async Task Get10LongestWalksAsync_WithInvalidImei_ThrowsBusinessException(string imei)
+        {
+            // Arrange
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _walkService.Get10LongestWalksAsync(imei));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<BusinessException>(exception);
+            Assert.Contains("Invalid IMEI", exception.Message);
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_WithValidImei_ReturnsExpectedInfo()
+        {
+            // Arrange
+            var imei = "123456789012345";
+            var walkInfoEntity = new WalksGeneralInfoEntity
+            {
+                TotalCount = 5,
+                TotalDistance = 100.5m,
+                TotalDuration = 120.0m
+            };
+
+            _walkRepository.GetWalksGeneralInfoAsync(imei).Returns(walkInfoEntity);
+
+            // Act
+            var result = await _walkService.GetWalksGeneralInfoAsync(imei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(5, result.TotalCount);
+            Assert.Equal(100.5m, result.TotalDistance);
+            Assert.Equal(120.0m, result.TotalDuration);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("123")]
+        [InlineData("1234567890123456")]
+        [InlineData("abcde1234567890")]
+        public async Task GetWalksGeneralInfoAsync_WithInvalidImei_ThrowsBusinessException(string imei)
+        {
+            // Arrange
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _walkService.GetWalksGeneralInfoAsync(imei));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<BusinessException>(exception);
+            Assert.Contains("Invalid IMEI", exception.Message);
+        }
+    }
+}

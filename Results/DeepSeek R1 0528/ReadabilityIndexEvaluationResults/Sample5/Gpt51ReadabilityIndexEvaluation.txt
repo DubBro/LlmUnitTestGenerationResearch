@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316047-vulNQ22jYaF0DDYBDhoP
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name `FolderServiceTests` clearly follows the `ClassUnderTestTests` convention.",
+    "Test method names follow the `Method_Scenario_ExpectedResult` pattern and clearly express intent.",
+    "Consistent use of async `Task` signatures for asynchronous tests; no `async void` usage.",
+    "AAA structure is followed and visually separated with `// Arrange`, `// Act`, `// Assert` (or `// Act & Assert`) making flow easy to follow.",
+    "Variable, field, and parameter names are meaningful and self-explanatory, matching C# naming conventions.",
+    "Use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for parameterized cases is appropriate and reduces duplication.",
+    "Assertions are clear and localized; use of `Assert.Collection` improves readability of collection expectations.",
+    "No unnecessary nested classes or extraneous comments; file is structurally simple and easy to navigate.",
+    "Some setup code for folder entities is duplicated across tests, which slightly impacts maintainability and could be improved with helper methods or builders.",
+    "A few minor inconsistencies in AAA comment wording (e.g., `// Act & Assert`) and slightly verbose `Task.FromResult` usage add small visual noise but do not significantly harm readability."
+  ]
+}

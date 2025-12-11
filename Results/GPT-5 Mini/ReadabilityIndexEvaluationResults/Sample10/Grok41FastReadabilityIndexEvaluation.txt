@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323684-FAS36WyGL0LXudXoXc0y
+
+Content:
+```json
+{
+	"readabilityIndex": 94,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names precisely follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to eliminate duplication.",
+		"CreateSut() helper method reduces setup duplication and enhances maintainability.",
+		"Clear, meaningful variable names and mock configurations.",
+		"No unnecessary comments or nested classes; adheres to conventions.",
+		"Minor combination of Act/Assert in Assert.Throws cases, but highly readable overall."
+	]
+}
+```

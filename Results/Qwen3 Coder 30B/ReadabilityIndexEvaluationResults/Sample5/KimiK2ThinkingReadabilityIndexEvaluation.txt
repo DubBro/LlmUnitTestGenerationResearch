@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765325895-0dzlWoUUwsNE9GMAIew8
+
+Content:
+ {
+	"readabilityIndex": 72,
+	"reasons": [
+		"Magic numbers in assertions (expected IDs 0, 3, 100) lack clear connection to arrange setup",
+		"Complex repository setup with multiple Returns calls reduces clarity in path traversal test",
+		"Inconsistent assertion patterns mixing indexed access with LINQ methods across tests",
+		"Ambiguous use of Count() extension method on SubFolders property",
+		"Implicit expectations about synthetic root folder creation require implementation knowledge",
+		"Test namespace doesn't follow typical organizational conventions",
+		"Could benefit from helper methods for common FolderEntity creation patterns"
+	]
+}

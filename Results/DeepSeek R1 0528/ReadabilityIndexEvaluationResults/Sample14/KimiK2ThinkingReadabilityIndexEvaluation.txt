@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316873-kzU795oO6wblIhx8yyHM
+
+Content:
+ {
+	"readabilityIndex": 68,
+	"reasons": [
+		"Test class name follows the ClassUnderTestTests pattern",
+		"Test method names use the MethodUnderTest_Scenario_ExpectedResult format",
+		"AAA pattern is correctly implemented with clear block comments and separation",
+		"Code duplication: three nearly identical tests (Size1, Size3, Size5) should be combined into a Theory",
+		"Theory test mixes invalid inputs poorly: cases 2 and 4 don't clearly match the 'InvalidInput' scenario name",
+		"Helper method AssertArrayEqual is extracted but could be static and provide better error messages",
+		"Follows standard C# naming conventions for all identifiers",
+		"No unnecessary comments beyond AAA markers",
+		"No nested classes used",
+		"Properly uses xUnit attributes [Theory] and [Fact] for test scenarios"
+	]
+}

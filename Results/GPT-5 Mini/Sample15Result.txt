@@ -1,0 +1,134 @@
+GenerationId:
+gen-1765218523-D970BwmGSbgE3bTjUZbG
+
+Content:
+```csharp
+using System;
+using System.Text;
+using Xunit;
+using Dataset.Sample15;
+
+namespace Dataset.Sample15.UnitTests
+{
+    public class Base64HelpersTests
+    {
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("\t\n")]
+        public void Encode_NullOrWhiteSpace_ReturnsEmpty(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.Encode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Encode_AsciiString_ReturnsExpectedBase64()
+        {
+            // Arrange
+            var input = "hello";
+            var expected = "aGVsbG8=";
+
+            // Act
+            var result = input.Encode();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Encode_UnicodeString_ReturnsUtf8Base64()
+        {
+            // Arrange
+            var input = "Привет, мир 🌍";
+            var expected = Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
+
+            // Act
+            var result = input.Encode();
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("\r\n")]
+        public void Decode_NullOrWhiteSpace_ReturnsEmpty(string input)
+        {
+            // Arrange
+
+            // Act
+            var result = input.Decode();
+
+            // Assert
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void Decode_ValidAsciiBase64_ReturnsOriginalString()
+        {
+            // Arrange
+            var original = "hello";
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(original));
+
+            // Act
+            var result = base64.Decode();
+
+            // Assert
+            Assert.Equal(original, result);
+        }
+
+        [Fact]
+        public void Decode_ValidUnicodeBase64_ReturnsOriginalString()
+        {
+            // Arrange
+            var original = "Привет, мир 🌍";
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(original));
+
+            // Act
+            var result = base64.Decode();
+
+            // Assert
+            Assert.Equal(original, result);
+        }
+
+        [Theory]
+        [InlineData("not-base64")]
+        [InlineData("!!!")]
+        [InlineData("abcd*")]
+        public void Decode_InvalidBase64_ThrowsFormatException(string invalidBase64)
+        {
+            // Arrange
+
+            // Act & Assert
+            Assert.Throws<FormatException>(() => Base64Helpers.Decode(invalidBase64));
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+26069,3029
+
+OpenRouterElapsedTimeMilliseconds:
+40297
+
+PromptTokens:
+1094
+
+CompletionTokens:
+1596
+
+TotalTokens:
+2690
+
+TotalCost:
+0,0034655

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765315412-AUA3EaBgYF7iu4I3yptU
+
+Content:
+{
+	"readabilityIndex": 82,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern (EmployeeServiceTests).",
+		"Test method names generally follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Tests follow AAA pattern with clear Arrange, Act, Assert blocks separated by comments.",
+		"Good use of [Theory] with [InlineData] for parameterized tests to avoid duplication.",
+		"Clear and meaningful variable names enhance understanding.",
+		"Asynchronous tests properly use async Task signature.",
+		"Some test names are slightly verbose but remain descriptive.",
+		"Assertion blocks in some tests are lengthy and could benefit from helper methods for property mapping checks.",
+		"Minor violation: some method names like ListFilteredAsync_AllFiltersDefault_CallsListAsync could be more concise.",
+		"Overall structure is logical and maintainable with consistent formatting."
+	]
+}

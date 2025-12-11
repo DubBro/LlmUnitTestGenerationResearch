@@ -1,0 +1,277 @@
+using Dataset.Sample5;
+using NSubstitute;
+
+namespace Gemini3ProUnitTests;
+
+public class FolderServiceTests
+{
+    private readonly IFolderRepository _folderRepository;
+    private readonly FolderService _folderService;
+
+    public FolderServiceTests()
+    {
+        _folderRepository = Substitute.For<IFolderRepository>();
+        _folderService = new FolderService(_folderRepository);
+    }
+
+    // --- GetRootFoldersAsync Tests ---
+
+    [Fact]
+    public async Task GetRootFoldersAsync_WhenRepositoryReturnsData_ReturnsMappedFolderDTOs()
+    {
+        // Arrange
+        var folderEntities = new List<FolderEntity>
+        {
+            new FolderEntity { Id = 1, Name = "Root1", ParentId = null },
+            new FolderEntity { Id = 2, Name = "Root2", ParentId = null }
+        };
+
+        _folderRepository.GetRootFoldersAsync().Returns(folderEntities);
+
+        // Act
+        var result = await _folderService.GetRootFoldersAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        var resultList = result.ToList();
+        Assert.Equal(2, resultList.Count);
+        Assert.Equal(1, resultList[0].Id);
+        Assert.Equal("Root1", resultList[0].Name);
+        Assert.Null(resultList[0].SubFolders); // Logic explicitly sets this to null!
+    }
+
+    [Fact]
+    public async Task GetRootFoldersAsync_WhenRepositoryReturnsEmpty_ReturnsEmptyList()
+    {
+        // Arrange
+        _folderRepository.GetRootFoldersAsync().Returns(new List<FolderEntity>());
+
+        // Act
+        var result = await _folderService.GetRootFoldersAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    // --- GetFolderAsync Tests ---
+
+    [Fact]
+    public async Task GetFolderAsync_WhenPathIsNull_ReturnsVirtualRootWithRepoRootFolders()
+    {
+        // Arrange
+        var rootEntities = new List<FolderEntity>
+        {
+            new FolderEntity { Id = 10, Name = "Docs" }
+        };
+        _folderRepository.GetRootFoldersAsync().Returns(rootEntities);
+
+        // Act
+        var result = await _folderService.GetFolderAsync(null);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(0, result.Id);
+        Assert.Equal("Root", result.Name);
+        Assert.Null(result.ParentId);
+        Assert.NotNull(result.SubFolders);
+        Assert.Single(result.SubFolders);
+        Assert.Equal(10, result.SubFolders.First().Id);
+    }
+
+    [Fact]
+    public async Task GetFolderAsync_WhenSingleLevelPathExists_ReturnsFolderDTO()
+    {
+        // Arrange
+        string path = "Music";
+        var entity = new FolderEntity
+        {
+            Id = 5,
+            Name = "Music",
+            ParentId = null,
+            SubFolders = new List<FolderEntity>
+            {
+                new FolderEntity { Id = 6, Name = "Rock", ParentId = 5 }
+            }
+        };
+
+        _folderRepository.GetFolderByNameAsync("Music").Returns(entity);
+
+        // Act
+        var result = await _folderService.GetFolderAsync(path);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(5, result.Id);
+        Assert.Equal("Music", result.Name);
+        Assert.NotNull(result.SubFolders);
+        Assert.Single(result.SubFolders);
+        Assert.Equal(6, result.SubFolders.First().Id);
+    }
+
+    [Fact]
+    public async Task GetFolderAsync_WhenSingleLevelPathDoesNotExist_ThrowsFolderNotFoundException()
+    {
+        // Arrange
+        string path = "Invalid";
+        _folderRepository.GetFolderByNameAsync("Invalid").Returns((FolderEntity?)null);
+
+        // Act & Assert
+        var ex = await Assert.ThrowsAsync<FolderNotFoundException>(() => _folderService.GetFolderAsync(path));
+        Assert.Contains("Invalid Check. Folder `Invalid` does not exist", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task GetFolderAsync_WhenNestedPathExists_TraversesAndReturnsLeafFolder()
+    {
+        // Arrange
+        string path = "/Docs/Work/"; // Should handle slashes via Trim/Split
+
+        var rootFolder = new FolderEntity
+        {
+            Id = 1,
+            Name = "Docs",
+            SubFolders = new List<FolderEntity>
+            {
+                new FolderEntity { Id = 2, Name = "Work", ParentId = 1 } // Needed for checksum logic
+            }
+        };
+
+        var leafFolder = new FolderEntity
+        {
+            Id = 2,
+            Name = "Work",
+            ParentId = 1,
+            SubFolders = new List<FolderEntity>()
+        };
+
+        // First call gets root
+        _folderRepository.GetFolderByNameAsync("Docs").Returns(rootFolder);
+        // Second call gets child using name and parent ID
+        _folderRepository.GetFolderByNameAsync("Work", 1).Returns(leafFolder);
+
+        // Act
+        var result = await _folderService.GetFolderAsync(path);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Id);
+        Assert.Equal("Work", result.Name);
+    }
+
+    [Fact]
+    public async Task GetFolderAsync_WhenNestedPathChildDoesNotExistInList_ThrowsFolderNotFoundException()
+    {
+        // Arrange
+        string path = "Docs/Missing";
+
+        var rootFolder = new FolderEntity
+        {
+            Id = 1,
+            Name = "Docs",
+            SubFolders = new List<FolderEntity>
+            {
+                new FolderEntity { Id = 2, Name = "Work", ParentId = 1 }
+                // "Missing" is not here
+            }
+        };
+
+        _folderRepository.GetFolderByNameAsync("Docs").Returns(rootFolder);
+
+        // Act & Assert
+        var ex = await Assert.ThrowsAsync<FolderNotFoundException>(() => _folderService.GetFolderAsync(path));
+        Assert.Contains("Folder `Missing` does not exist", ex.Message);
+    }
+
+    // --- AddFolderAsync Tests ---
+
+    [Fact]
+    public async Task AddFolderAsync_WhenDtoIsNull_ThrowsArgumentNullException()
+    {
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _folderService.AddFolderAsync(null!));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("Name/WithSlash")]
+    public async Task AddFolderAsync_WhenNameIsInvalid_ThrowsArgumentException(string? invalidName)
+    {
+        // Arrange
+        var folderDto = new FolderDTO { Name = invalidName!, ParentId = 1 };
+
+        // Act & Assert
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => _folderService.AddFolderAsync(folderDto));
+        Assert.Equal("Name", ex.ParamName);
+    }
+
+    [Fact]
+    public async Task AddFolderAsync_WhenNameIsTooLong_ThrowsArgumentException()
+    {
+        // Arrange
+        var longName = new string('a', 256);
+        var folderDto = new FolderDTO { Name = longName, ParentId = 1 };
+
+        // Act & Assert
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => _folderService.AddFolderAsync(folderDto));
+        Assert.Equal("Name", ex.ParamName);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async Task AddFolderAsync_WhenParentIdIsInvalid_ThrowsArgumentException(int invalidParentId)
+    {
+        // Arrange
+        var folderDto = new FolderDTO { Name = "ValidName", ParentId = invalidParentId };
+
+        // Act & Assert
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => _folderService.AddFolderAsync(folderDto));
+        Assert.Equal("ParentId", ex.ParamName);
+    }
+
+    [Fact]
+    public async Task AddFolderAsync_WhenFolderAlreadyExists_ThrowsArgumentException()
+    {
+        // Arrange
+        var folderDto = new FolderDTO { Name = "Existing", ParentId = 1 };
+
+        _folderRepository
+            .GetFolderByNameAsync(folderDto.Name, folderDto.ParentId)
+            .Returns(new FolderEntity { Id = 5, Name = "Existing" });
+
+        // Act & Assert
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => _folderService.AddFolderAsync(folderDto));
+        Assert.Equal("Name", ex.ParamName);
+    }
+
+    [Fact]
+    public async Task AddFolderAsync_WhenFolderIsValid_AddsToRepositoryAndReturnsId()
+    {
+        // Arrange
+        var folderDto = new FolderDTO { Name = "NewFolder", ParentId = 10 };
+        int expectedNewId = 123;
+
+        // Ensure duplicate check returns null
+        _folderRepository
+            .GetFolderByNameAsync(folderDto.Name, folderDto.ParentId)
+            .Returns((FolderEntity?)null);
+
+        _folderRepository
+            .AddFolderAsync(Arg.Any<FolderEntity>())
+            .Returns(expectedNewId);
+
+        // Act
+        var result = await _folderService.AddFolderAsync(folderDto);
+
+        // Assert
+        Assert.Equal(expectedNewId, result);
+
+        // Verify mapper logic implicitly
+        await _folderRepository.Received(1).AddFolderAsync(Arg.Is<FolderEntity>(x =>
+            x.Name == "NewFolder" &&
+            x.ParentId == 10
+        ));
+    }
+}

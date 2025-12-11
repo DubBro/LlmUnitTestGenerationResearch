@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Qwen3Coder30BUnitTests\Sample5Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample5;
+using NSubstitute;
+
+namespace Qwen3Coder30BUnitTests
+{
+    public class FolderServiceTests
+    {
+        private readonly IFolderRepository _folderRepository;
+        private readonly FolderService _folderService;
+
+        public FolderServiceTests()
+        {
+            _folderRepository = Substitute.For&lt;IFolderRepository&gt;();
+            _folderService = new FolderService(_folderRepository);
+        }
+
+        [Fact]
+        public async Task GetFolderAsync_PathIsNull_ReturnsRootFolder()
+        {
+            // Arrange
+            var rootFolders = new List&lt;FolderEntity&gt;
+            {
+                new FolderEntity { Id = 1, Name = &quot;Folder1&quot;, ParentId = null },
+                new FolderEntity { Id = 2, Name = &quot;Folder2&quot;, ParentId = null }
+            };
+
+            _folderRepository.GetRootFoldersAsync().Returns(rootFolders);
+
+            // Act
+            var result = await _folderService.GetFolderAsync(null);
+
+            // Assert
+            Assert.Equal(0, result.Id);
+            Assert.Equal(&quot;Root&quot;, result.Name);
+            Assert.Equal(rootFolders.Count, result.SubFolders.Count());
+            Assert.Null(result.ParentId);
+        }
+
+        [Fact]
+        public async Task GetFolderAsync_PathIsValid_ReturnsFolderWithSubfolders()
+        {
+            // Arrange
+            var folderDto1 = new FolderEntity { Id = 1, Name = &quot;Root&quot;, ParentId = null };
+            var folderDto2 = new FolderEntity { Id = 2, Name = &quot;Sub1&quot;, ParentId = 1 };
+            var folderDto3 = new FolderEntity { Id = 3, Name = &quot;Sub2&quot;, ParentId = 1 };
+
+            var subfolders = new List&lt;FolderEntity&gt; { folderDto2, folderDto3 };
+
+            _folderRepository.GetFolderByNameAsync(Arg.Any&lt;string&gt;(), Arg.Any&lt;int?&gt;()).Returns(folderDto1);
+            _folderRepository.GetFolderByNameAsync(&quot;Sub1&quot;, 1).Returns(folderDto2);
+            _folderRepository.GetFolderByNameAsync(&quot;Sub2&quot;, 1).Returns(folderDto3);
+
+            // Act
+            var result = await _folderService.GetFolderAsync(&quot;/Root/Sub1/Sub2&quot;);
+
+            // Assert
+            Assert.Equal(3, result.Id);
+            Assert.Equal(&quot;Sub2&quot;, result.Name);
+            Assert.Equal(1, result.ParentId);
+        }
+
+        [Fact]
+        public async Task GetFolderAsync_PathDoesNotExist_ThrowsFolderNotFoundException()
+        {
+            // Arrange
+            _folderRepository.GetFolderByNameAsync(Arg.Any&lt;string&gt;(), Arg.Any&lt;int?&gt;()).Returns((FolderEntity)null);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;FolderNotFoundException&gt;(() =&gt; _folderService.GetFolderAsync(&quot;/Invalid&quot;));
+        }
+
+        [Fact]
+        public async Task GetFolderAsync_FolderDoesNotExistInsidePath_ThrowsFolderNotFoundException()
+        {
+            // Arrange
+            var folder1 = new FolderEntity { Id = 1, Name = &quot;Root&quot;, ParentId = null };
+            var folder2 = new FolderEntity { Id = 2, Name = &quot;Sub1&quot;, ParentId = 1 };
+
+            _folderRepository.GetFolderByNameAsync(&quot;Root&quot;, null).Returns(folder1);
+            _folderRepository.GetFolderByNameAsync(&quot;Sub1&quot;, 1).Returns(folder2);
+            _folderRepository.GetFolderByNameAsync(&quot;Sub2&quot;, 2).Returns((FolderEntity)null);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;FolderNotFoundException&gt;(() =&gt; _folderService.GetFolderAsync(&quot;/Root/Sub1/Sub2&quot;));
+        }
+
+        [Fact]
+        public async Task GetRootFoldersAsync_Invoked_ReturnsRootFolders()
+        {
+            // Arrange
+            var folderEntities = new List&lt;FolderEntity&gt;
+            {
+                new FolderEntity { Id = 1, Name = &quot;Folder1&quot;, ParentId = null },
+                new FolderEntity { Id = 2, Name = &quot;Folder2&quot;, ParentId = null }
+            };
+
+            _folderRepository.GetRootFoldersAsync().Returns(folderEntities);
+
+            // Act
+            var result = await _folderService.GetRootFoldersAsync();
+
+            // Assert
+            Assert.Equal(2, result.Count());
+            Assert.Equal(folderEntities[0].Id, result.First().Id);
+            Assert.Equal(folderEntities[1].Id, result.Last().Id);
+        }
+
+        [Fact]
+        public async Task AddFolderAsync_ValidFolderDto_ReturnsAddedFolderId()
+        {
+            // Arrange
+            var folderDto = new FolderDTO { Name = &quot;NewFolder&quot;, ParentId = 1 };
+            var folderEntity = new FolderEntity { Name = &quot;NewFolder&quot;, ParentId = 1 };
+
+            _folderRepository.GetFolderByNameAsync(Arg.Any&lt;string&gt;(), Arg.Any&lt;int?&gt;()).Returns((FolderEntity)null);
+            _folderRepository.AddFolderAsync(Arg.Any&lt;FolderEntity&gt;()).Returns(100);
+
+            // Act
+            var result = await _folderService.AddFolderAsync(folderDto);
+
+            // Assert
+            Assert.Equal(100, result);
+        }
+
+        [Fact]
+        public async Task AddFolderAsync_NullFolderDto_ThrowsArgumentNullException()
+        {
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentNullException&gt;(() =&gt; _folderService.AddFolderAsync(null));
+        }
+
+        [Fact]
+        public async Task AddFolderAsync_InvalidFolderName_ThrowsArgumentException()
+        {
+            // Arrange
+            var folderDto = new FolderDTO { Name = &quot;Invalid/Name&quot;, ParentId = 1 };
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _folderService.AddFolderAsync(folderDto));
+        }
+
+        [Fact]
+        public async Task AddFolderAsync_InvalidParentId_ThrowsArgumentException()
+        {
+            // Arrange
+            var folderDto = new FolderDTO { Name = &quot;ValidFolder&quot;, ParentId = 0 };
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _folderService.AddFolderAsync(folderDto));
+        }
+
+        [Fact]
+        public async Task AddFolderAsync_DuplicateFolderName_ThrowsArgumentException()
+        {
+            // Arrange
+            var folderDto = new FolderDTO { Name = &quot;ExistingFolder&quot;, ParentId = 1 };
+            _folderRepository.GetFolderByNameAsync(Arg.Any&lt;string&gt;(), Arg.Any&lt;int?&gt;()).Returns(new FolderEntity());
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentException&gt;(() =&gt; _folderService.AddFolderAsync(folderDto));
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,9,11,36,1],[12,9,12,10,1],[13,13,13,69,1],[14,13,14,67,1],[15,9,15,10,1],[19,9,19,10,1],[21,13,25,15,1],[27,13,27,74,1],[30,13,30,68,1],[33,13,33,40,1],[34,13,34,47,1],[35,13,35,72,1],[36,13,36,42,1],[37,9,37,10,1],[41,9,41,10,1],[43,13,43,90,1],[44,13,44,87,1],[45,13,45,87,1],[47,13,47,80,1],[49,13,49,108,1],[50,13,50,83,1],[51,13,51,83,1],[54,13,54,81,1],[57,13,57,40,0],[58,13,58,47,0],[59,13,59,46,0],[60,9,60,10,0],[64,9,64,10,1],[66,13,66,116,1],[69,13,69,112,1],[70,9,70,10,1],[74,9,74,10,1],[76,13,76,87,1],[77,13,77,84,1],[79,13,79,83,1],[80,13,80,80,1],[81,13,81,91,1],[84,13,84,119,1],[85,9,85,10,1],[89,9,89,10,1],[91,13,95,15,1],[97,13,97,77,1],[100,13,100,69,1],[103,13,103,45,1],[104,13,104,67,1],[105,13,105,66,1],[106,9,106,10,1],[110,9,110,10,1],[112,13,112,80,1],[113,13,113,86,1],[115,13,115,116,1],[116,13,116,84,1],[119,13,119,73,1],[122,13,122,39,1],[123,9,123,10,1],[127,9,127,10,1],[129,13,129,104,1],[130,9,130,10,1],[134,9,134,10,1],[136,13,136,83,1],[139,13,139,63,1],[139,63,139,103,1],[139,103,139,105,1],[140,9,140,10,1],[144,9,144,10,1],[146,13,146,82,1],[149,13,149,63,1],[149,63,149,103,1],[149,103,149,105,1],[150,9,150,10,1],[154,9,154,10,1],[156,13,156,85,1],[157,13,157,116,1],[160,13,160,63,1],[160,63,160,103,1],[160,103,160,105,1],[161,9,161,10,1]]);
+    </script>
+  </body>
+</html>

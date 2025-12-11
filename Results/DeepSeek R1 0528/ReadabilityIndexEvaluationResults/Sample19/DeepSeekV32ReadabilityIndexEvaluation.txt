@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765317195-ldaFRjOeqqv43yrMqtnS
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Clear test class naming following 'ClassUnderTestTests' pattern",
+		"Test method names follow 'MethodUnderTest_Scenario_ExpectedResult' pattern precisely",
+		"Excellent use of [Theory] and [InlineData] for parameterized testing",
+		"Proper AAA pattern with clear separation using comments",
+		"Consistent formatting and structure across all test cases",
+		"Descriptive input/output variable names",
+		"No unnecessary comments or code duplication",
+		"Each test method focuses on a single extension method",
+		"Good coverage of edge cases and boundary conditions in test data",
+		"Proper handling of null inputs in test scenarios"
+	]
+}

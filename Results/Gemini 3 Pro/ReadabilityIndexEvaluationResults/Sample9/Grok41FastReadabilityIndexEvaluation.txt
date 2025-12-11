@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765318258-dKBsMCZ4B5WFcuMjZbw0
+
+Content:
+```json
+{
+	"readabilityIndex": 72,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names mostly follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistent use of AAA pattern with clear // Arrange, // Act, // Assert comments and separation.",
+		"Appropriate use of [Fact] and [Theory] with [InlineData] to avoid duplication in invalid cases.",
+		"Excessive explanatory comments beyond AAA markers, violating ideal of minimal comments.",
+		"Code duplication in similar tests for string and HtmlSafe versions (e.g., zero paragraphs).",
+		"Complex, manual character counting in assertions reduces readability and maintainability.",
+		"Abbreviated variable names (e.g., minW, maxW) in some tests.",
+		"Occasional combined // Act & Assert blocks deviate slightly from strict AAA."
+	]
+}
+```

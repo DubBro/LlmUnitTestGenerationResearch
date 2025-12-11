@@ -1,0 +1,99 @@
+using AutoMapper;
+using Dataset.Sample4;
+using NSubstitute;
+
+namespace Glm45AirUnitTests;
+
+public class CompanyServiceTests
+{
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IMapper _mapper;
+    private readonly CompanyService _companyService;
+
+    public CompanyServiceTests()
+    {
+        _companyRepository = Substitute.For<ICompanyRepository>();
+        _mapper = Substitute.For<IMapper>();
+        _companyService = new CompanyService(_companyRepository, _mapper);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryReturnsEntity_ReturnsMappedModel()
+    {
+        // Arrange
+        int id = 1;
+        var entity = new CompanyEntity { Id = id, Name = "Test Company", Description = "Test Description" };
+        var model = new CompanyModel { Id = id, Name = "Test Company", Description = "Test Description" };
+
+        _companyRepository.GetAsync(id).Returns(entity);
+        _mapper.Map<CompanyModel>(entity).Returns(model);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.Equal(model, result);
+        await _companyRepository.Received().GetAsync(id);
+        _mapper.Received().Map<CompanyModel>(entity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WithDefaultId_UsesDefaultId()
+    {
+        // Arrange
+        var entity = new CompanyEntity { Id = 1, Name = "Default Company", Description = "Default Description" };
+        var model = new CompanyModel { Id = 1, Name = "Default Company", Description = "Default Description" };
+
+        _companyRepository.GetAsync(Arg.Any<int>()).Returns(entity);
+        _mapper.Map<CompanyModel>(entity).Returns(model);
+
+        // Act
+        var result = await _companyService.GetAsync();
+
+        // Assert
+        Assert.Equal(model, result);
+        await _companyRepository.Received().GetAsync(1);
+        _mapper.Received().Map<CompanyModel>(entity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        int id = 2;
+        _companyRepository.GetAsync(id).Returns((CompanyEntity?)null);
+        _mapper.Map<CompanyModel>(Arg.Any<CompanyEntity>()).Returns((CompanyModel?)null);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.Null(result);
+        await _companyRepository.Received().GetAsync(id);
+        _mapper.DidNotReceive().Map<CompanyModel>(Arg.Any<CompanyEntity>());
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenCalledThroughInterface_ReturnsMappedModel()
+    {
+        // Arrange
+        int id = 1;
+        var entity = new CompanyEntity { Id = id, Name = "Interface Test", Description = "Interface Description" };
+        var model = new CompanyModel { Id = id, Name = "Interface Test", Description = "Interface Description" };
+
+        var repository = Substitute.For<ICompanyRepository>();
+        var mapper = Substitute.For<IMapper>();
+        repository.GetAsync(id).Returns(entity);
+        mapper.Map<CompanyModel>(entity).Returns(model);
+
+        ICompanyService service = new CompanyService(repository, mapper);
+
+        // Act
+        var result = await service.GetAsync(id);
+
+        // Assert
+        Assert.Equal(model, result);
+        await repository.Received().GetAsync(id);
+        mapper.Received().Map<CompanyModel>(entity);
+    }
+}

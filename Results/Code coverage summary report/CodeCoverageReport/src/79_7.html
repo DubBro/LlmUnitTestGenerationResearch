@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample17Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample17;
+
+namespace Gpt5MiniUnitTests
+{
+    public class VectorExtensionsTests
+    {
+        [Fact]
+        public void Copy_WhenCalled_ReturnsNewArrayWithSameElements()
+        {
+            // Arrange
+            var original = new double[] { 1.0, 2.0, 3.0 };
+
+            // Act
+            var copy = original.Copy();
+
+            // Assert
+            Assert.False(ReferenceEquals(original, copy));
+            Assert.Equal(original, copy);
+            original[0] = 99.0;
+            Assert.Equal(1.0, copy[0]);
+        }
+
+        [Fact]
+        public void Copy_EmptyArray_ReturnsEmptyArray()
+        {
+            // Arrange
+            var original = Array.Empty&lt;double&gt;();
+
+            // Act
+            var copy = original.Copy();
+
+            // Assert
+            Assert.False(ReferenceEquals(original, copy));
+            Assert.Empty(copy);
+        }
+
+        [Fact]
+        public void OuterProduct_WhenCalled_ReturnsCorrectMatrix()
+        {
+            // Arrange
+            var lhs = new double[] { 1.0, 2.0 };
+            var rhs = new double[] { 3.0, 4.0, 5.0 };
+
+            // Act
+            var result = lhs.OuterProduct(rhs);
+
+            // Assert
+            Assert.Equal(2, result.GetLength(0));
+            Assert.Equal(3, result.GetLength(1));
+            Assert.Equal(3.0, result[0, 0]);
+            Assert.Equal(4.0, result[0, 1]);
+            Assert.Equal(5.0, result[0, 2]);
+            Assert.Equal(6.0, result[1, 0]);
+            Assert.Equal(8.0, result[1, 1]);
+            Assert.Equal(10.0, result[1, 2]);
+        }
+
+        [Fact]
+        public void OuterProduct_WithEmptyRight_ReturnsZeroWidthMatrix()
+        {
+            // Arrange
+            var lhs = new double[] { 1.0, 2.0 };
+            var rhs = Array.Empty&lt;double&gt;();
+
+            // Act
+            var result = lhs.OuterProduct(rhs);
+
+            // Assert
+            Assert.Equal(2, result.GetLength(0));
+            Assert.Equal(0, result.GetLength(1));
+        }
+
+        [Fact]
+        public void Dot_WhenSameLength_ReturnsCorrectResult()
+        {
+            // Arrange
+            var a = new double[] { 1.0, 2.0, 3.0 };
+            var b = new double[] { 4.0, 5.0, 6.0 };
+
+            // Act
+            var result = a.Dot(b);
+
+            // Assert
+            Assert.Equal(32.0, result);
+        }
+
+        [Fact]
+        public void Dot_DifferentLengths_ThrowsArgumentException()
+        {
+            // Arrange
+            var a = new double[] { 1.0, 2.0 };
+            var b = new double[] { 3.0 };
+
+            // Act &amp; Assert
+            Assert.Throws&lt;ArgumentException&gt;(() =&gt; a.Dot(b));
+        }
+
+        [Fact]
+        public void Dot_EmptyArrays_ReturnsZero()
+        {
+            // Arrange
+            var a = Array.Empty&lt;double&gt;();
+            var b = Array.Empty&lt;double&gt;();
+
+            // Act
+            var result = a.Dot(b);
+
+            // Assert
+            Assert.Equal(0.0, result);
+        }
+
+        [Fact]
+        public void Magnitude_WhenCalled_ReturnsSqrtOfDotProduct()
+        {
+            // Arrange
+            var vector = new double[] { 3.0, 4.0 };
+
+            // Act
+            var result = vector.Magnitude();
+
+            // Assert
+            Assert.Equal(5.0, result);
+        }
+
+        [Fact]
+        public void Magnitude_EmptyArray_ReturnsZero()
+        {
+            // Arrange
+            var vector = Array.Empty&lt;double&gt;();
+
+            // Act
+            var result = vector.Magnitude();
+
+            // Assert
+            Assert.Equal(0.0, result);
+        }
+
+        [Theory]
+        [InlineData(0.0)]
+        [InlineData(1.0)]
+        [InlineData(-2.0)]
+        public void Scale_WhenCalled_ReturnsScaledArray(double factor)
+        {
+            // Arrange
+            var input = new double[] { 1.0, -2.0, 3.0 };
+
+            // Act
+            var result = input.Scale(factor);
+
+            // Assert
+            var expected = new double[] { 1.0 * factor, -2.0 * factor, 3.0 * factor };
+            Assert.Equal(expected, result);
+            Assert.False(ReferenceEquals(input, result));
+        }
+
+        [Fact]
+        public void ToColumnVector_WhenCalled_ReturnsMatrixWithSingleColumn()
+        {
+            // Arrange
+            var source = new double[] { 1.0, 2.0, 3.0 };
+
+            // Act
+            var column = source.ToColumnVector();
+
+            // Assert
+            Assert.Equal(3, column.GetLength(0));
+            Assert.Equal(1, column.GetLength(1));
+            Assert.Equal(1.0, column[0, 0]);
+            Assert.Equal(2.0, column[1, 0]);
+            Assert.Equal(3.0, column[2, 0]);
+        }
+
+        [Fact]
+        public void ToRowVector_WhenMatrixHasSingleColumn_ReturnsArray()
+        {
+            // Arrange
+            var column = new double[3, 1];
+            column[0, 0] = 7.0;
+            column[1, 0] = 8.0;
+            column[2, 0] = 9.0;
+
+            // Act
+            var row = column.ToRowVector();
+
+            // Assert
+            var expected = new double[] { 7.0, 8.0, 9.0 };
+            Assert.Equal(expected, row);
+        }
+
+        [Fact]
+        public void ToRowVector_WhenWidthGreaterThanOne_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var matrix = new double[2, 2];
+
+            // Act &amp; Assert
+            Assert.Throws&lt;InvalidOperationException&gt;(() =&gt; matrix.ToRowVector());
+        }
+
+        [Fact]
+        public void ToDiagonalMatrix_WhenCalled_ReturnsSquareMatrixWithDiagonalSet()
+        {
+            // Arrange
+            var vector = new double[] { 1.0, 2.0, 3.0 };
+
+            // Act
+            var matrix = vector.ToDiagonalMatrix();
+
+            // Assert
+            Assert.Equal(3, matrix.GetLength(0));
+            Assert.Equal(3, matrix.GetLength(1));
+            for (int i = 0; i &lt; 3; i++)
+            {
+                for (int j = 0; j &lt; 3; j++)
+                {
+                    if (i == j)
+                    {
+                        Assert.Equal(vector[i], matrix[i, j]);
+                    }
+                    else
+                    {
+                        Assert.Equal(0.0, matrix[i, j]);
+                    }
+                }
+            }
+        }
+
+        [Fact]
+        public void ToDiagonalMatrix_EmptyArray_ReturnsZeroByZeroMatrix()
+        {
+            // Arrange
+            var vector = Array.Empty&lt;double&gt;();
+
+            // Act
+            var matrix = vector.ToDiagonalMatrix();
+
+            // Assert
+            Assert.Equal(0, matrix.GetLength(0));
+            Assert.Equal(0, matrix.GetLength(1));
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,1],[11,13,11,59,1],[14,13,14,40,1],[17,13,17,59,1],[18,13,18,42,1],[19,13,19,32,1],[20,13,20,40,1],[21,9,21,10,1],[25,9,25,10,1],[27,13,27,50,1],[30,13,30,40,1],[33,13,33,59,1],[34,13,34,32,1],[35,9,35,10,1],[39,9,39,10,1],[41,13,41,49,1],[42,13,42,54,1],[45,13,45,48,1],[48,13,48,50,1],[49,13,49,50,1],[50,13,50,45,1],[51,13,51,45,1],[52,13,52,45,1],[53,13,53,45,1],[54,13,54,45,1],[55,13,55,46,1],[56,9,56,10,1],[60,9,60,10,1],[62,13,62,49,1],[63,13,63,45,1],[66,13,66,48,1],[69,13,69,50,1],[70,13,70,50,1],[71,9,71,10,1],[75,9,75,10,1],[77,13,77,52,1],[78,13,78,52,1],[81,13,81,35,1],[84,13,84,40,1],[85,9,85,10,1],[89,9,89,10,1],[91,13,91,47,1],[92,13,92,42,1],[95,13,95,52,1],[95,52,95,60,1],[95,60,95,62,1],[96,9,96,10,1],[100,9,100,10,1],[102,13,102,43,1],[103,13,103,43,1],[106,13,106,35,1],[109,13,109,39,1],[110,9,110,10,1],[114,9,114,10,1],[116,13,116,52,1],[119,13,119,45,1],[122,13,122,39,1],[123,9,123,10,1],[127,9,127,10,1],[129,13,129,48,1],[132,13,132,45,1],[135,13,135,39,1],[136,9,136,10,1],[143,9,143,10,1],[145,13,145,57,1],[148,13,148,46,1],[151,13,151,87,1],[152,13,152,44,1],[153,13,153,58,1],[154,9,154,10,1],[158,9,158,10,1],[160,13,160,57,1],[163,13,163,50,1],[166,13,166,50,1],[167,13,167,50,1],[168,13,168,45,1],[169,13,169,45,1],[170,13,170,45,1],[171,9,171,10,1],[175,9,175,10,1],[177,13,177,43,1],[178,13,178,32,1],[179,13,179,32,1],[180,13,180,32,1],[183,13,183,44,1],[186,13,186,59,1],[187,13,187,41,1],[188,9,188,10,1],[192,9,192,10,1],[194,13,194,43,1],[197,13,197,60,1],[197,60,197,80,1],[197,80,197,82,1],[198,9,198,10,1],[202,9,202,10,1],[204,13,204,57,1],[207,13,207,52,1],[210,13,210,50,1],[211,13,211,50,1],[212,18,212,27,1],[212,29,212,34,1],[212,36,212,39,1],[213,13,213,14,1],[214,22,214,31,1],[214,33,214,38,1],[214,40,214,43,1],[215,17,215,18,1],[216,21,216,32,1],[217,21,217,22,1],[218,25,218,63,1],[219,21,219,22,1],[221,21,221,22,1],[222,25,222,57,1],[223,21,223,22,1],[224,17,224,18,1],[225,13,225,14,1],[226,9,226,10,1],[230,9,230,10,1],[232,13,232,48,1],[235,13,235,52,1],[238,13,238,50,1],[239,13,239,50,1],[240,9,240,10,1]]);
+    </script>
+  </body>
+</html>

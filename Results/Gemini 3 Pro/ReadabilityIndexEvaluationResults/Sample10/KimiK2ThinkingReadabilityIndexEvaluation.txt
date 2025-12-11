@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765318387-VFRnZCXXTWQ7AyoKUa9V
+
+Content:
+ {
+	"readabilityIndex": 90,
+	"reasons": [
+		"Excellent adherence to MethodUnderTest_Scenario_ExpectedResult naming convention",
+		"Proper AAA pattern implementation with clear block separation and comments",
+		"Appropriate use of [Theory] and [InlineData] for testing multiple input variations",
+		"Well-organized constructor with clear substitute initialization",
+		"Some test names use generic scenario descriptions like 'ValidScenario'",
+		"Hardcoded exception message strings couple tests to implementation details",
+		"Regions improve navigation but reduce immediate visibility of all test code"
+	]
+}

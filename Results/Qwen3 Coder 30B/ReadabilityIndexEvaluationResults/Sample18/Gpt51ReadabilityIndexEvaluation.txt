@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765327937-2lkfK4Mvz4w2IjxszD6t
+
+Content:
+{
+  "readabilityIndex": 94,
+  "reasons": [
+    "Test class name `CaesarEncoderTests` clearly follows the `ClassUnderTestTests` pattern and reflects its purpose.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern and are very descriptive.",
+    "AAA pattern is explicitly followed in every test, with `// Arrange`, `// Act`, `// Assert` comments and clear separation.",
+    "Good and appropriate use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for multiple input variations, reducing duplication and improving clarity.",
+    "Code formatting is clean and consistent: proper spacing, brace placement, and minimal noise, making each test easy to scan.",
+    "No unnecessary comments or nested classes; each test is self-contained and focused on a single scenario.",
+    "Parameter names in theories (`input`, `key`, `expected`) are clear and make each inline data row easy to understand.",
+    "Some Encode/Decode scenarios are duplicated in separate tests and could be DRYed up or grouped more logically, but this does not significantly hurt readability."
+  ]
+}

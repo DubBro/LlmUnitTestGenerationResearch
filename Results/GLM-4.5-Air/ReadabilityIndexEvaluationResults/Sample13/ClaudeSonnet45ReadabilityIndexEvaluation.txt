@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765322033-fepJMBRJo2xOL6u4U0k8
+
+Content:
+```json
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the recommended pattern 'ClassUnderTestTests'",
+		"All test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is clearly followed in all tests with proper comment markers and blank line separation",
+		"Excellent use of [Theory] with [InlineData] to avoid code duplication for similar test scenarios",
+		"Variable naming is clear and meaningful (node, expected, actual, input)",
+		"No unnecessary comments beyond AAA markers, keeping tests focused and clean",
+		"Consistent formatting and structure across all test methods enhances maintainability",
+		"Proper use of mocking framework (NSubstitute) with clear setup of test doubles",
+		"Tests are well-organized, progressing logically from simple cases to edge cases and parameterized scenarios",
+		"Code adheres to C# and .NET naming conventions throughout"
+	]
+}
+```

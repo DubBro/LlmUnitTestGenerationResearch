@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765327771-7Jbx2j6Xac92XkX6K0mT
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test names follow clear MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Tests consistently use AAA pattern with explicit Arrange, Act, Assert comments",
+		"Method names and variable names are meaningful and descriptive",
+		"Each test focuses on a single scenario with clear assertions",
+		"Good separation between test cases with proper spacing",
+		"Uses appropriate xUnit attributes ([Fact] for single scenarios)",
+		"Consistent formatting and adherence to C# naming conventions",
+		"Exception testing follows proper pattern with both type and message verification",
+		"Tests use appropriate assertion methods for different verification scenarios",
+		"Minor deduction: Could benefit from using [Theory] with [InlineData] for some similar scenarios to reduce duplication"
+	]
+}

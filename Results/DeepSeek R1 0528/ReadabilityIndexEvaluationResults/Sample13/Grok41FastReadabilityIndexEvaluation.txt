@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316790-3TSfzJEyPeVS3kLYGPpM
+
+Content:
+{"readabilityIndex":95,"reasons":["Test class name follows `ClassUnderTestTests` pattern.","Test method names precisely follow `MethodUnderTest_Scenario_ExpectedResult` pattern.","Appropriate use of `[Theory]` with `[InlineData]` avoids code duplication for multiple scenarios.","Strict adherence to AAA pattern with `// Arrange`, `// Act`, `// Assert` comments and clear separation.","No unnecessary comments, nested classes, or extraneous code.","Clear, meaningful variable and parameter names.","Standard C# naming conventions followed.","Exception test logically combines Act & Assert using `Assert.Throws`, which is idiomatic and readable.","Well-formatted and concise code structure enhances maintainability.","Minor verbosity in some test names, but remains highly descriptive."]}

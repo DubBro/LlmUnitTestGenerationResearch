@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323620-lyX67b2eWGciMFlJM3aJ
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Test class name follows the `ClassUnderTestTests` pattern (AuctionServiceTests).",
+		"Test method names follow the `MethodUnderTest_Scenario_ExpectedResult` pattern, clearly indicating scenario and expected outcome.",
+		"AAA pattern is consistently applied with clear sections (Arrange, Act, Assert).",
+		"Proper use of `[Theory]` with `[InlineData]` for parameterized tests to avoid duplication.",
+		"Clear and meaningful variable names (e.g., auction, sut, repo, mapper).",
+		"Helper method `CreateSut()` centralizes test setup, improving maintainability.",
+		"Tests are logically grouped by method under test, enhancing structural clarity.",
+		"Good separation of concerns between test methods, each focusing on a single scenario.",
+		"Minimal and focused use of comments (only AAA separators).",
+		"Consistent formatting and spacing throughout the test suite."
+	]
+}

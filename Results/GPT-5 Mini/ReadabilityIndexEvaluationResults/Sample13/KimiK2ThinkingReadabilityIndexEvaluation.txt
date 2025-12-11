@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323945-MTtry1C6KkhRamZHyBcE
+
+Content:
+ {"readabilityIndex":90,"reasons":["Test class name follows ClassUnderTestTests pattern","Test method names are descriptive and follow MethodUnderTest_Scenario_ExpectedResult pattern","Consistent AAA pattern with clear block separation comments","Effective use of [Theory] with [InlineData] to avoid duplication for similar scenarios","No unnecessary comments beyond standard AAA markers","Clear and meaningful variable naming (node, result)","Self-contained tests with explicit setup make each test easy to understand","Proper use of idiomatic exception testing pattern with combined Act & Assert block","Follows standard C# naming conventions throughout","Minor repetition in Arrange sections is acceptable for test isolation and clarity"]}

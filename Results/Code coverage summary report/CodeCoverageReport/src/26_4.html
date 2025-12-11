@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample11Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample11;
+
+namespace Gemini3ProUnitTests
+{
+    public class MatrixChainMultiplicationTests
+    {
+        [Theory]
+        [InlineData(new int[] { 10, 30, 5, 60 }, 4, 4500)]
+        [InlineData(new int[] { 40, 20, 30, 10, 30 }, 5, 26000)]
+        [InlineData(new int[] { 10, 20, 30 }, 3, 6000)]
+        public void MatrixChainOrder_WhenCalledWithValidDimensions_ReturnsMinimumMultiplications(int[] p, int n, int expectedCost)
+        {
+            // Arrange
+            // Inputs provided by InlineData
+
+            // Act
+            int result = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Assert
+            Assert.Equal(expectedCost, result);
+            Assert.NotNull(s);
+            Assert.Equal(n, s.GetLength(0));
+            Assert.Equal(n, s.GetLength(1));
+        }
+
+        [Fact]
+        public void MatrixChainOrder_WhenCalledWithSingleMatrix_ReturnsZeroCost()
+        {
+            // Arrange
+            // Represents one matrix of dimension 10x20. No multiplication needed.
+            int[] p = { 10, 20 };
+            int n = 2;
+
+            // Act
+            int result = MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Assert
+            Assert.Equal(0, result);
+            Assert.NotNull(s);
+        }
+
+        [Fact]
+        public void MatrixChainOrder_WhenCalled_PopulatesSplitMatrixCorrectly()
+        {
+            // Arrange
+            // A1(10x30), A2(30x5), A3(5x60)
+            // Optimal solution is ((A1A2)A3) with cost 4500.
+            // The split for the range (1 to 3) should be after A2 (k=2).
+            int[] p = { 10, 30, 5, 60 };
+            int n = 4;
+
+            // Act
+            MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Assert
+            // s[1,3] represents the split point for matrices A1 through A3
+            Assert.Equal(2, s[1, 3]);
+        }
+
+        [Fact]
+        public void GetOptimalParentheses_WhenStartAndEndIndicesAreEqual_ReturnsMatrixIdentifier()
+        {
+            // Arrange
+            int[,] s = new int[5, 5]; // The &#39;s&#39; matrix content is irrelevant for the base case i == j
+            int i = 3;
+            int j = 3;
+
+            // Act
+            string result = MatrixChainMultiplication.GetOptimalParentheses(s, i, j);
+
+            // Assert
+            Assert.Equal(&quot;A3&quot;, result);
+        }
+
+        [Fact]
+        public void GetOptimalParentheses_WithComputedMatrix_ReturnsCorrectParenthesisString()
+        {
+            // Arrange
+            // Dimensions for 3 matrices: A1(10x20), A2(20x30), A3(30x40)
+            // (A1A2)A3 cost: 6000 + 12000 = 18000 (Optimal)
+            // A1(A2A3) cost: 24000 + 8000 = 32000
+            int[] p = { 10, 20, 30, 40 };
+            int n = 4;
+
+            // Compute &#39;s&#39; matrix first to ensure integration between the two methods
+            MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Act
+            // Range is 1 to n-1 (A1 to A3)
+            string result = MatrixChainMultiplication.GetOptimalParentheses(s, 1, n - 1);
+
+            // Assert
+            Assert.Equal(&quot;((A1A2)A3)&quot;, result);
+        }
+
+        [Fact]
+        public void GetOptimalParentheses_WithComplexChain_ReturnsCorrectParenthesisString()
+        {
+            // Arrange
+            // Using the standard CLRS example
+            int[] p = { 30, 35, 15, 5, 10, 20, 25 };
+            int n = 7; // 6 matrices
+            MatrixChainMultiplication.MatrixChainOrder(p, n, out int[,] s);
+
+            // Act
+            string result = MatrixChainMultiplication.GetOptimalParentheses(s, 1, n - 1);
+
+            // Assert
+            Assert.Equal(&quot;((A1(A2A3))((A4A5)A6))&quot;, result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,10,1],[17,13,17,89,1],[20,13,20,48,1],[21,13,21,31,1],[22,13,22,45,1],[23,13,23,45,1],[24,9,24,10,1],[28,9,28,10,1],[31,13,31,34,1],[32,13,32,23,1],[35,13,35,89,1],[38,13,38,37,1],[39,13,39,31,1],[40,9,40,10,1],[44,9,44,10,1],[49,13,49,41,1],[50,13,50,23,1],[53,13,53,76,1],[57,13,57,38,1],[58,9,58,10,1],[62,9,62,10,1],[64,13,64,38,1],[65,13,65,23,1],[66,13,66,23,1],[69,13,69,86,1],[72,13,72,40,1],[73,9,73,10,1],[77,9,77,10,1],[82,13,82,42,1],[83,13,83,23,1],[86,13,86,76,1],[90,13,90,90,1],[93,13,93,48,1],[94,9,94,10,1],[98,9,98,10,1],[101,13,101,53,1],[102,13,102,23,1],[103,13,103,76,1],[106,13,106,90,1],[109,13,109,60,1],[110,9,110,10,1]]);
+    </script>
+  </body>
+</html>

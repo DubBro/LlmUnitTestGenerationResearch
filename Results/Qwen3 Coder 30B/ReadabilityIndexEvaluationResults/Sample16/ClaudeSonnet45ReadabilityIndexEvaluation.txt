@@ -1,0 +1,20 @@
+GenerationId:
+gen-1765327737-d0rlwKlGDrIzGN4YSF01
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class naming follows the recommended pattern 'ClassUnderTestTests'",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"All tests follow the AAA pattern with proper comment separators and blank lines",
+		"Good use of [Theory] with [InlineData] to avoid code duplication for testing multiple input variations",
+		"Variable naming is clear and meaningful throughout the tests",
+		"Standard C# and .NET naming conventions are consistently applied",
+		"Some redundancy exists with separate [Fact] tests that could be consolidated into [Theory] tests (e.g., null and empty string cases, ASCII-only cases)",
+		"The test 'RemoveNonAsciiChars_InputContainsOnlyNonAsciiChars_ReplacesAllWithSpecifiedChar' has a misleading name mentioning 'Replaces' instead of 'Removes' for the RemoveNonAsciiChars method",
+		"Minor inconsistency: one [Theory] test omits the Arrange section while all [Fact] tests include it, which slightly affects uniformity"
+	]
+}
+```

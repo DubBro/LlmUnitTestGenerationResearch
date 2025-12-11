@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765318682-HSnO2FwkIk1IMJleR9gb
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the correct pattern 'ClassUnderTestTests'",
+		"All test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is properly implemented with clear comments and blank line separation in all tests",
+		"Appropriate use of [Theory] with [InlineData] to avoid code duplication for testing multiple NodeType values",
+		"Variable names are clear and meaningful (expectedResult, rawString, node, result)",
+		"Good use of inline comments to explain business logic in edge cases without cluttering the code",
+		"Consistent formatting and indentation throughout all test methods",
+		"Proper use of NSubstitute mocking framework with clear setup",
+		"All async scenarios would use 'async Task' pattern (none present, but structure supports it)",
+		"Very minor: some inline logic comments could be removed as test names are already descriptive, but they add clarity for complex edge cases"
+	]
+}
+```

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765328070-XNL2xNxPTXYJTILt6yii
+
+Content:
+ {
+	"readabilityIndex": 90,
+	"reasons": [
+		"Test names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"All tests properly implement AAA pattern with clear comments and spacing",
+		"Appropriate use of [Theory] with [InlineData] for multi-input scenarios",
+		"Test class name follows standard ClassUnderTestTests convention",
+		"Clean, consistent formatting with no unnecessary code",
+		"Variable names are concise and meaningful within test context",
+		"No nested classes or complex structures",
+		"Each test is independent and self-documenting",
+		"Follows standard C# and .NET naming conventions",
+		"High degree of consistency across all tests"
+	]
+}

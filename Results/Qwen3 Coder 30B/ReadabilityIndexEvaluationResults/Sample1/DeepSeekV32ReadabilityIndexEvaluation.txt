@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765324892-pqIy3ngBhZ7dAbkUEqVH
+
+Content:
+{
+    "readabilityIndex": 85,
+    "reasons": [
+        "Test class follows naming pattern ClassUnderTestTests (DepartmentServiceTests)",
+        "Test methods follow MethodUnderTest_Scenario_ExpectedResult pattern (GetAsync_ValidId_ReturnsDepartmentModel, ListAsync_Called_ReturnsCollectionOfDepartmentModels)",
+        "Clear AAA pattern with explicit comments separating Arrange, Act, Assert blocks",
+        "Proper async Task signatures for asynchronous tests",
+        "Good use of descriptive variable names (repository, entity, service, result)",
+        "Tests are focused and test one scenario each",
+        "Consistent formatting and indentation throughout",
+        "No unnecessary nested classes or complex structures",
+        "Assertions are clear and directly verify expected results",
+        "Test setup is straightforward and easy to understand"
+    ]
+}

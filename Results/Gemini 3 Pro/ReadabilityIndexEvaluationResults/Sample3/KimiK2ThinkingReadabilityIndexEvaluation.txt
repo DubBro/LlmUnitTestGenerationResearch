@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765317763-8tlMsmzTQiyJp6Dy0xEd
+
+Content:
+ {"readabilityIndex":88,"reasons":["Test class name follows the ClassUnderTestTests convention","All test names consistently use MethodUnderTest_Scenario_ExpectedResult pattern","AAA pattern is properly structured with comments and spacing in every test","Asynchronous tests correctly use async Task return type","Appropriate use of [Fact] and [Theory] attributes to avoid code duplication","Variables and fields have clear, meaningful names reflecting their purpose","Common setup is centralized in constructor, reducing redundancy","Test methods are focused on single scenarios with clear intent","Inline comments on test data violate the 'no comments' guideline in one test","Complex Arg.Is predicate expressions in assertions reduce immediate clarity"]}

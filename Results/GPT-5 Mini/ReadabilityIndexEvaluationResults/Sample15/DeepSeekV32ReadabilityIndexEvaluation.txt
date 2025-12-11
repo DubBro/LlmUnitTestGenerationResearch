@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324029-ClJc1aduNgPvILjy5z7K
+
+Content:
+{"readabilityIndex": 85, "reasons": ["Test class name follows the pattern 'ClassUnderTestTests'.", "Test methods use the recommended naming pattern 'MethodUnderTest_Scenario_ExpectedResult'.", "All tests follow the AAA pattern with clear Arrange-Act-Assert sections separated by comments and empty lines.", "Uses [Fact] for single scenarios and [Theory] with [InlineData] for parameterized tests effectively.", "Code is well-formatted and adheres to standard C# naming conventions.", "No unnecessary nested classes or extraneous comments.", "Tests are logically grouped and easy to follow.", "One minor inconsistency: the last test uses 'Base64Helpers.Decode' instead of the extension method 'invalidBase64.Decode()', which could confuse readers about which method is being tested.", "Test names clearly indicate the scenario and expected outcome.", "No code duplication; repeated logic for encoding/decoding is encapsulated in helper methods via extension methods."]}

@@ -1,0 +1,179 @@
+GenerationId:
+gen-1765204237-6m3V1BkbcR6WEQjY0KHE
+
+Content:
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using NSubstitute;
+using Xunit;
+
+namespace Dataset.Sample7.UnitTests;
+
+public class WalkServiceTests
+{
+    private readonly IWalkRepository _walkRepository;
+    private readonly WalkService _walkService;
+
+    public WalkServiceTests()
+    {
+        _walkRepository = Substitute.For<IWalkRepository>();
+        _walkService = new WalkService(_walkRepository);
+    }
+
+    public class Get10LongestWalksAsync : WalkServiceTests
+    {
+        [Fact]
+        public async Task GivenValidImei_WhenCalled_ReturnsWalkDtos()
+        {
+            // Arrange
+            var validImei = "123456789012345";
+            var walkEntities = new List<WalkEntity>
+            {
+                new WalkEntity { Distance = 10.5m, Duration = 30.2m },
+                new WalkEntity { Distance = 5.0m, Duration = 15.0m }
+            };
+            _walkRepository.Get10LongestWalksAsync(validImei).Returns(walkEntities);
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count());
+            Assert.Equal(1, result.First().Number);
+            Assert.Equal(10.5m, result.First().Distance);
+            Assert.Equal(30.2m, result.First().Duration);
+            Assert.Equal(2, result.Last().Number);
+            Assert.Equal(5.0m, result.Last().Distance);
+            Assert.Equal(15.0m, result.Last().Duration);
+        }
+
+        [Fact]
+        public async Task GivenEmptyImei_WhenCalled_ThrowsBusinessException()
+        {
+            // Arrange
+            var invalidImei = "";
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<BusinessException>(() => _walkService.Get10LongestWalksAsync(invalidImei));
+            Assert.Equal("Invalid IMEI .", exception.Message);
+        }
+
+        [Fact]
+        public async Task GivenImeiWithIncorrectLength_WhenCalled_ThrowsBusinessException()
+        {
+            // Arrange
+            var invalidImei = "123";
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<BusinessException>(() => _walkService.Get10LongestWalksAsync(invalidImei));
+            Assert.Equal("Invalid IMEI 123.", exception.Message);
+        }
+
+        [Fact]
+        public async Task GivenImeiWithNonNumericCharacters_WhenCalled_ThrowsBusinessException()
+        {
+            // Arrange
+            var invalidImei = "12345678901234a";
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<BusinessException>(() => _walkService.Get10LongestWalksAsync(invalidImei));
+            Assert.Equal("Invalid IMEI 12345678901234a.", exception.Message);
+        }
+
+        [Fact]
+        public async Task GivenRepositoryReturnsEmptyList_WhenCalled_ReturnsEmptyList()
+        {
+            // Arrange
+            var validImei = "123456789012345";
+            _walkRepository.Get10LongestWalksAsync(validImei).Returns(Enumerable.Empty<WalkEntity>());
+
+            // Act
+            var result = await _walkService.Get10LongestWalksAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+    }
+
+    public class GetWalksGeneralInfoAsync : WalkServiceTests
+    {
+        [Fact]
+        public async Task GivenValidImei_WhenCalled_ReturnsWalksGeneralInfoDto()
+        {
+            // Arrange
+            var validImei = "123456789012345";
+            var entity = new WalksGeneralInfoEntity
+            {
+                TotalCount = 5,
+                TotalDistance = 100.5m,
+                TotalDuration = 200.2m
+            };
+            _walkRepository.GetWalksGeneralInfoAsync(validImei).Returns(entity);
+
+            // Act
+            var result = await _walkService.GetWalksGeneralInfoAsync(validImei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(5, result.TotalCount);
+            Assert.Equal(100.5m, result.TotalDistance);
+            Assert.Equal(200.2m, result.TotalDuration);
+        }
+
+        [Fact]
+        public async Task GivenEmptyImei_WhenCalled_ThrowsBusinessException()
+        {
+            // Arrange
+            var invalidImei = "";
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<BusinessException>(() => _walkService.GetWalksGeneralInfoAsync(invalidImei));
+            Assert.Equal("Invalid IMEI .", exception.Message);
+        }
+
+        [Fact]
+        public async Task GivenImeiWithIncorrectLength_WhenCalled_ThrowsBusinessException()
+        {
+            // Arrange
+            var invalidImei = "123";
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<BusinessException>(() => _walkService.GetWalksGeneralInfoAsync(invalidImei));
+            Assert.Equal("Invalid IMEI 123.", exception.Message);
+        }
+
+        [Fact]
+        public async Task GivenImeiWithNonNumericCharacters_WhenCalled_ThrowsBusinessException()
+        {
+            // Arrange
+            var invalidImei = "12345678901234a";
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<BusinessException>(() => _walkService.GetWalksGeneralInfoAsync(invalidImei));
+            Assert.Equal("Invalid IMEI 12345678901234a.", exception.Message);
+        }
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+10867,6055
+
+OpenRouterElapsedTimeMilliseconds:
+10603
+
+PromptTokens:
+1534
+
+CompletionTokens:
+1190
+
+TotalTokens:
+2724
+
+TotalCost:
+0,000871288

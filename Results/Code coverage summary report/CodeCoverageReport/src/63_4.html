@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample4Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using AutoMapper;
+using Dataset.Sample4;
+using NSubstitute;
+
+namespace Gemini3ProUnitTests;
+
+public class CompanyServiceTests
+{
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IMapper _mapper;
+    private readonly CompanyService _companyService;
+
+    public CompanyServiceTests()
+    {
+        _companyRepository = Substitute.For&lt;ICompanyRepository&gt;();
+        _mapper = Substitute.For&lt;IMapper&gt;();
+        _companyService = new CompanyService(_companyRepository, _mapper);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(100)]
+    public async Task GetAsync_WhenCalledWithSpecificId_ReturnsMappedModel(int id)
+    {
+        // Arrange
+        var entity = new CompanyEntity { Id = id, Name = &quot;Test Company&quot;, Description = &quot;Test Description&quot; };
+        var expectedModel = new CompanyModel { Id = id, Name = &quot;Test Company&quot;, Description = &quot;Test Description&quot; };
+
+        _companyRepository.GetAsync(id).Returns(entity);
+        _mapper.Map&lt;CompanyModel&gt;(entity).Returns(expectedModel);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedModel, result);
+        await _companyRepository.Received(1).GetAsync(id);
+        _mapper.Received(1).Map&lt;CompanyModel&gt;(entity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenCalledWithoutArguments_UsesDefaultIdAndReturnsModel()
+    {
+        // Arrange
+        const int defaultId = 1;
+        var entity = new CompanyEntity { Id = defaultId, Name = &quot;Default Corp&quot; };
+        var expectedModel = new CompanyModel { Id = defaultId, Name = &quot;Default Corp&quot; };
+
+        _companyRepository.GetAsync(defaultId).Returns(entity);
+        _mapper.Map&lt;CompanyModel&gt;(entity).Returns(expectedModel);
+
+        // Act
+        var result = await _companyService.GetAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedModel, result);
+        await _companyRepository.Received(1).GetAsync(defaultId);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        var id = 5;
+        CompanyEntity? nullEntity = null;
+        CompanyModel? nullModel = null;
+
+        _companyRepository.GetAsync(id).Returns(nullEntity);
+        _mapper.Map&lt;CompanyModel&gt;(nullEntity).Returns(nullModel);
+
+        // Act
+        var result = await _companyService.GetAsync(id);
+
+        // Assert
+        Assert.Null(result);
+        await _companyRepository.Received(1).GetAsync(id);
+        _mapper.Received(1).Map&lt;CompanyModel&gt;(nullEntity);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenRepositoryThrowsException_ThrowsSameException()
+    {
+        // Arrange
+        var id = 10;
+        var expectedException = new InvalidOperationException(&quot;Database connection error&quot;);
+
+        _companyRepository.GetAsync(id).Returns(Task.FromException&lt;CompanyEntity&gt;(expectedException));
+
+        // Act
+        var act = () =&gt; _companyService.GetAsync(id);
+
+        // Assert
+        var exception = await Assert.ThrowsAsync&lt;InvalidOperationException&gt;(act);
+        Assert.Equal(expectedException.Message, exception.Message);
+        await _companyRepository.Received(1).GetAsync(id);
+        _mapper.DidNotReceiveWithAnyArgs().Map&lt;CompanyModel&gt;(default);
+    }
+
+    [Fact]
+    public async Task GetAsync_WhenMapperThrowsException_ThrowsSameException()
+    {
+        // Arrange
+        var id = 20;
+        var entity = new CompanyEntity { Id = id };
+        var expectedException = new AutoMapperMappingException(&quot;Mapping configuration missing&quot;);
+
+        _companyRepository.GetAsync(id).Returns(entity);
+        _mapper.Map&lt;CompanyModel&gt;(entity).Returns(_ =&gt; throw expectedException);
+
+        // Act
+        var act = () =&gt; _companyService.GetAsync(id);
+
+        // Assert
+        var exception = await Assert.ThrowsAsync&lt;AutoMapperMappingException&gt;(act);
+        Assert.Equal(expectedException.Message, exception.Message);
+        await _companyRepository.Received(1).GetAsync(id);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,5,13,33,1],[14,5,14,6,1],[15,9,15,67,1],[16,9,16,45,1],[17,9,17,75,1],[18,5,18,6,1],[24,5,24,6,1],[26,9,26,109,1],[27,9,27,115,1],[29,9,29,57,1],[30,9,30,66,1],[33,9,33,57,1],[36,9,36,32,1],[37,9,37,45,1],[38,9,38,59,1],[39,9,39,55,1],[40,5,40,6,1],[44,5,44,6,1],[47,9,47,82,1],[48,9,48,88,1],[50,9,50,64,1],[51,9,51,66,1],[54,9,54,55,1],[57,9,57,32,1],[58,9,58,45,1],[59,9,59,66,1],[60,5,60,6,1],[64,5,64,6,1],[66,9,66,20,1],[67,9,67,42,1],[68,9,68,40,1],[70,9,70,61,1],[71,9,71,66,1],[74,9,74,57,1],[77,9,77,29,1],[78,9,78,59,1],[79,9,79,59,1],[80,5,80,6,1],[84,5,84,6,1],[86,9,86,21,1],[87,9,87,92,1],[89,9,89,103,1],[92,9,92,25,1],[92,25,92,53,1],[92,53,92,54,1],[95,9,95,82,1],[96,9,96,68,1],[97,9,97,59,1],[98,9,98,71,1],[99,5,99,6,1],[103,5,103,6,1],[105,9,105,21,1],[106,9,106,52,1],[107,9,107,97,1],[109,9,109,57,1],[110,9,110,56,1],[110,56,110,79,1],[110,79,110,81,1],[113,9,113,25,1],[113,25,113,53,1],[113,53,113,54,1],[116,9,116,83,1],[117,9,117,68,1],[118,9,118,59,1],[119,5,119,6,1]]);
+    </script>
+  </body>
+</html>

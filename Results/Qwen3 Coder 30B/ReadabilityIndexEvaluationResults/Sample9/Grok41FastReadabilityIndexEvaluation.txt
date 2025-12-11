@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765326627-skAcoGzI8Qr0RVlzIpyV
+
+Content:
+{
+	"readabilityIndex": 85,
+	"reasons": [
+		"Excellent class and method naming following recommended patterns.",
+		"Consistent AAA structure with clear // Arrange, // Act, // Assert comments.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] to avoid duplication.",
+		"No unnecessary comments or nested classes.",
+		"Minor issue: unused 'expectedParagraphCount' variable in two [Theory] tests.",
+		"Sloppy, redundant code in 'GenerateLoremIpsumHtmlSafe_ValidInputs_ReturnsHtmlStringWithCorrectParagraphCount': unused tag counts and duplicate ReadToEnd calls.",
+		"Combined // Act & Assert in exception tests is readable and conventional.",
+		"Adheres to C# naming conventions."
+	]
+}

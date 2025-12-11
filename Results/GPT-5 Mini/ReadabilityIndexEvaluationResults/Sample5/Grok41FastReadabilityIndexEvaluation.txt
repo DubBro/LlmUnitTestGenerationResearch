@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765323192-rzsSm9zk3wFZw9ehBRS2
+
+Content:
+{
+	"readabilityIndex": 95,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names precisely follow MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistent AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"Proper use of async Task for asynchronous tests.",
+		"Excellent use of [Fact] and [Theory] with [InlineData] to avoid duplication.",
+		"Meaningful, descriptive variable and object names throughout.",
+		"Clean mock setups with NSubstitute, easy to follow.",
+		"No unnecessary comments, nested classes, or deviations from conventions.",
+		"Well-formatted code with consistent indentation and spacing.",
+		"Assertions are clear and logically grouped despite some verbosity in Contains checks."
+	]
+}

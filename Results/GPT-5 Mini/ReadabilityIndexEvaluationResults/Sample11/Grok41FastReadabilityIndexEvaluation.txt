@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323759-rrIlO0DUxXEJ7sqHxlFK
+
+Content:
+{"readabilityIndex":92,"reasons":["Excellent adherence to AAA pattern with clear // Arrange, // Act, // Assert separators and logical block separation.","Test method names precisely follow MethodUnderTest_Scenario_ExpectedResult pattern, highly descriptive.","Class name follows ClassUnderTestTests convention.","Clear, meaningful variable names (e.g., p, n, s, parentheses).","Strict use of [Fact]; no unnecessary [Theory].","Pragmatic handling of exception tests with Assert.Throws, though combines Act & Assert.","Minor deviation: extra explanatory comments beyond AAA separators (e.g., in Arrange and Assert sections).","No nested classes, good overall structure and formatting for maintainability."]}

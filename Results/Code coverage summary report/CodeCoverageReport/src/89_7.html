@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gpt5MiniUnitTests\Sample7Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample7;
+using NSubstitute;
+
+namespace Gpt5MiniUnitTests
+{
+    public class WalkServiceTests
+    {
+        [Fact]
+        public async Task Get10LongestWalksAsync_ValidImei_ReturnsMappedWalksWithSequentialNumbers()
+        {
+            // Arrange
+            var imei = &quot;123456789012345&quot;;
+            var walkEntities = new List&lt;WalkEntity&gt;
+            {
+                new WalkEntity { Distance = 10.5m, Duration = 5.5m },
+                new WalkEntity { Distance = 8.0m, Duration = 4.0m },
+                new WalkEntity { Distance = 3.25m, Duration = 1.75m },
+            };
+
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            repo.Get10LongestWalksAsync(imei).Returns(Task.FromResult&lt;IEnumerable&lt;WalkEntity&gt;&gt;(walkEntities));
+
+            var service = new WalkService(repo);
+
+            // Act
+            var result = await service.Get10LongestWalksAsync(imei);
+
+            // Assert
+            var list = Assert.IsType&lt;List&lt;WalkDTO&gt;&gt;(new List&lt;WalkDTO&gt;(result));
+            Assert.Equal(3, list.Count);
+            Assert.Equal(1, list[0].Number);
+            Assert.Equal(10.5m, list[0].Distance);
+            Assert.Equal(5.5m, list[0].Duration);
+
+            Assert.Equal(2, list[1].Number);
+            Assert.Equal(8.0m, list[1].Distance);
+            Assert.Equal(4.0m, list[1].Duration);
+
+            Assert.Equal(3, list[2].Number);
+            Assert.Equal(3.25m, list[2].Distance);
+            Assert.Equal(1.75m, list[2].Duration);
+
+            repo.Received(1).Get10LongestWalksAsync(imei);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_EmptyResult_ReturnsEmptyList()
+        {
+            // Arrange
+            var imei = &quot;123456789012345&quot;;
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            repo.Get10LongestWalksAsync(imei).Returns(Task.FromResult&lt;IEnumerable&lt;WalkEntity&gt;&gt;(new List&lt;WalkEntity&gt;()));
+            var service = new WalkService(repo);
+
+            // Act
+            var result = await service.Get10LongestWalksAsync(imei);
+
+            // Assert
+            var list = Assert.IsType&lt;List&lt;WalkDTO&gt;&gt;(new List&lt;WalkDTO&gt;(result));
+            Assert.Empty(list);
+            repo.Received(1).Get10LongestWalksAsync(imei);
+        }
+
+        [Theory]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;123&quot;)]
+        [InlineData(&quot;abcdefghijklmno&quot;)]
+        [InlineData(&quot;12345678901234&quot;)] // 14 digits
+        [InlineData(&quot;1234567890123456&quot;)] // 16 digits
+        public async Task Get10LongestWalksAsync_InvalidImei_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            var service = new WalkService(repo);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;BusinessException&gt;(() =&gt; service.Get10LongestWalksAsync(invalidImei));
+            await repo.DidNotReceiveWithAnyArgs().Get10LongestWalksAsync(default);
+        }
+
+        [Fact]
+        public async Task Get10LongestWalksAsync_NullImei_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? imei = null;
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            var service = new WalkService(repo);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentNullException&gt;(() =&gt; service.Get10LongestWalksAsync(imei!));
+            await repo.DidNotReceiveWithAnyArgs().Get10LongestWalksAsync(default);
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_ValidImei_ReturnsMappedGeneralInfo()
+        {
+            // Arrange
+            var imei = &quot;987654321098765&quot;;
+            var entity = new WalksGeneralInfoEntity
+            {
+                TotalCount = 42,
+                TotalDistance = 1234.5m,
+                TotalDuration = 678.25m
+            };
+
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            repo.GetWalksGeneralInfoAsync(imei).Returns(Task.FromResult(entity));
+            var service = new WalkService(repo);
+
+            // Act
+            var result = await service.GetWalksGeneralInfoAsync(imei);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(42, result.TotalCount);
+            Assert.Equal(1234.5m, result.TotalDistance);
+            Assert.Equal(678.25m, result.TotalDuration);
+            repo.Received(1).GetWalksGeneralInfoAsync(imei);
+        }
+
+        [Theory]
+        [InlineData(&quot;&quot;)]
+        [InlineData(&quot;short&quot;)]
+        [InlineData(&quot;abcdefghijklmnop&quot;)]
+        public async Task GetWalksGeneralInfoAsync_InvalidImei_ThrowsBusinessException(string invalidImei)
+        {
+            // Arrange
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            var service = new WalkService(repo);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;BusinessException&gt;(() =&gt; service.GetWalksGeneralInfoAsync(invalidImei));
+            await repo.DidNotReceiveWithAnyArgs().GetWalksGeneralInfoAsync(default);
+        }
+
+        [Fact]
+        public async Task GetWalksGeneralInfoAsync_NullImei_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? imei = null;
+            var repo = Substitute.For&lt;IWalkRepository&gt;();
+            var service = new WalkService(repo);
+
+            // Act &amp; Assert
+            await Assert.ThrowsAsync&lt;ArgumentNullException&gt;(() =&gt; service.GetWalksGeneralInfoAsync(imei!));
+            await repo.DidNotReceiveWithAnyArgs().GetWalksGeneralInfoAsync(default);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,9,10,10,1],[12,13,12,42,1],[13,13,18,15,1],[20,13,20,58,1],[21,13,21,111,1],[23,13,23,49,1],[26,13,26,69,1],[29,13,29,80,1],[30,13,30,41,1],[31,13,31,45,1],[32,13,32,51,1],[33,13,33,50,1],[35,13,35,45,1],[36,13,36,50,1],[37,13,37,50,1],[39,13,39,45,1],[40,13,40,51,1],[41,13,41,51,1],[43,13,43,59,1],[44,9,44,10,1],[48,9,48,10,1],[50,13,50,42,1],[51,13,51,58,1],[52,13,52,121,1],[53,13,53,49,1],[56,13,56,69,1],[59,13,59,80,1],[60,13,60,32,1],[61,13,61,59,1],[62,9,62,10,1],[71,9,71,10,1],[73,13,73,58,1],[74,13,74,49,1],[77,13,77,63,1],[77,63,77,106,1],[77,106,77,108,1],[78,13,78,83,1],[79,9,79,10,1],[83,9,83,10,1],[85,13,85,33,1],[86,13,86,58,1],[87,13,87,49,1],[90,13,90,67,1],[90,67,90,104,1],[90,104,90,106,1],[91,13,91,83,1],[92,9,92,10,1],[96,9,96,10,1],[98,13,98,42,1],[99,13,104,15,1],[106,13,106,58,1],[107,13,107,82,1],[108,13,108,49,1],[111,13,111,71,1],[114,13,114,36,1],[115,13,115,49,1],[116,13,116,57,1],[117,13,117,57,1],[118,13,118,61,1],[119,9,119,10,1],[126,9,126,10,1],[128,13,128,58,1],[129,13,129,49,1],[132,13,132,63,1],[132,63,132,108,1],[132,108,132,110,1],[133,13,133,85,1],[134,9,134,10,1],[138,9,138,10,1],[140,13,140,33,1],[141,13,141,58,1],[142,13,142,49,1],[145,13,145,67,1],[145,67,145,106,1],[145,106,145,108,1],[146,13,146,85,1],[147,9,147,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765318874-6t8qNiHIl3ickmUggkh4
+
+Content:
+```json
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows the recommended pattern 'ClassUnderTestTests'",
+		"Test method names consistently follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern, making test intent immediately clear",
+		"Excellent use of [Theory] with [InlineData] to avoid code duplication across similar test scenarios",
+		"All tests properly follow the AAA pattern with clear comment separators and empty lines between sections",
+		"Variable and parameter names are meaningful and self-explanatory (e.g., 'plainText', 'expectedBase64', 'invalidBase64Data')",
+		"Comments in Arrange sections appropriately indicate when no setup is required for static utility methods",
+		"Consistent formatting and code style throughout all test methods",
+		"Good coverage of edge cases (null, empty, whitespace) and valid scenarios without redundancy",
+		"The 'Act & Assert' comment in the exception test appropriately reflects the combined nature of that assertion",
+		"Minor point: one inline comment explains Base64 length requirement, which could be considered unnecessary but doesn't significantly detract from readability"
+	]
+}
+```

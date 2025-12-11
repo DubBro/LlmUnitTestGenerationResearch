@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765319906-vuts7JFIeDRKphxi6zew
+
+Content:
+{
+  "readabilityIndex": 90,
+  "reasons": [
+    "Test class name `CompanyServiceTests` clearly follows the `ClassUnderTestTests` convention.",
+    "Test method names consistently follow the `Method_Scenario_ExpectedResult` pattern and are descriptive.",
+    "AAA pattern is clearly used and explicitly marked with `// Arrange`, `// Act`, `// Assert` comments, improving scanability.",
+    "Async tests correctly use `async Task` signatures and `await`, avoiding `async void` pitfalls.",
+    "Field and variable names (_companyRepository, entity, model, result) are self-explanatory and adhere to C# naming conventions.",
+    "Setup via constructor with shared test doubles reduces boilerplate and keeps Arrange sections focused.",
+    "No extraneous comments beyond AAA markers; the code is clean and uncluttered.",
+    "Use of NSubstitute and AutoMapper is straightforward and idiomatic, making the intent of each test easy to follow.",
+    "There is some minor duplication in entity/model construction that could be extracted to helpers or test data builders for even better maintainability.",
+    "One test creates local substitutes instead of using the shared fields, introducing a small inconsistency in setup style but still remaining understandable."
+  ]
+}

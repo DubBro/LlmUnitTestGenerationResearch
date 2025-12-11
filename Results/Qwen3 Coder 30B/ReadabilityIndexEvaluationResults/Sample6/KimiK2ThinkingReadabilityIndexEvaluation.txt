@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765326023-rpU9zficwZMtsrBc6ddD
+
+Content:
+ {"readabilityIndex":85,"reasons":["Test class and method names are clear, meaningful, and follow the MethodUnderTest_Scenario_ExpectedResult pattern consistently","AAA pattern is properly implemented with clear comments and separation in most tests","No unnecessary comments or nested classes, keeping the code clean and focused","Repeated null validation tests (e.g., AddLot and UpdateLot) could be consolidated using [Theory] with [InlineData] to reduce code duplication and improve maintainability","The UpdateLot_ValidLotDto_CallsUpdateAndCommit test contains a very long initialization line that negatively impacts readability","Some minor code duplication exists in mock setup across multiple similar tests","Test naming shows slight inconsistency in scenario description (some include 'WhenCalled', others omit it)"]}

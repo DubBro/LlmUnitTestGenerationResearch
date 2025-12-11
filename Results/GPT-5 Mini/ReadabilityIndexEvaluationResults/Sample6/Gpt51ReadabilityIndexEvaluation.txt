@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765323254-3B6UgDjUEVa0iptw2Qlb
+
+Content:
+{
+  "readabilityIndex": 83,
+  "reasons": [
+    "Test class and method names are clear, descriptive, and follow the ClassUnderTestTests and Method_Scenario_Result pattern, making intent easy to understand.",
+    "Tests consistently follow the AAA pattern with explicit // Arrange, // Act, // Assert comments and visual separation, which improves scanability.",
+    "Use of [Fact] for single scenarios and [Theory]/[InlineData] for parameterized cases avoids duplication and keeps similar scenarios grouped and readable.",
+    "Dependencies are created via a single CreateSut helper, reducing boilerplate in individual tests and keeping each test body focused on behavior under test.",
+    "The long tuple returned from CreateSut and frequent use of discards (var (service, _, _, _, _)) reduce clarity because readers must remember the tuple element order.",
+    "CreateSut contains large, custom mapping lambdas with repetitive object initializers that introduce noise and make the overall fixture setup harder to grasp and maintain.",
+    "Mock/Stub naming (db, lots, auctions, mapper, dto, domain) is consistent and meaningful, but the combination of multiple mocks passed via tuple slightly increases cognitive load.",
+    "Test bodies are short, well-formatted, and mostly free of extraneous comments or logic, but there is some repetition in collection setup (domainList/mappedList) that could be abstracted for even better maintainability."
+  ]
+}

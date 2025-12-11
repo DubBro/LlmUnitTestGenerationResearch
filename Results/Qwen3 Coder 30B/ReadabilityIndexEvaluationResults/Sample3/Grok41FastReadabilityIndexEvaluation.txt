@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765325173-CJkoi03tiiBxriQycBtw
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern perfectly",
+		"Test method names adhere strictly to MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Consistent AAA structure with Arrange/Act/Assert comments in most tests",
+		"Clear, meaningful variable and field names reflecting purpose",
+		"Proper async Task signatures for asynchronous tests",
+		"Efficient mock setup in constructor, reused across tests",
+		"Standard C# naming conventions followed",
+		"Some tests combine Act & Assert blocks, slightly deviating from strict AAA separation",
+		"Verbose entity object initialization in Arrange sections",
+		"No [Theory] used for similar validation scenarios, leading to minor code repetition"
+	]
+}

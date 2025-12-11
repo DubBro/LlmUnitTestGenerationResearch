@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324230-LtNmJDajXpGzutS81OxN
+
+Content:
+{"readabilityIndex": 88, "reasons": ["Test class name 'CaesarEncoderTests' follows standard pattern.", "Test method names clearly describe the scenario, e.g., 'Encode_Lowercase_KeyVariations_ReturnsExpected', 'Encode_PreservesNonLetterCharacters_ReturnsExpected', 'Decode_WhenApplied_AfterEncode_ReturnsOriginal'.", "Tests follow the AAA pattern and are logically separated with comments.", "Theory tests with InlineData are used appropriately to avoid duplication.", "Tests are well-structured, with each test focusing on a single aspect of the functionality.", "Test names are consistent and follow MethodUnderTest_Scenario_ExpectedResult pattern.", "Code formatting is clean and adheres to C# conventions.", "Tests cover both positive and edge cases (empty string, null).", "The use of InlineData for key variations demonstrates good test design.", "Tests are easy to read and understand, making maintenance straightforward."]}

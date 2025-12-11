@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765318852-as2Fs05ynTqBj4J9lura
+
+Content:
+{"readabilityIndex": 95, "reasons": ["Test class follows 'ClassUnderTestTests' naming pattern", "Test methods use 'MethodUnderTest_Scenario_ExpectedResult' naming convention consistently", "Follows AAA pattern with clear separation using comments", "Uses [Theory] with [InlineData] appropriately to avoid code duplication", "Good use of both [Theory] and [Fact] attributes where appropriate", "Clear and meaningful test method names describe what is being tested", "Well-structured code with logical grouping of related tests", "Proper handling of edge cases (null, empty, whitespace) and special characters", "Comments are minimal and serve only as AAA separators", "Code follows standard C# naming conventions and formatting"]}

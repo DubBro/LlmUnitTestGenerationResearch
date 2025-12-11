@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323846-WCVHzpK6D1p3dYcwU7Gv
+
+Content:
+ {"readabilityIndex":75,"reasons":["Explanatory comments (e.g., '// L should have ones on diagonal') inside test bodies violate the ideal of self-documenting tests.","The test Decompose_KnownMatrix_ReconstructsPermutedOriginal is overly verbose and complex, hindering quick comprehension and maintainability.","The test GetPermutationMatrix_ReturnsExpectedString uses '// Arrange & Act' instead of separate '// Arrange' and '// Act' comments, creating minor inconsistency."]}

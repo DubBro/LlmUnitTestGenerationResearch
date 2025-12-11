@@ -1,0 +1,402 @@
+using AutoMapper;
+using Dataset.Sample6;
+using NSubstitute;
+
+namespace Gpt5MiniUnitTests
+{
+    public class LotServiceTests
+    {
+        private (LotService service, IUnitOfWork db, IMapper mapper, ILotRepository lots, IAuctionRepository auctions) CreateSut()
+        {
+            var db = Substitute.For<IUnitOfWork>();
+            var lots = Substitute.For<ILotRepository>();
+            var auctions = Substitute.For<IAuctionRepository>();
+            db.Lots.Returns(lots);
+            db.Auctions.Returns(auctions);
+
+            var mapper = Substitute.For<IMapper>();
+
+            mapper
+                .Map<LotDTO, Lot>(Arg.Any<LotDTO>())
+                .Returns(ci =>
+                {
+                    var dto = ci.Arg<LotDTO>();
+                    if (dto == null) return null;
+                    return new Lot
+                    {
+                        ID = dto.ID,
+                        Name = dto.Name,
+                        Owner = dto.Owner,
+                        Sold = dto.Sold,
+                        Category = dto.Category,
+                        Details = dto.Details,
+                        Auction = dto.Auction == null ? null : new Auction { ID = dto.Auction.ID, Bid = dto.Auction.Bid, Leader = dto.Auction.Leader, Started = dto.Auction.Started, Ended = dto.Auction.Ended }
+                    };
+                });
+
+            mapper
+                .Map<Lot, LotDTO>(Arg.Any<Lot>())
+                .Returns(ci =>
+                {
+                    var e = ci.Arg<Lot>();
+                    if (e == null) return null;
+                    return new LotDTO
+                    {
+                        ID = e.ID,
+                        Name = e.Name,
+                        Owner = e.Owner,
+                        Sold = e.Sold,
+                        Category = e.Category,
+                        Details = e.Details,
+                        Auction = e.Auction == null ? null : new AuctionDTO { ID = e.Auction.ID, Bid = e.Auction.Bid, Leader = e.Auction.Leader, Started = e.Auction.Started, Ended = e.Auction.Ended }
+                    };
+                });
+
+            mapper
+                .Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(Arg.Any<IEnumerable<Lot>>())
+                .Returns(ci =>
+                {
+                    var list = ci.Arg<IEnumerable<Lot>>();
+                    return list?.Select(l => new LotDTO
+                    {
+                        ID = l.ID,
+                        Name = l.Name,
+                        Owner = l.Owner,
+                        Sold = l.Sold,
+                        Category = l.Category,
+                        Details = l.Details,
+                        Auction = l.Auction == null ? null : new AuctionDTO { ID = l.Auction.ID, Bid = l.Auction.Bid, Leader = l.Auction.Leader, Started = l.Auction.Started, Ended = l.Auction.Ended }
+                    }).ToList();
+                });
+
+            var service = new LotService(db, mapper);
+            return (service, db, mapper, lots, auctions);
+        }
+
+        [Fact]
+        public void AddLot_NullLot_ThrowsInvalidLotException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() => service.AddLot(null);
+
+            // Assert
+            Assert.Throws<InvalidLotException>(Act);
+        }
+
+        [Fact]
+        public void AddLot_LotAlreadySold_ThrowsInvalidLotException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+            var dto = new LotDTO { ID = 1, Name = "n", Owner = "o", Category = "c", Sold = true };
+
+            // Act
+            void Act() => service.AddLot(dto);
+
+            // Assert
+            Assert.Throws<InvalidLotException>(Act);
+        }
+
+        [Theory]
+        [InlineData(null, "owner", "cat")]
+        [InlineData("name", null, "cat")]
+        [InlineData("name", "owner", null)]
+        public void AddLot_MissingRequiredFields_ThrowsInvalidLotException(string name, string owner, string category)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+            var dto = new LotDTO { ID = 1, Name = name, Owner = owner, Category = category, Sold = false };
+
+            // Act
+            void Act() => service.AddLot(dto);
+
+            // Assert
+            Assert.Throws<InvalidLotException>(Act);
+        }
+
+        [Fact]
+        public void AddLot_Valid_AddsAndCommitsAndSetsAuction()
+        {
+            // Arrange
+            var (service, db, mapper, lots, _) = CreateSut();
+            var dto = new LotDTO { ID = 2, Name = "Lot", Owner = "Owner", Category = "Cat", Sold = false, Details = "D" };
+
+            // Act
+            service.AddLot(dto);
+
+            // Assert
+            Assert.NotNull(dto.Auction);
+            mapper.Received(1).Map<LotDTO, Lot>(dto);
+            lots.Received(1).Add(Arg.Is<Lot>(l => l.Name == dto.Name && l.Owner == dto.Owner && l.Category == dto.Category && l.Details == dto.Details));
+            db.Received(1).Commit();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void DeleteLot_InvalidId_ThrowsInvalidIdException(int id)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() => service.DeleteLot(id);
+
+            // Assert
+            Assert.Throws<InvalidIdException>(Act);
+        }
+
+        [Fact]
+        public void DeleteLot_Valid_DeletesAuctionsAndLotsAndCommits()
+        {
+            // Arrange
+            var (service, db, _, _, auctions) = CreateSut();
+            var id = 5;
+
+            // Act
+            service.DeleteLot(id);
+
+            // Assert
+            auctions.Received(1).Delete(id);
+            db.Lots.Received(1).Delete(id);
+            db.Received(1).Commit();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-10)]
+        public void GetLot_InvalidId_ThrowsInvalidIdException(int id)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() => service.GetLot(id);
+
+            // Assert
+            Assert.Throws<InvalidIdException>(Act);
+        }
+
+        [Fact]
+        public void GetLot_NotFound_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var id = 10;
+            lots.Get(id).Returns((Lot)null);
+            mapper.Map<Lot, LotDTO>(Arg.Any<Lot>()).Returns((LotDTO)null);
+
+            // Act
+            void Act() => service.GetLot(id);
+
+            // Assert
+            Assert.Throws<InvalidIdException>(Act);
+        }
+
+        [Fact]
+        public void GetLot_Existing_ReturnsMappedDto()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domain = new Lot { ID = 3, Name = "n", Owner = "o", Category = "c", Sold = false, Details = "d" };
+            var mapped = new LotDTO { ID = 3, Name = "n", Owner = "o", Category = "c", Sold = false, Details = "d" };
+            lots.Get(domain.ID).Returns(domain);
+            mapper.Map<Lot, LotDTO>(domain).Returns(mapped);
+
+            // Act
+            var result = service.GetLot(domain.ID);
+
+            // Assert
+            Assert.Same(mapped, result);
+        }
+
+        [Fact]
+        public void GetLots_ReturnsMappedCollection()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List<Lot>
+            {
+                new Lot { ID = 1, Name = "a" },
+                new Lot { ID = 2, Name = "b" }
+            };
+            var mappedList = new List<LotDTO>
+            {
+                new LotDTO { ID = 1, Name = "a" },
+                new LotDTO { ID = 2, Name = "b" }
+            };
+            lots.GetAll().Returns(domainList);
+            mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetLots();
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetLotsByCategory_NullCategory_ThrowsInvalidCategoryException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() => service.GetLotsByCategory(null);
+
+            // Assert
+            Assert.Throws<InvalidCategoryException>(Act);
+        }
+
+        [Fact]
+        public void GetLotsByCategory_Valid_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List<Lot> { new Lot { ID = 4, Category = "cat" } };
+            var mappedList = new List<LotDTO> { new LotDTO { ID = 4, Category = "cat" } };
+            lots.GetLotsByCategory("cat").Returns(domainList);
+            mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetLotsByCategory("cat");
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetLotsByName_NullName_ThrowsInvalidNameException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() => service.GetLotsByName(null);
+
+            // Assert
+            Assert.Throws<InvalidNameException>(Act);
+        }
+
+        [Fact]
+        public void GetLotsByName_Valid_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List<Lot> { new Lot { ID = 6, Name = "nm" } };
+            var mappedList = new List<LotDTO> { new LotDTO { ID = 6, Name = "nm" } };
+            lots.GetLotsByName("nm").Returns(domainList);
+            mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetLotsByName("nm");
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetNotSoldLots_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List<Lot> { new Lot { ID = 7, Sold = false } };
+            var mappedList = new List<LotDTO> { new LotDTO { ID = 7, Sold = false } };
+            lots.GetNotSoldLots().Returns(domainList);
+            mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetNotSoldLots();
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void GetSoldLots_ReturnsMapped()
+        {
+            // Arrange
+            var (service, _, mapper, lots, _) = CreateSut();
+            var domainList = new List<Lot> { new Lot { ID = 8, Sold = true } };
+            var mappedList = new List<LotDTO> { new LotDTO { ID = 8, Sold = true } };
+            lots.GetSoldLots().Returns(domainList);
+            mapper.Map<IEnumerable<Lot>, IEnumerable<LotDTO>>(domainList).Returns(mappedList);
+
+            // Act
+            var result = service.GetSoldLots();
+
+            // Assert
+            Assert.Equal(mappedList, result);
+        }
+
+        [Fact]
+        public void UpdateLot_Null_ThrowsInvalidLotException()
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+
+            // Act
+            void Act() => service.UpdateLot(null);
+
+            // Assert
+            Assert.Throws<InvalidLotException>(Act);
+        }
+
+        [Theory]
+        [InlineData(null, "o", "c")]
+        [InlineData("n", null, "c")]
+        [InlineData("n", "o", null)]
+        public void UpdateLot_MissingRequiredFields_ThrowsInvalidLotException(string name, string owner, string category)
+        {
+            // Arrange
+            var (service, _, _, _, _) = CreateSut();
+            var dto = new LotDTO { ID = 1, Name = name, Owner = owner, Category = category };
+
+            // Act
+            void Act() => service.UpdateLot(dto);
+
+            // Assert
+            Assert.Throws<InvalidLotException>(Act);
+        }
+
+        [Fact]
+        public void UpdateLot_LotNotFound_ThrowsInvalidIdException()
+        {
+            // Arrange
+            var (service, _, _, lots, _) = CreateSut();
+            var dto = new LotDTO { ID = 11, Name = "n", Owner = "o", Category = "c", Sold = true, Details = "d" };
+            lots.Get(dto.ID).Returns((Lot)null);
+
+            // Act
+            void Act() => service.UpdateLot(dto);
+
+            // Assert
+            Assert.Throws<InvalidIdException>(Act);
+        }
+
+        [Fact]
+        public void UpdateLot_Valid_UpdatesEntityAndCommits()
+        {
+            // Arrange
+            var (service, db, _, lots, _) = CreateSut();
+            var existing = new Lot { ID = 12, Name = "old", Owner = "oldOwner", Category = "oldCat", Sold = false, Details = "oldD" };
+            var dto = new LotDTO { ID = 12, Name = "new", Owner = "newOwner", Category = "newCat", Sold = true, Details = "newD" };
+            lots.Get(existing.ID).Returns(existing);
+
+            // Act
+            service.UpdateLot(dto);
+
+            // Assert
+            Assert.Equal("new", existing.Name);
+            Assert.Equal("newOwner", existing.Owner);
+            Assert.Equal("newCat", existing.Category);
+            Assert.Equal("newD", existing.Details);
+            Assert.True(existing.Sold);
+            lots.Received(1).Update(existing);
+            db.Received(1).Commit();
+        }
+    }
+}

@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765324460-UbdfYH43B292sQ52wE8H
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern perfectly.",
+		"Test method names adhere strictly to MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Consistent use of AAA pattern with clear // Arrange, // Act, // Assert comments.",
+		"Appropriate use of [Fact] for unique scenarios and [Theory] with [InlineData] to avoid duplication.",
+		"Clear, meaningful variable names and standard C# naming conventions.",
+		"Private helper method AssertSameMultiset is well-named and reusable, enhancing maintainability.",
+		"Minor deduction for extra comments outside AAA separators (e.g., on helper and in test body).",
+		"Slight inconsistency in one test combining // Act & Assert."
+	]
+}

@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765322925-VoAeKV0BDrWi7Knbz23X
+
+Content:
+ {
+	"readabilityIndex": 85,
+	"reasons": [
+		"Consistent AAA pattern implementation with clear separation and comments in all tests",
+		"Clear and descriptive naming for test class and all test methods following the MethodUnderTest_Scenario_ExpectedResult pattern",
+		"Effective use of private static helper methods (CreateEntity, CreateValidModel) to reduce code duplication",
+		"Proper asynchronous test signatures using async Task instead of async void",
+		"Excessive verbosity in property mapping assertions (14 individual Assert.Equal calls) reduces conciseness",
+		"Use of non-descriptive magic strings and values ('n', 'c', 't', 1m, 2m, 3, 4) in filter tests without named constants",
+		"Deviation from 'no comments' guideline with a production code behavior explanation in one test",
+		"Clear and meaningful variable naming throughout (repo, service, model, result, ex)",
+		"Each test maintains good isolation by creating its own mocks and service instances",
+		"Appropriate use of NSubstitute assertions (Received, DidNotReceive, Arg.Is) for verification"
+	]
+}

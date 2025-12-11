@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765316858-nIcV73TMiRf2PAuediKu
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended pattern 'ClassUnderTestTests'",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is clearly implemented with comment markers and empty line separation in all tests",
+		"Effective use of [Theory] with [InlineData] to avoid code duplication for invalid input scenarios",
+		"Variable names are clear and meaningful (size, expectedArray, result)",
+		"Code adheres to standard C# and .NET naming conventions throughout",
+		"Helper method 'AssertArrayEqual' improves maintainability by avoiding assertion duplication",
+		"Minor issue: empty Arrange section in first test could be removed or consolidated",
+		"All tests are well-structured, easy to understand, and maintain",
+		"No unnecessary comments beyond AAA markers, keeping the code clean"
+	]
+}
+```

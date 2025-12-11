@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323401-ybeAflILbZU6DD48M5q0
+
+Content:
+ {"readabilityIndex": 78, "reasons": ["Test names follow MethodUnderTest_Scenario_ExpectedResult pattern clearly", "Consistent AAA pattern with proper comments and spacing throughout", "Appropriate use of Fact and Theory with descriptive InlineData cases", "Variable names are meaningful and follow standard conventions", "Redundant object creation in assertions (new List<T>(result)) reduces clarity", "Comments on InlineData attributes violate the 'no comments' guideline", "Null-forgiving operator (imei!) usage is slightly confusing", "Test class name follows the ClassUnderTestTests convention", "All async tests correctly use async Task signatures"]}

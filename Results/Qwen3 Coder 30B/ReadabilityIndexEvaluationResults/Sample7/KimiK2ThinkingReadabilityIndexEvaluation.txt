@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765326216-ayRL487t3xBPpcbu0ZAa
+
+Content:
+ {"readabilityIndex":90,"reasons":["Test names clearly follow MethodUnderTest_Scenario_ExpectedResult pattern","Proper use of [Fact] and [Theory] with [InlineData] eliminates code duplication","Consistent AAA pattern with comments and empty line separation","All async tests correctly use async Task signature","Clear and meaningful naming for test class, methods, and variables","No unnecessary comments or nested classes","Empty Arrange blocks in two tests slightly deviate from ideal structure","Assertions in first test are verbose and could use collection assertions for better clarity"]}

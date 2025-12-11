@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316066-VqmIW6vYl1tCrnye2HK3
+
+Content:
+{
+	"readabilityIndex": 93,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Test method names are descriptive and adhere to MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"All tests strictly follow AAA pattern with // Arrange, // Act, // Assert comments and clear separation.",
+		"Appropriate use of [Fact] for single scenarios and [Theory] with [InlineData] to avoid duplication.",
+		"All async tests use async Task signatures correctly.",
+		"Clear, meaningful names for variables, fields, and mocks.",
+		"Well-structured NSubstitute mocking setups.",
+		"Precise assertions using Assert.Collection, Assert.ThrowsAsync, etc.",
+		"No unnecessary comments or nested classes.",
+		"Minor complexity in Arrange for multi-level paths, but remains readable and maintainable."
+	]
+}

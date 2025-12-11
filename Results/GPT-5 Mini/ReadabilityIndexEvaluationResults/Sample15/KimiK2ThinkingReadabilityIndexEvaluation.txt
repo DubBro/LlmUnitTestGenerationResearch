@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324094-lauSuuE7mmozVTRW0u9w
+
+Content:
+ {"readabilityIndex":90,"reasons":["Test class and method names follow standard patterns (ClassUnderTestTests and MethodUnderTest_Scenario_ExpectedResult) and are highly descriptive","Effective use of [Theory] with [InlineData] to test multiple input variations without code duplication","AAA pattern is consistently applied with clear comments and proper separation between blocks","Variable names (input, expected, result, etc.) are meaningful and improve test comprehension","Minor inconsistency: static method call style (Base64Helpers.Decode) differs from extension method usage pattern used in other tests","Empty Arrange sections could be omitted for conciseness but do not significantly impact readability"]}

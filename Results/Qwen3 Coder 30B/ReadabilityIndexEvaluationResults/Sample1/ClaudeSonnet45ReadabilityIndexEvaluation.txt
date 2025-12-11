@@ -1,0 +1,21 @@
+GenerationId:
+gen-1765324963-RTDQgdHMA9KblQjKalk3
+
+Content:
+```json
+{
+	"readabilityIndex": 78,
+	"reasons": [
+		"Test class name follows the recommended 'ClassUnderTestTests' pattern",
+		"Test method names follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern consistently",
+		"AAA pattern is clearly implemented with proper comment markers and empty line separation",
+		"Asynchronous tests correctly use 'async Task' signature instead of 'async void'",
+		"Variable names are clear and meaningful (repository, entity, service, result)",
+		"Code follows standard C# and .NET naming conventions throughout",
+		"No unnecessary comments beyond AAA markers, keeping tests clean",
+		"Tests could benefit from using [Theory] with [InlineData] to reduce duplication in assertion patterns",
+		"Multiple individual Assert statements could be consolidated or use Assert.Multiple for better readability",
+		"Overall structure is logical, well-formatted, and easy to understand with minimal maintenance burden"
+	]
+}
+```

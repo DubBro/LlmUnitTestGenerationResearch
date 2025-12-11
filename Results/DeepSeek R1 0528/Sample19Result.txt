@@ -1,0 +1,149 @@
+GenerationId:
+gen-1765212257-ry7QWzcOuhitFYj2IvF7
+
+Content:
+```csharp
+namespace Dataset.Sample19.UnitTests;
+
+public class StringExtensionsTests
+{
+    [Theory]
+    [InlineData('0', true)]
+    [InlineData('5', true)]
+    [InlineData('9', true)]
+    [InlineData('a', false)]
+    [InlineData(' ', false)]
+    [InlineData('@', false)]
+    public void IsDigit_GivenVariousChars_ReturnsExpected(char input, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = input.IsDigit();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("123", true)]
+    [InlineData("-456", true)]
+    [InlineData("0", true)]
+    [InlineData("abc", false)]
+    [InlineData("12.3", false)]
+    [InlineData("", false)]
+    [InlineData("   ", false)]
+    [InlineData(null, false)]
+    public void IsInteger_GivenVariousStrings_ReturnsExpected(string input, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = input.IsInteger();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("123", true)]
+    [InlineData("-456", true)]
+    [InlineData("0", true)]
+    [InlineData("12.3", true)]
+    [InlineData("-12.5", true)]
+    [InlineData("1.23e5", true)]
+    [InlineData("abc", false)]
+    [InlineData("", false)]
+    [InlineData("   ", false)]
+    [InlineData(null, false)]
+    public void IsNumber_GivenVariousStrings_ReturnsExpected(string input, bool expected)
+    {
+        // Arrange
+        // Act
+        var result = input.IsNumber();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("hello", "olleh")]
+    [InlineData("a", "a")]
+    [InlineData("", "")]
+    [InlineData("   ", "   ")]
+    [InlineData("123", "321")]
+    [InlineData("  test  ", "  tset  ")]
+    [InlineData(null, null)]
+    public void Reverse_GivenVariousStrings_ReturnsExpected(string input, string expected)
+    {
+        // Arrange
+        // Act
+        var result = input.Reverse();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("simple", "simple")]
+    [InlineData("comma,here", "\"comma,here\"")]
+    [InlineData("semi;colon", "\"semi;colon\"")]
+    [InlineData("quote\"me", "\"quote\"\"me\"")]
+    [InlineData("line\nbreak", "\"line\nbreak\"")]
+    [InlineData(" leading", "\" leading\"")]
+    [InlineData("trailing ", "\"trailing \"")]
+    [InlineData("multi, issues;here\"", "\"multi, issues;here\"\"\"")]
+    [InlineData("", "")]
+    [InlineData("   ", "\"   \"")]
+    [InlineData("\"", "\"\"\"\"")]
+    [InlineData("\"\"", "\"\"\"\"\"")]
+    [InlineData(null, null)]
+    public void ToCsvCompatible_GivenVariousStrings_ReturnsExpected(string input, string expected)
+    {
+        // Arrange
+        // Act
+        var result = input.ToCsvCompatible();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("file.txt", "txt")]
+    [InlineData("archive.tar.gz", "gz")]
+    [InlineData("noextension", "")]
+    [InlineData(".gitignore", "gitignore")]
+    [InlineData("folder.with.dots/name.ext", "ext")]
+    [InlineData("space at end.txt ", "txt")]
+    [InlineData("double..ext", "ext")]
+    [InlineData("", "")]
+    [InlineData("   ", "")]
+    [InlineData("   .   ", "")]
+    [InlineData(null, null)]
+    public void GetFileExtension_GivenVariousStrings_ReturnsExpected(string input, string expected)
+    {
+        // Arrange
+        // Act
+        var result = input.GetFileExtension();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+49386,6951
+
+OpenRouterElapsedTimeMilliseconds:
+49295
+
+PromptTokens:
+1482
+
+CompletionTokens:
+1293
+
+TotalTokens:
+2775
+
+TotalCost:
+0,0042888

@@ -1,0 +1,15 @@
+GenerationId:
+gen-1765327730-cjTWH3xJzJUIsR96dMnv
+
+Content:
+{
+  "readabilityIndex": 92,
+  "reasons": [
+    "Test class name `AsciiHelpersTests` clearly reflects the unit under test and follows the `ClassUnderTestTests` pattern.",
+    "Test method names consistently follow the `MethodUnderTest_Scenario_ExpectedResult` pattern and are descriptive and unambiguous.",
+    "AAA structure is clearly used and explicitly marked with `// Arrange`, `// Act`, `// Assert`, greatly aiding scanability.",
+    "Consistent formatting, spacing, and simple linear structure with no nested classes or helper constructs makes the file easy to follow.",
+    "Appropriate use of `[Fact]` for single scenarios and `[Theory]` with `[InlineData]` for multiple variations improves maintainability and reduces duplication for those cases.",
+    "Some scenario overlap and minor duplication between individual `[Fact]` tests and the final `[Theory]` test slightly reduce maintainability and could be further consolidated."
+  ]
+}

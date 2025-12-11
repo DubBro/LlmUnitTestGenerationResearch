@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765315466-KjonVlVV3BQkm8lICvOU
+
+Content:
+ {"readabilityIndex":75,"reasons":["Excellent adherence to AAA pattern with clear block separation","Proper async Task signatures used correctly","Test class name follows standard ClassUnderTestTests convention","Good variable naming clarity and consistency","Correct usage of [Fact] and [Theory] with [InlineData]","Significant code duplication in model/entity instantiation across tests","Overly verbose assertions with 14 separate property checks in mapping test","Some test names are vague (e.g., WhenCalled) or slightly misleading","Unused dummy parameter in [InlineData] creates confusion","No unnecessary comments beyond AAA markers"]}

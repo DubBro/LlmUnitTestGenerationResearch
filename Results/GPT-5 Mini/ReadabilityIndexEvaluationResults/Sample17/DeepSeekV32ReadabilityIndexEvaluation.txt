@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765324172-C4dmxxQlC8NLHfOn7yfw
+
+Content:
+{"readabilityIndex":95,"reasons":["Test class name follows 'ClassUnderTestTests' pattern","Test method names follow 'MethodUnderTest_Scenario_ExpectedResult' pattern","Clear AAA pattern with separation comments","Good use of [Theory] with [InlineData] for parameterized tests","Well-structured arrange/act/assert sections","Consistent formatting and spacing throughout","No unnecessary comments beyond AAA markers","Clear variable naming that reflects purpose","Proper use of both [Fact] and [Theory] attributes","Tests are focused and single-purpose"]}

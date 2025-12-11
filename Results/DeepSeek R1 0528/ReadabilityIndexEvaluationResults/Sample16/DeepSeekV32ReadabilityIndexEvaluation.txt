@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765316981-AErG4bMZgCadHQSCyPJw
+
+Content:
+{"readabilityIndex": 92, "reasons": ["Test class name 'AsciiHelpersTests' correctly follows the ClassUnderTestTests pattern.", "Test method names clearly follow MethodUnderTest_Scenario_ExpectedResult pattern with good descriptive scenario.", "Test methods use Theory attribute with appropriate InlineData for multiple input variations, avoiding code duplication.", "AAA pattern is well followed with clear '// Act' and '// Assert' comments separating blocks.", "No unnecessary comments beyond the block separators, keeping the test focused.", "Input parameters and expected results are clearly named, making test cases easy to understand.", "Good spacing and formatting make the code visually clean and readable.", "Tests cover edge cases (null, empty, whitespace) along with typical and Unicode examples.", "All test cases are self-contained with no shared state, improving maintainability.", "The asynchronous signature is not needed here, and the methods appropriately return void for synchronous tests."]}

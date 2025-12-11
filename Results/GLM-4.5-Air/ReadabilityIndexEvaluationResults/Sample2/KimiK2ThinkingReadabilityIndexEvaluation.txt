@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765319732-A7pIHChCCUmBxyFR5jId
+
+Content:
+ {"readabilityIndex":68,"reasons":["Test names follow MethodUnderTest_Scenario_ExpectedResult pattern consistently","AAA pattern is properly implemented with clear comments and spacing","Appropriate use of Fact and Theory attributes for different test scenarios","All async test methods correctly return Task instead of void","Variable naming is clear and meaningful throughout the test class","Significant code duplication in EmployeeModel setup across multiple validation tests","Repeated magic strings and test values in InlineData attributes reduce maintainability","Inconsistent assertion depth - some tests verify partial data while others check extensively","Arrange sections are verbose and could be simplified with helper methods or builders","Namespace naming is unconventional but does not severely impact readability"]}

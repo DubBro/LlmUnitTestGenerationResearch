@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765321956-OeNUeMM6U3SMIwmoexM4
+
+Content:
+{
+	"readabilityIndex": 82,
+	"reasons": [
+		"Test class name follows the 'ClassUnderTestTests' pattern (OntologyHelperTests)",
+		"Test methods follow the 'MethodUnderTest_Scenario_ExpectedResult' naming convention",
+		"AAA pattern is consistently used with clear comments separating blocks",
+		"[Fact] and [Theory] attributes are appropriately used for single vs. multiple test cases",
+		"[InlineData] provides clear test data for parameterized tests",
+		"No unnecessary nested classes or complex structures",
+		"Variables and mocks are clearly named and meaningful",
+		"Proper use of Arrange-Act-Assert separation with blank lines",
+		"Tests are focused on specific scenarios and edge cases",
+		"Good balance between individual tests and parameterized tests to avoid duplication"
+	]
+}

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample17Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample17;
+
+namespace DeepSeekR10528UnitTests;
+
+public class VectorExtensionsTests
+{
+    [Fact]
+    public void Copy_NotEmptyVector_ReturnsEqualArray()
+    {
+        // Arrange
+        double[] vector = { 1.1, 2.2, 3.3 };
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.Equal(vector, result);
+        Assert.NotSame(vector, result);
+    }
+
+    [Fact]
+    public void Copy_EmptyVector_ReturnsEmptyArray()
+    {
+        // Arrange
+        double[] vector = Array.Empty&lt;double&gt;();
+
+        // Act
+        var result = vector.Copy();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void OuterProduct_TwoVectors_CorrectMatrixResult()
+    {
+        // Arrange
+        double[] lhs = { 1, 2 };
+        double[] rhs = { 3, 4 };
+        double[,] expected = { { 3, 4 }, { 6, 8 } };
+
+        // Act
+        var result = lhs.OuterProduct(rhs);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void OuterProduct_OneEmptyVector_ReturnsEmptyMatrix()
+    {
+        // Arrange
+        double[] lhs = { 1, 2 };
+        double[] rhs = Array.Empty&lt;double&gt;();
+        var expected = new double[2,0];
+
+        // Act
+        var result = lhs.OuterProduct(rhs);
+
+        // Assert
+        Assert.Equal(expected.GetLength(0), result.GetLength(0));
+        Assert.Equal(expected.GetLength(1), result.GetLength(1));
+    }
+
+    [Theory]
+    [InlineData(new double[] { 1, 2 }, new double[] { 3, 4 }, 11)]
+    [InlineData(new double[] { -1, 0, 1 }, new double[] { 2, 3, 4 }, 2)]
+    public void Dot_EqualLengthVectors_CorrectResult(double[] lhs, double[] rhs, double expected)
+    {
+        // Arrange &amp; Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Dot_DifferentLengthVectors_ThrowsArgumentException()
+    {
+        // Arrange
+        double[] lhs = { 1, 2 };
+        double[] rhs = { 1 };
+
+        // Act &amp; Assert
+        Assert.Throws&lt;ArgumentException&gt;(() =&gt; lhs.Dot(rhs));
+    }
+
+    [Fact]
+    public void Dot_EmptyVectors_ReturnsZero()
+    {
+        // Arrange
+        double[] lhs = Array.Empty&lt;double&gt;();
+        double[] rhs = Array.Empty&lt;double&gt;();
+
+        // Act
+        var result = lhs.Dot(rhs);
+
+        // Assert
+        Assert.Equal(0, result);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 3, 4 }, 5)]
+    [InlineData(new double[] { 1, 1, 1, 1 }, 2)]
+    [InlineData(new double[] { 0, 0 }, 0)]
+    public void Magnitude_VariousVectors_CorrectResult(double[] vector, double expected)
+    {
+        // Arrange &amp; Act
+        var result = vector.Magnitude();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(new double[] { 1, 2, 3 }, 2, new double[] { 2, 4, 6 })]
+    [InlineData(new double[] { 0, 1, 0 }, 5, new double[] { 0, 5, 0 })]
+    [InlineData(new double[] { }, 10, new double[] { })]
+    public void Scale_VariousVectors_CorrectResult(double[] vector, double factor, double[] expected)
+    {
+        // Arrange &amp; Act
+        var result = vector.Scale(factor);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToColumnVector_NonEmptyVector_CorrectMatrix()
+    {
+        // Arrange
+        double[] vector = { 1, 2, 3 };
+        double[,] expected = { { 1 }, { 2 }, { 3 } };
+
+        // Act
+        var result = vector.ToColumnVector();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToColumnVector_EmptyVector_CorrectMatrix()
+    {
+        // Arrange
+        double[] vector = Array.Empty&lt;double&gt;();
+        double[,] expected = new double[0, 1];
+
+        // Act
+        var result = vector.ToColumnVector();
+
+        // Assert
+        Assert.Equal(expected.GetLength(0), result.GetLength(0));
+        Assert.Equal(1, result.GetLength(1));
+    }
+
+    [Fact]
+    public void ToRowVector_ColumnVector_CorrectArray()
+    {
+        // Arrange
+        double[,] vector = { { 1 }, { 2 }, { 3 } };
+        double[] expected = { 1, 2, 3 };
+
+        // Act
+        var result = vector.ToRowVector();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToRowVector_NonColumnVector_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        double[,] invalidVector = new double[2, 2];
+
+        // Act &amp; Assert
+        Assert.Throws&lt;InvalidOperationException&gt;(() =&gt; invalidVector.ToRowVector());
+    }
+
+    [Fact]
+    public void ToRowVector_EmptyColumnVector_ReturnsEmptyArray()
+    {
+        // Arrange
+        double[,] emptyVector = new double[0, 1];
+        double[] expected = Array.Empty&lt;double&gt;();
+
+        // Act
+        var result = emptyVector.ToRowVector();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_NonEmptyVector_CorrectMatrix()
+    {
+        // Arrange
+        double[] vector = { 1, 2, 3 };
+        double[,] expected = {
+            { 1, 0, 0 },
+            { 0, 2, 0 },
+            { 0, 0, 3 }
+        };
+
+        // Act
+        var result = vector.ToDiagonalMatrix();
+
+        // Assert
+        for (int i = 0; i &lt; vector.Length; i++)
+        {
+            for (int j = 0; j &lt; vector.Length; j++)
+            {
+                Assert.Equal(expected[i, j], result[i, j]);
+            }
+        }
+    }
+
+    [Fact]
+    public void ToDiagonalMatrix_EmptyVector_ReturnsEmptyMatrix()
+    {
+        // Arrange
+        double[] vector = Array.Empty&lt;double&gt;();
+        var expected = new double[0, 0];
+
+        // Act
+        var result = vector.ToDiagonalMatrix();
+
+        // Assert
+        Assert.Equal(expected.GetLength(0), result.GetLength(0));
+        Assert.Equal(expected.GetLength(1), result.GetLength(1));
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,5,9,6,1],[11,9,11,45,1],[14,9,14,36,1],[17,9,17,38,1],[18,9,18,40,1],[19,5,19,6,1],[23,5,23,6,1],[25,9,25,49,1],[28,9,28,36,1],[31,9,31,30,1],[32,5,32,6,1],[36,5,36,6,1],[38,9,38,33,1],[39,9,39,33,1],[40,9,40,53,1],[43,9,43,44,1],[46,9,46,40,1],[47,5,47,6,1],[51,5,51,6,1],[53,9,53,33,1],[54,9,54,46,1],[55,9,55,40,1],[58,9,58,44,1],[61,9,61,66,1],[62,9,62,66,1],[63,5,63,6,1],[69,5,69,6,1],[71,9,71,35,1],[74,9,74,40,1],[75,5,75,6,1],[79,5,79,6,1],[81,9,81,33,1],[82,9,82,30,1],[85,9,85,48,1],[85,48,85,60,1],[85,60,85,62,1],[86,5,86,6,1],[90,5,90,6,1],[92,9,92,46,1],[93,9,93,46,1],[96,9,96,35,1],[99,9,99,33,1],[100,5,100,6,1],[107,5,107,6,1],[109,9,109,41,1],[112,9,112,40,1],[113,5,113,6,1],[120,5,120,6,1],[122,9,122,43,1],[125,9,125,40,1],[126,5,126,6,1],[130,5,130,6,1],[132,9,132,39,1],[133,9,133,54,1],[136,9,136,46,1],[139,9,139,40,1],[140,5,140,6,1],[144,5,144,6,1],[146,9,146,49,1],[147,9,147,47,1],[150,9,150,46,1],[153,9,153,66,1],[154,9,154,46,1],[155,5,155,6,1],[159,5,159,6,1],[161,9,161,52,1],[162,9,162,41,1],[165,9,165,43,1],[168,9,168,40,1],[169,5,169,6,1],[173,5,173,6,1],[175,9,175,52,1],[178,9,178,56,1],[178,56,178,83,1],[178,83,178,85,1],[179,5,179,6,1],[183,5,183,6,1],[185,9,185,50,1],[186,9,186,51,1],[189,9,189,48,1],[192,9,192,40,1],[193,5,193,6,1],[197,5,197,6,1],[199,9,199,39,1],[200,9,204,11,1],[207,9,207,48,1],[210,14,210,23,1],[210,25,210,42,1],[210,44,210,47,1],[211,9,211,10,1],[212,18,212,27,1],[212,29,212,46,1],[212,48,212,51,1],[213,13,213,14,1],[214,17,214,60,1],[215,13,215,14,1],[216,9,216,10,1],[217,5,217,6,1],[221,5,221,6,1],[223,9,223,49,1],[224,9,224,41,1],[227,9,227,48,1],[230,9,230,66,1],[231,9,231,66,1],[232,5,232,6,1]]);
+    </script>
+  </body>
+</html>

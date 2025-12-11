@@ -1,0 +1,17 @@
+GenerationId:
+gen-1765327232-z49DgtPCwRs2KqUAg9iD
+
+Content:
+{
+	"readabilityIndex": 92,
+	"reasons": [
+		"Consistent AAA pattern with clear // Arrange, // Act, // Assert comments and separation.",
+		"Test class name follows ClassUnderTestTests pattern.",
+		"Appropriate use of [Fact] for single scenarios and [Theory]/[InlineData] for multiples, reducing duplication.",
+		"No unnecessary comments, nested classes, or deviations from standard C# conventions.",
+		"Arrange sections are simple and repetitive but readable with mocks.",
+		"Most test names follow MethodUnderTest_Scenario_ExpectedResult pattern effectively.",
+		"Some test names use generic 'ReturnsExpectedResult' instead of specific outcomes, minor clarity issue.",
+		"Scenario descriptions in names are clear and logical."
+	]
+}

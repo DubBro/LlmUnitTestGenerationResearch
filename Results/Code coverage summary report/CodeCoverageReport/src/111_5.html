@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\DeepSeekR10528UnitTests\Sample16Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample16;
+
+namespace DeepSeekR10528UnitTests;
+
+public class AsciiHelpersTests
+{
+    [Theory]
+    [InlineData(null, &#39;*&#39;, &quot;&quot;)]
+    [InlineData(&quot;&quot;, &#39;*&#39;, &quot;&quot;)]
+    [InlineData(&quot;   &quot;, &#39;*&#39;, &quot;&quot;)]
+    [InlineData(&quot;Hello&quot;, &#39;*&#39;, &quot;Hello&quot;)]
+    [InlineData(&quot;Caf&#233;&quot;, &#39;*&#39;, &quot;Caf*&quot;)]
+    [InlineData(&quot;M&#246;t&#246;rh&#235;&#228;d&quot;, &#39;*&#39;, &quot;M*t*rh*d&quot;)]
+    [InlineData(&quot;東京&quot;, &#39;*&#39;, &quot;**&quot;)]
+    [InlineData(&quot;aβc&quot;, &#39;*&#39;, &quot;a*c&quot;)]
+    public void ReplaceNonAsciiCharsWith_GivenVariousInputs_ReturnsExpectedResult(string input, char replacement, string expected)
+    {
+        // Act
+        var result = AsciiHelpers.ReplaceNonAsciiCharsWith(input, replacement);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(null, &quot;&quot;)]
+    [InlineData(&quot;&quot;, &quot;&quot;)]
+    [InlineData(&quot;   &quot;, &quot;&quot;)]
+    [InlineData(&quot;Hello&quot;, &quot;Hello&quot;)]
+    [InlineData(&quot;Caf&#233;&quot;, &quot;Caf&quot;)]
+    [InlineData(&quot;M&#246;t&#246;rh&#235;&#228;d&quot;, &quot;Mtrhd&quot;)]
+    [InlineData(&quot;東京&quot;, &quot;&quot;)]
+    [InlineData(&quot;aβc&quot;, &quot;ac&quot;)]
+    public void RemoveNonAsciiChars_GivenVariousInputs_ReturnsExpectedResult(string input, string expected)
+    {
+        // Act
+        var result = AsciiHelpers.RemoveNonAsciiChars(input);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,5,17,6,1],[19,9,19,80,1],[22,9,22,40,1],[23,5,23,6,1],[35,5,35,6,1],[37,9,37,62,1],[40,9,40,40,1],[41,5,41,6,1]]);
+    </script>
+  </body>
+</html>

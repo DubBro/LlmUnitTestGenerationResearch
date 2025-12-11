@@ -1,0 +1,16 @@
+GenerationId:
+gen-1765324358-mczM6BQ8sTxaSJPCkBZD
+
+Content:
+ {
+	"readabilityIndex": 97,
+	"reasons": [
+		"Test names consistently follow MethodUnderTest_Scenario_ExpectedResult pattern",
+		"AAA pattern properly implemented with comments and spacing",
+		"Appropriate use of [Theory] and [Fact] attributes",
+		"Clear and meaningful variable names",
+		"Test class name follows ClassUnderTestTests convention",
+		"No unnecessary comments or code clutter",
+		"One test combines null and whitespace scenarios, slightly reducing clarity"
+	]
+}

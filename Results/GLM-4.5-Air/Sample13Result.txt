@@ -1,0 +1,210 @@
+GenerationId:
+gen-1765204322-3lVMHHQZOScJVmbu5ovr
+
+Content:
+```csharp
+using Xunit;
+using NSubstitute;
+using Dataset.Sample13;
+
+namespace Dataset.Sample13.UnitTests;
+
+public class OntologyHelperTests
+{
+    [Fact]
+    public void ParseNode_NodeTypeIsUri_ReturnsParsedString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns("http://example.org#123");
+        var expected = "123";
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsLiteral_ReturnsParsedString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns("123^http://www.w3.org/2001/XMLSchema#string");
+        var expected = "123";
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsBlank_ReturnsEmptyString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Blank);
+        var expected = string.Empty;
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsGraphLiteral_ReturnsEmptyString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.GraphLiteral);
+        var expected = string.Empty;
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsVariable_ReturnsEmptyString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Variable);
+        var expected = string.Empty;
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsTriple_ReturnsEmptyString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Triple);
+        var expected = string.Empty;
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeToStringReturnsNull_ReturnsEmptyString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns((string)null);
+        var expected = string.Empty;
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("", "")]
+    [InlineData("http://example.org#", "")]
+    [InlineData("http://example.org#123", "123")]
+    [InlineData("http://example.org#123#456", "123#456")]
+    public void ParseNode_NodeTypeIsUri_WithVariousUris_ReturnsCorrectSubstring(string input, string expected)
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns(input);
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("", "")]
+    [InlineData("123^", "123")]
+    [InlineData("123^http://www.w3.org/2001/XMLSchema#string", "123")]
+    [InlineData("123^http://www.w3.org/2001/XMLSchema#string^extra", "123")]
+    public void ParseNode_NodeTypeIsLiteral_WithVariousLiterals_ReturnsCorrectSubstring(string input, string expected)
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns(input);
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsUri_WithEncodedCharacters_ReturnsDecodedString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Uri);
+        node.ToString().Returns("http://example.org/value%23with%20hash");
+        var expected = "value#with hash";
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ParseNode_NodeTypeIsLiteral_WithEncodedCharacters_ReturnsDecodedString()
+    {
+        // Arrange
+        var node = Substitute.For<INode>();
+        node.NodeType.Returns(NodeType.Literal);
+        node.ToString().Returns("value%23with%20hash^http://www.w3.org/2001/XMLSchema#string");
+        var expected = "value#with hash";
+
+        // Act
+        var actual = OntologyHelper.ParseNode(node);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+}
+```
+
+ElapsedTimeMilliseconds:
+11701,3507
+
+OpenRouterElapsedTimeMilliseconds:
+11460
+
+PromptTokens:
+1196
+
+CompletionTokens:
+1149
+
+TotalTokens:
+2345
+
+TotalCost:
+0,000807944

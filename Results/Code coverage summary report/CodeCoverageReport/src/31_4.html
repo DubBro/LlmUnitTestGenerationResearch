@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>D:\Programming\Projects\LlmUnitTestGenerationArtifacts\Gemini3ProUnitTests\Sample15Tests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dataset.Sample15;
+
+namespace Gemini3ProUnitTests;
+
+public class Base64HelpersTests
+{
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot; &quot;)]
+    [InlineData(&quot;   &quot;)]
+    public void Encode_InputNullOrWhiteSpace_ReturnsEmptyString(string? plainText)
+    {
+        // Arrange
+        // No specific state setup required for static utility method.
+
+        // Act
+        var result = Base64Helpers.Encode(plainText!);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;Hello World&quot;, &quot;SGVsbG8gV29ybGQ=&quot;)]
+    [InlineData(&quot;unit test&quot;, &quot;dW5pdCB0ZXN0&quot;)]
+    [InlineData(&quot;1234567890&quot;, &quot;MTIzNDU2Nzg5MA==&quot;)]
+    [InlineData(&quot;!@#$%^&amp;*()_+&quot;, &quot;IUAjJCVeJiooKV8r&quot;)]
+    public void Encode_ValidString_ReturnsCorrectBase64String(string plainText, string expectedBase64)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act
+        var result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(expectedBase64, result);
+    }
+
+    [Fact]
+    public void Encode_StringWithUtf8Characters_ReturnsCorrectBase64String()
+    {
+        // Arrange
+        string plainText = &quot;C# &#233; muito bom&quot;;
+        string expectedBase64 = &quot;QyMgw6kgbXVpdG8gYm9t&quot;;
+
+        // Act
+        var result = Base64Helpers.Encode(plainText);
+
+        // Assert
+        Assert.Equal(expectedBase64, result);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(&quot;&quot;)]
+    [InlineData(&quot; &quot;)]
+    [InlineData(&quot;   &quot;)]
+    public void Decode_InputNullOrWhiteSpace_ReturnsEmptyString(string? base64Data)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act
+        var result = Base64Helpers.Decode(base64Data!);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;SGVsbG8gV29ybGQ=&quot;, &quot;Hello World&quot;)]
+    [InlineData(&quot;dW5pdCB0ZXN0&quot;, &quot;unit test&quot;)]
+    [InlineData(&quot;MTIzNDU2Nzg5MA==&quot;, &quot;1234567890&quot;)]
+    [InlineData(&quot;IUAjJCVeJiooKV8r&quot;, &quot;!@#$%^&amp;*()_+&quot;)]
+    public void Decode_ValidBase64String_ReturnsCorrectDecodedString(string base64Data, string expectedPlainText)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act
+        var result = Base64Helpers.Decode(base64Data);
+
+        // Assert
+        Assert.Equal(expectedPlainText, result);
+    }
+
+    [Fact]
+    public void Decode_Base64StringWithUtf8Characters_ReturnsCorrectDecodedString()
+    {
+        // Arrange
+        string base64Data = &quot;QyMgw6kgbXVpdG8gYm9t&quot;;
+        string expectedPlainText = &quot;C# &#233; muito bom&quot;;
+
+        // Act
+        var result = Base64Helpers.Decode(base64Data);
+
+        // Assert
+        Assert.Equal(expectedPlainText, result);
+    }
+
+    [Theory]
+    [InlineData(&quot;InvalidBase64...&quot;)]
+    [InlineData(&quot;!!!!&quot;)]
+    [InlineData(&quot;SGVsbG8&quot;)] // Missing padding if strict, or invalid length for Base64 (length must be multiple of 4)
+    public void Decode_InvalidBase64String_ThrowsFormatException(string invalidBase64Data)
+    {
+        // Arrange
+        // No specific state setup required.
+
+        // Act &amp; Assert
+        Assert.Throws&lt;FormatException&gt;(() =&gt; Base64Helpers.Decode(invalidBase64Data));
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,5,13,6,1],[18,9,18,55,1],[21,9,21,44,1],[22,5,22,6,1],[30,5,30,6,1],[35,9,35,54,1],[38,9,38,46,1],[39,5,39,6,1],[43,5,43,6,1],[45,9,45,45,1],[46,9,46,56,1],[49,9,49,54,1],[52,9,52,46,1],[53,5,53,6,1],[61,5,61,6,1],[66,9,66,56,1],[69,9,69,44,1],[70,5,70,6,1],[78,5,78,6,1],[83,9,83,55,1],[86,9,86,49,1],[87,5,87,6,1],[91,5,91,6,1],[93,9,93,52,1],[94,9,94,53,1],[97,9,97,55,1],[100,9,100,49,1],[101,5,101,6,1],[108,5,108,6,1],[113,9,113,46,1],[113,46,113,85,1],[113,85,113,87,1],[114,5,114,6,1]]);
+    </script>
+  </body>
+</html>

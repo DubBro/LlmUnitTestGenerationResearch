@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765327104-1Ixpr7sZqcRqZOAT1WJZ
+
+Content:
+{"readabilityIndex": 85, "reasons": ["Test class name follows the standard pattern 'ClassUnderTestTests' (OntologyHelperTests).", "Test method names are clear and follow the 'MethodUnderTest_Scenario_ExpectedResult' pattern.", "Tests follow the AAA pattern with clear Arrange, Act, Assert sections separated by comments.", "Proper use of [Fact] and [Theory] attributes to avoid code duplication.", "Meaningful variable names and clear test structure make tests easy to understand.", "All tests are synchronous and use proper return types (no async void).", "Good use of test theory with inline data for parameterized tests.", "Minor issues: test names could be more specific about edge cases (e.g., 'WhenHashAtEnd' rather than 'WhenHashAtEnd_ReturnsEmptyString')."]}

@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765316230-Ii3ApjMvFm6qYe4bmKui
+
+Content:
+{
+	"readabilityIndex": 88,
+	"reasons": [
+		"Test class name follows ClassUnderTestTests convention.",
+		"Test method names adhere to MethodUnderTest_Scenario_ExpectedResult pattern.",
+		"Effective use of [Theory] and [InlineData] to test multiple invalid inputs without duplication.",
+		"Consistent async Task signatures for asynchronous tests.",
+		"Mostly follows AAA pattern with // Arrange, // Act, // Assert comments for clear separation.",
+		"Clear and meaningful names for variables, fields, and parameters.",
+		"Minor flaw: extraneous explanatory comments next to [InlineData] values.",
+		"Minor flaw: Act and Assert combined in invalid input tests, deviating from strict AAA blocks.",
+		"Nested lambdas in Assert.Collection are readable but could use more descriptive parameter names."
+	]
+}

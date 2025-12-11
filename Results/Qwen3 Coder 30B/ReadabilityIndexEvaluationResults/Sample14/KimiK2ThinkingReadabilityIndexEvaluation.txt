@@ -1,0 +1,18 @@
+GenerationId:
+gen-1765327468-SBQbthLC6inoCfSx8hEJ
+
+Content:
+ {
+	"readabilityIndex": 65,
+	"reasons": [
+		"Test class name follows the `ClassUnderTestTests` pattern.",
+		"All tests implement the AAA pattern with proper comments and spacing.",
+		"Appropriate use of `[Theory]` for testing multiple invalid inputs.",
+		"[Issue] Theory test data is ambiguous: unclear why inputs 2 and 4 are invalid.",
+		"[Issue] Generic exception `Assert.Throws<Exception>()` should be more specific.",
+		"[Issue] Significant code duplication: array comparison logic repeated across both valid input tests.",
+		"[Issue] Test name contains vague terms: `WithValidInput` and `ReturnsCorrectRhombus` lack specificity.",
+		"[Issue] Hardcoded 2D arrays are verbose and difficult to verify visually.",
+		"No reusable helper method for 2D array equality assertions, harming maintainability."
+	]
+}

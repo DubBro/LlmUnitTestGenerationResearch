@@ -1,0 +1,19 @@
+GenerationId:
+gen-1765316933-PpNrtAPkBzMEpl5dnmA3
+
+Content:
+{
+  "readabilityIndex": 94,
+  "reasons": [
+    "Test class name follows the ClassUnderTestTests pattern and clearly indicates the subject under test (Base64HelpersTests).",
+    "Test method names follow the MethodUnderTest_Scenario_ExpectedResult pattern and accurately describe behavior.",
+    "Consistent use of [Theory] with [InlineData] to cover multiple input variations avoids duplication and improves clarity.",
+    "AAA pattern is followed in each test, with clear separation (even if Arrange is sometimes empty), making test flow easy to follow.",
+    "Code formatting (spacing, line breaks, indentation) is clean and consistent, aiding quick visual parsing.",
+    "No unnecessary nested classes or complex structures; one flat test class keeps the file easy to navigate.",
+    "Use of extension methods Encode/Decode is clear in context and keeps the Act step readable.",
+    "Input and expected values in InlineData are small and self-explanatory, making scenarios easy to understand at a glance.",
+    "Correct use of void-return tests and Assert.Throws in a single Act & Assert block preserves readability.",
+    "Minor deviation from guidelines (an inline comment in InlineData and using [Theory] instead of [Fact] for the single invalid-case scenario) slightly reduces, but does not significantly harm, overall readability."
+  ]
+}

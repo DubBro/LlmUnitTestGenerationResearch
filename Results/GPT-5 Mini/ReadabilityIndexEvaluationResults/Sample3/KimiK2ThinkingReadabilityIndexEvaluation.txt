@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765323020-2hasUuWsjQYos6viYyj2
+
+Content:
+ {"readabilityIndex":79,"reasons":["Consistent MethodUnderTest_Scenario_ExpectedResult naming pattern","Proper AAA pattern structure with clear comments","Correct async Task signatures and appropriate Theory usage","Repeated setup code creates verbosity and maintenance burden","Complex NSubstitute expressions (Arg.Do, predicate capture) reduce clarity","Lengthy test methods with multiple assertions hinder quick comprehension","Magic literals used without named constants"]}

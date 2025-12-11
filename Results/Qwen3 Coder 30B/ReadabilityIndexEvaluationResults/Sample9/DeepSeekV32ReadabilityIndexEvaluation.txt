@@ -1,0 +1,5 @@
+GenerationId:
+gen-1765326503-mpijukRbFdLttKykn4Fm
+
+Content:
+{"readabilityIndex": 88, "reasons": ["Clear and meaningful test class and method names following the recommended naming conventions.", "Good use of AAA pattern with clear Arrange, Act, Assert comments and separation.", "Appropriate use of [Fact] and [Theory] attributes with InlineData for parameterized tests.", "Tests are well-structured with logical separation of concerns for different scenarios.", "No unnecessary nested classes or excessive comments, maintaining clean code.", "Minor issues: Some test method names are slightly verbose, and a few test assertions could be more descriptive."]}
